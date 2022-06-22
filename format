@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+shopt -s globstar
+for f in **/*.py; do
+    autopep8 --in-place --aggressive --aggressive "$f"
+done
+git diff

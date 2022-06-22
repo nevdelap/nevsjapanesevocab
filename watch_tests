@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+find . -name "*.py" -print | \
+    entr -c python src/run_tests.py
