@@ -2,28 +2,23 @@ import contextlib
 import io
 import unittest
 from unittest_data_provider import data_provider
-from vocab import Vocab
-
-# English words will never exist in the real data. I'm taking
-# advantage of that, and that 送る has one reading, to allow
-# the tests to expect things not to exist, or that make
-# modifications to not rely on the existing data.
+from src.vocab import Vocab
 
 
 class VocabTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.vocab = Vocab('vocab.csv')
+        self.vocab = Vocab('src/tests/test_data/vocab_good.csv')
 
     def test_contains(self):
         self.assertTrue(self.vocab.contains('送る'))
         self.assertTrue(self.vocab.contains('送る', 'おくる'))
-        self.assertTrue(not self.vocab.contains('junk'))
-        self.assertTrue(not self.vocab.contains('送る', 'junk'))
+        self.assertFalse(self.vocab.contains('junk'))
+        self.assertFalse(self.vocab.contains('送る', 'junk'))
 
-    def test_kanji(self):
-        self.assertTrue(not self.vocab.contains('new'))
-        list_name = self.vocab.new('new')
+    def test_add_delete_kanji(self):
+        self.assertFalse(self.vocab.contains('new'))
+        list_name = self.vocab.add('new')
         self.assertEqual(self.vocab.get_list_name('new'), list_name)
         self.assertEqual(self.vocab.get_known('new'), False)
         self.assertEqual(self.vocab.toggle_known('new'), True)
@@ -33,23 +28,59 @@ class VocabTestCase(unittest.TestCase):
         self.assertTrue(self.vocab.contains('new'))
         self.assertEqual(self.vocab.delete('new'), list_name)
 
-    def test_kana(self):
-        self.assertTrue(not self.vocab.contains('送る', 'new'))
-        index = self.vocab.new_kana('送る', 'new')
+    def test_change_kanji(self):
+        self.assertFalse(self.vocab.contains('new'))
+        list_name = self.vocab.add('new')
+        self.vocab.add_kana('new', 'kana')
+        self.vocab.add_kana('new', 'kana2')
+        self.assertTrue(self.vocab.contains('new'))
+        self.assertTrue(self.vocab.contains('new', 'kana'))
+        self.assertTrue(self.vocab.contains('new', 'kana2'))
+        self.assertFalse(self.vocab.contains('NEW'))
+        self.assertFalse(self.vocab.contains('NEW', 'kana'))
+        self.assertFalse(self.vocab.contains('NEW', 'kana2'))
+        self.vocab.change('new', 'NEW')
+        self.assertFalse(self.vocab.contains('new'))
+        self.assertFalse(self.vocab.contains('new', 'kana'))
+        self.assertFalse(self.vocab.contains('new', 'kana2'))
+        self.assertTrue(self.vocab.contains('NEW'))
+        self.assertTrue(self.vocab.contains('NEW', 'kana'))
+        self.assertTrue(self.vocab.contains('NEW', 'kana2'))
+
+    def test_add_delete_kana(self):
+        self.assertFalse(self.vocab.contains('送る', 'new'))
+        index = self.vocab.add_kana('送る', 'new')
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new'])
-        index2 = self.vocab.new_kana('送る', 'new2')
+        index2 = self.vocab.add_kana('送る', 'new2')
         self.assertTrue(self.vocab.contains('送る', 'new2'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new', 'new2'])
         self.assertEqual(self.vocab.delete_kana('送る', 'new2'), index2)
-        self.assertTrue(not self.vocab.contains('送る', 'new2'))
+        self.assertFalse(self.vocab.contains('送る', 'new2'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new'])
-        index2 = self.vocab.new_kana('送る', 'new2')
+        index2 = self.vocab.add_kana('送る', 'new2')
         self.assertEqual(self.vocab.delete_kana('送る', 'new'), index)
-        self.assertTrue(not self.vocab.contains('送る', 'new'))
+        self.assertFalse(self.vocab.contains('送る', 'new'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new2'])
         self.assertEqual(self.vocab.delete_kana('送る', 'new2'), index)
-        self.assertTrue(not self.vocab.contains('送る', 'new2'))
+        self.assertFalse(self.vocab.contains('送る', 'new2'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
+
+    def test_change_kana(self):
+        self.assertFalse(self.vocab.contains('new'))
+        list_name = self.vocab.add('new')
+        self.vocab.add_kana('new', 'kana')
+        self.vocab.add_kana('new', 'kana2')
+        self.assertTrue(self.vocab.contains('new'))
+        self.assertTrue(self.vocab.contains('new', 'kana'))
+        self.assertTrue(self.vocab.contains('new', 'kana2'))
+        self.assertFalse(self.vocab.contains('new', 'kana3'))
+        self.assertEqual(['kana', 'kana2'], self.vocab.get_kana('new'))
+        self.vocab.change_kana('new', 'kana', 'kana3')
+        self.assertTrue(self.vocab.contains('new'))
+        self.assertFalse(self.vocab.contains('new', 'kana'))
+        self.assertTrue(self.vocab.contains('new', 'kana2'))
+        self.assertTrue(self.vocab.contains('new', 'kana3'))
+        self.assertEqual(['kana3', 'kana2'], self.vocab.get_kana('new'))
 
     def bad_files_provider():
         return [

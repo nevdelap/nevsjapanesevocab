@@ -32,7 +32,8 @@ This is my setup, the bits relevant to this at least.
 1. `git clone git@bitbucket.org:nevdelap/nevsjapanesevocab.git`
 1. `cd nevsjapanesevocab`
 1. `bash install_termux`
-1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data pykakasi unittest-data-provider wheel`
+1. `pip install wheel`
+1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data pykakasi unittest-data-provider`
 1. Create a Termux Widget to run `.shortcuts/vocab`
 
 ## Other

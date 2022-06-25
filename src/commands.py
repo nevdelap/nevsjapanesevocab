@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from colors import color
-from vocab import Vocab
+from src.vocab import Vocab
 
 
 class Command(ABC):
@@ -84,14 +84,14 @@ class AddCommand(Command):
         self.__list_name = None
 
     def do(self) -> None:
-        self.__list_name = self.vocab.new(self.__kanji)
+        self.__list_name = self.vocab.add(self.__kanji)
 
     def undo(self) -> str:
         self.vocab.delete(self.__kanji)
         return self._undone_message()
 
     def redo(self) -> str:
-        self.vocab.new(self.__kanji, self.__list_name)
+        self.vocab.add(self.__kanji, self.__list_name)
         return self._redone_message()
 
     def _undone_message(self) -> str:
@@ -114,9 +114,9 @@ class DeleteCommand(Command):
         self.__list_name = self.vocab.delete(self.__kanji)
 
     def undo(self) -> str:
-        self.vocab.new(self.__kanji, self.__list_name)
+        self.vocab.add(self.__kanji, self.__list_name)
         self.vocab.set_known(self.__kanji, self.__known)
-        self.vocab.replace_kana(self.__kanji, self.__kana)
+        self.vocab.replace_all_kana(self.__kanji, self.__kana)
         return self._undone_message()
 
     def redo(self) -> str:
@@ -130,6 +130,31 @@ class DeleteCommand(Command):
         return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
 
 
+class ChangeCommand(Command):
+
+    def __init__(self, vocab: Vocab, kanji: str, new_kanji: str) -> None:
+        Command.__init__(self, vocab)
+        self.__kanji = kanji
+        self.__new_kanji = new_kanji
+
+    def do(self) -> None:
+        self.redo()
+
+    def undo(self) -> str:
+        self.vocab.change(self.__new_kanji, self.__kanji)
+        return self._undone_message()
+
+    def redo(self) -> str:
+        self.__list_name = self.vocab.change(self.__kanji, self.__new_kanji)
+        return self._redone_message()
+
+    def _undone_message(self) -> str:
+        return f'{self.__new_kanji}を{self.__kanji}に戻した。'
+
+    def _redone_message(self) -> int:
+        return f'{self.__kanji}を{self.__new_kanji}に変更した。'
+
+
 class AddKanaCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str, kana: str) -> None:
@@ -139,14 +164,14 @@ class AddKanaCommand(Command):
         self.__index = -1
 
     def do(self) -> None:
-        self.__index = self.vocab.new_kana(self.__kanji, self.__kana)
+        self.__index = self.vocab.add_kana(self.__kanji, self.__kana)
 
     def undo(self) -> str:
         self.vocab.delete_kana(self.__kanji, self.__kana)
         return self._undone_message()
 
     def redo(self) -> str:
-        self.vocab.new_kana(self.__kanji, self.__kana, self.__index)
+        self.vocab.add_kana(self.__kanji, self.__kana, self.__index)
         return self._redone_message()
 
     def _undone_message(self) -> str:
@@ -154,6 +179,32 @@ class AddKanaCommand(Command):
 
     def _redone_message(self) -> int:
         return f'{self.__kana}は{self.__kanji}に追加した。'
+
+
+class ChangeKanaCommand(Command):
+
+    def __init__(self, vocab: Vocab, kanji: str, kana: str, new_kana: str) -> None:
+        Command.__init__(self, vocab)
+        self.__kanji = kanji
+        self.__kana = kana
+        self.__new_kana = new_kana
+
+    def do(self) -> None:
+        self.redo()
+
+    def undo(self) -> str:
+        self.vocab.change_kana(self.__kanji, self.__new_kana, self.__kana)
+        return self._undone_message()
+
+    def redo(self) -> str:
+        self.vocab.change_kana(self.__kanji, self.__kana, self.__new_kana)
+        return self._redone_message()
+
+    def _undone_message(self) -> str:
+        return f'{self.__kanji}は{self.__new_kana}を{self.__kana}に戻した。'
+
+    def _redone_message(self) -> int:
+        return f'{self.__kanji}は{self.__kana}を{self.__new_kana}に変更した。'
 
 
 class DeleteKanaCommand(Command):
@@ -168,7 +219,7 @@ class DeleteKanaCommand(Command):
         self.__index = self.vocab.delete_kana(self.__kanji, self.__kana)
 
     def undo(self) -> str:
-        self.vocab.new_kana(self.__kanji, self.__kana, self.__index)
+        self.vocab.add_kana(self.__kanji, self.__kana, self.__index)
         return self._undone_message()
 
     def redo(self) -> str:
