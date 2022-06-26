@@ -145,7 +145,7 @@ class ChangeCommand(Command):
         return self._undone_message()
 
     def redo(self) -> str:
-        self.__list_name = self.vocab.change(self.__kanji, self.__new_kanji)
+        self.vocab.change(self.__kanji, self.__new_kanji)
         return self._redone_message()
 
     def _undone_message(self) -> str:
