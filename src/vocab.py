@@ -1,4 +1,4 @@
-import pykakasi
+import pykakasi  # type: ignore
 import sys
 from collections import OrderedDict
 from unicodedata import normalize

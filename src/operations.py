@@ -1,5 +1,5 @@
-from colors import color
-from jamdict import Jamdict
+from colors import color  # type: ignore
+from jamdict import Jamdict  # type: ignore
 from src.commands import *
 from typing import Optional, Tuple
 
