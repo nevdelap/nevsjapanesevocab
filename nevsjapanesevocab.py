@@ -2,7 +2,7 @@
 import readline
 import shlex
 import sys
-from colors import color
+from colors import color  # type: ignore
 from src.commands import CommandStack
 from src.operations import get_operations
 from src.vocab import Vocab
@@ -11,7 +11,7 @@ from typing import Optional, List
 
 def main() -> None:
     print(color('ネフの日本語語彙リスト', style='bold'))
-    
+
     vocab_file = 'vocab.csv'
     try:
         print('読み込み中...')
@@ -51,7 +51,11 @@ def main_stuff(vocab: Vocab,
     if len(params) == 0:
         search = previous_search
     else:
-        params = replace_indices(vocab, previous_search, previous_kanji_found, params)
+        params = replace_indices(
+            vocab,
+            previous_search,
+            previous_kanji_found,
+            params)
         command = params[0] if len(params) > 0 else ''
         params = params[1:] if len(params) > 1 else []
         if command == 'q' and len(params) == 0:
@@ -88,7 +92,7 @@ def main_stuff(vocab: Vocab,
             elif len(params) > 0:
                 print('使い方: h 使い方を表示する。')
                 return previous_search, previous_kanji_found
-    
+
     if search == '':
         return '', previous_kanji_found
 
