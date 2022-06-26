@@ -55,7 +55,7 @@ class MainTestCase(unittest.TestCase):
 
     __io = [
         # Search found and not found.
-        ('研究', '見つかった: \(1\)\n     1 0100 研究 1 けんきゅう'),
+        ('研究', '見つかった: \\(1\\)\n     1 0100 研究 1 けんきゅう'),
         ('notfound', '何も見つからない。'),
         # Each command's usage when used with incorrect
         # parameters or at the wrong time.
@@ -71,12 +71,12 @@ class MainTestCase(unittest.TestCase):
         ('r', '遣り直しものがない。'),
         # Each command and undo/redo.
         ('h', '使い方:.*終了'),
-        ('l 研究', 'けんきゅう \(研究\) : study/research/investigation'),
+        ('l 研究', 'けんきゅう \\(研究\\) : study/research/investigation'),
         ('new', '何も見つからない。'),
-        ('a new', '見つかった: \(1\)\n     1 0100 new'),
+        ('a new', '見つかった: \\(1\\)\n     1 0100 new'),
         ('new', '見つかった.*1 0100 new'),
-        ('c new NEW', '見つかった: \(1\)\n     1 0100 NEW'),
-        ('NEW', '見つかった: \(1\)\n     1 0100 NEW'),
+        ('c new NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
+        ('NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
         ('u', 'NEWをnewに戻した。'),
         ('u', 'newはリスト0100から削除した。'),
         ('r', 'newはリスト0100に追加した。'),
@@ -84,7 +84,7 @@ class MainTestCase(unittest.TestCase):
         ('u', 'newはリスト0100に追加した。'),
         ('r', 'newはリスト0100から削除した。'),
         ('u', 'newはリスト0100に追加した。'),
-        ('ak new kana', '見つかった: \(1\).*1 0100 new 1 kana'),
+        ('ak new kana', '見つかった: \\(1\\).*1 0100 new 1 kana'),
         ('u', 'kanaはnewから削除した。'),
         ('r', 'kanaはnewに追加した。'),
         ('dk new kana', 'newはkanaが削除した。'),
@@ -92,9 +92,9 @@ class MainTestCase(unittest.TestCase):
         ('r', 'kanaはnewから削除した。'),
         ('u', 'kanaはnewに追加した。'),
         ('k', 'データ:\n  分かった: 0\n  学んでいる 6\n  合計: 6'),
-        ('t new', '見つかった: \(1\)\n     1 0100 new 1 kana ✓'),
+        ('t new', '見つかった: \\(1\\)\n     1 0100 new 1 kana ✓'),
         ('k', 'データ:\n  分かった: 1\n  学んでいる 5\n  合計: 6'),
-        ('t new', '見つかった: \(1\)\n     1 0100 new 1 kana[^✓]+$'),
+        ('t new', '見つかった: \\(1\\)\n     1 0100 new 1 kana[^✓]+$'),
         ('k', 'データ:\n  分かった: 0\n  学んでいる 6\n  合計: 6'),
         ('d new', 'newは削除した。'),
         # Indexes.
@@ -114,17 +114,17 @@ class MainTestCase(unittest.TestCase):
         ('new', '1 0100 new 1 kana'),
         ('dk 1 1', 'newはkanaが削除した。'),
         ('new', '1 0100 new'),
-        ('c 1 NEW', '見つかった: \(1\)\n     1 0100 NEW'),
-        ('NEW', '見つかった: \(1\)\n     1 0100 NEW'),
+        ('c 1 NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
+        ('NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
         ('u', 'NEWをnewに戻した。'),
-        ('new', '見つかった: \(1\)\n     1 0100 new'),
+        ('new', '見つかった: \\(1\\)\n     1 0100 new'),
         ('d 1', 'newは削除した。'),
         ('new', '何も見つからない。'),
         ('u', 'newはリスト0100に追加した。'),
         ('u', 'kanaはnewに追加した。'),
         ('u', 'kana3はnewに追加した。'),
         ('u', 'kana2はnewに追加した。'),
-        ('u', 'newのステータスが既知\(✓\)に変更された。'),
+        ('u', 'newのステータスが既知\\(✓\\)に変更された。'),
         ('u', 'newのステータスが未知に変更された。'),
         ('u', 'kana3はnewから削除した。'),
         ('u', 'kana2はnewから削除した。'),
@@ -132,12 +132,12 @@ class MainTestCase(unittest.TestCase):
         ('u', 'newはリスト0100から削除した。'),
         ('new', '何も見つからない。'),
         # Each aommand's error messages.
-        ('a new', '見つかった: \(1\)\n     1 0100 new'),
+        ('a new', '見つかった: \\(1\\)\n     1 0100 new'),
         ('a new', 'newは既に有る。'),
         ('c new2 new', 'new2は見つからない。'),
         ('c new new', 'newは既に有る。'),
         ('d new2', 'new2は見つからない。'),
-        ('ak new kana', '見つかった: \(1\)\n     1 0100 new 1 kana'),
+        ('ak new kana', '見つかった: \\(1\\)\n     1 0100 new 1 kana'),
         ('ak new kana', 'newはkanaが既に有る。'),
         ('ck new kana2 kana3', 'newはkana2が見つからない。'),
         ('ck new kana kana', 'newはkanaが既に有る。'),
@@ -161,16 +161,20 @@ class MainTestCase(unittest.TestCase):
                 sys.stdout.truncate(0)
                 sys.stdin.write(test_input + '\n')
                 sys.stdin.seek(0)
-                search, kanji_found = main_stuff(vocab, command_stack, '', kanji_found)
+                search, kanji_found = main_stuff(
+                    vocab, command_stack, '', kanji_found
+                )
                 sys.stdout.seek(0)
                 actual_output = MainTestCase.__stripEscape(sys.stdout.read())
                 if not re.search(expected_regex, actual_output, re.S):
                     print('Expected: ' + expected_regex, file=sys.stderr)
                     print('Actual: ' + actual_output, file=sys.stderr)
-                self.assertRegex(actual_output, re.compile(expected_regex, re.S))
+                self.assertRegex(
+                    actual_output, re.compile(
+                        expected_regex, re.S))
         finally:
             sys.stdin = stdin
             sys.stdout = stdout
 
     def __stripEscape(s):
-        return re.sub('\x1b\[[\d;]+m', '', s)
+        return re.sub('\x1b\\[[\\d;]+m', '', s)
