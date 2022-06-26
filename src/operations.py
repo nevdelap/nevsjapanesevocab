@@ -23,8 +23,11 @@ def look_up(command_stack: CommandStack, vocab: str, params: [
     assert len(params) == 1
     search = params[0]
     result = jam.lookup(search)
-    for entry in result.entries:
-        print('  ' + entry.text(True))
+    if len(result.entries) > 0:
+        for entry in result.entries:
+            print('  ' + entry.text(True))
+    else:
+        print('何も見つからない。')
     return (None, None, False, False)
 
 

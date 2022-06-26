@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import readline
 import shlex
 import sys
 from colors import color
@@ -49,7 +50,7 @@ def main_stuff(vocab: Vocab,
     if len(params) == 0:
         search = previous_search
     else:
-        params = replace_indices(vocab, previous_kanji_found, params)
+        params = replace_indices(vocab, previous_search, previous_kanji_found, params)
         command = params[0] if len(params) > 0 else ''
         params = params[1:] if len(params) > 1 else []
         if command == 'q' and len(params) == 0:
@@ -61,27 +62,34 @@ def main_stuff(vocab: Vocab,
                     operation) = operations[command]
                 if len(params) == expected_params and (
                         validation is None or validation(command_stack)):
-                    (message,
-                     search,
-                     repeat_previous_search,
-                     invalidate_previous_search) = operation(command_stack,
-                                                             vocab,
-                                                             params)
+                    (
+                        message,
+                        search,
+                        repeat_previous_search,
+                        invalidate_previous_search
+                    ) = operation(
+                        command_stack,
+                        vocab,
+                        params
+                    )
                     if message is not None:
                         print(message)
-                    if search is None:
-                        search = previous_search
-                    else:
-                        exact = True
                     if invalidate_previous_search:
                         previous_kanji_found = []
+                    if search is None:
+                        search = previous_search
+                        if not repeat_previous_search:
+                            return search, previous_kanji_found
+                    else:
+                        exact = True
                 else:
                     print(error_message)
-            elif len(params) > 1:
+            elif len(params) > 0:
                 print('使い方: h 使い方を表示する。')
                 return previous_search, previous_kanji_found
+    
     if search == '':
-        return '', []
+        return '', previous_kanji_found
 
     kanji_found = vocab.search(search, exact)
     if len(kanji_found) > 0:
@@ -106,25 +114,28 @@ def main_stuff(vocab: Vocab,
                 out.append(color('✓', fg='green'))
             print('  ' + ' '.join(out))
     else:
-        previous_s = s = ''
+        search = ''
         print('何も見つからない。')
     return search, kanji_found
 
 
 def replace_indices(
         vocab: Vocab,
+        previous_search: str,
         kanji_found: list[str],
         params: list[str]) -> list[str]:
     """ Given a set of search results, and command
     parameters that reference kanji and kana by index in
-    those results, replace the indicies with the kanji and
-    kana. """
+    those results, replace the indices with the kanji and
+    kana."""
     assert all(Vocab.valid_string(kanji) for kanji in kanji_found)
     assert all(vocab.contains(kanji) for kanji in kanji_found)
     assert all(len(p) > 0 for p in params)
     if len(params) > 1 and params[1].isnumeric():
         kanji_index = int(params[1]) - 1
-        if kanji_index >= 0 and kanji_index < len(kanji_found):
+        if kanji_index == -1 and len(previous_search) > 0:
+            params[1] = previous_search
+        elif kanji_index >= 0 and kanji_index < len(kanji_found):
             kanji = kanji_found[kanji_index]
             params[1] = kanji
             if len(params) > 2 and params[2].isnumeric():
