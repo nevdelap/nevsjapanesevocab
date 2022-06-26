@@ -71,10 +71,9 @@ class Vocab:
                     known = 1 if known else 0
                     kana_list = ','.join(kana_list)
                     f.write(
-                        normalize('NFC',
-                            '%s,%s,%s,%s\n' % (list_name, kanji, known, kana_list)
-                            )
-                    )
+                        normalize(
+                            'NFC', '%s,%s,%s,%s\n' %
+                            (list_name, kanji, known, kana_list)))
 
     def get_stats(self) -> (int, int, int):
         """Returns a tuple of (known, learning, total)

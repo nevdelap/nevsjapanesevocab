@@ -7,6 +7,7 @@ from src.operations import get_operations
 from src.vocab import Vocab
 from typing import Optional, List
 
+
 def main() -> None:
     vocab_file = 'vocab.csv'
     try:
@@ -23,7 +24,8 @@ def main() -> None:
     search = ''
     kanji_found = []
     while True:
-        search, kanji_found = main_stuff(vocab, command_stack, search, kanji_found)
+        search, kanji_found = main_stuff(
+            vocab, command_stack, search, kanji_found)
         if search is None:
             break
     try:
@@ -34,7 +36,13 @@ def main() -> None:
         sys.exit(1)
 
 # Driven by tests.
-def main_stuff(vocab: Vocab, command_stack: CommandStack, previous_search: str, previous_kanji_found: List[str]) -> (Optional[str], List):
+
+
+def main_stuff(vocab: Vocab,
+               command_stack: CommandStack,
+               previous_search: str,
+               previous_kanji_found: List[str]) -> (Optional[str],
+                                                    List):
     search = input('検索: ').strip()
     params = shlex.split(search)
     exact = False
@@ -51,9 +59,14 @@ def main_stuff(vocab: Vocab, command_stack: CommandStack, previous_search: str, 
             if command in operations:
                 (expected_params, validation, error_message,
                     operation) = operations[command]
-                if len(params) == expected_params and (validation is None or validation(command_stack)):
-                    (message, search, repeat_previous_search, invalidate_previous_search) = operation(
-                        command_stack, vocab, params)
+                if len(params) == expected_params and (
+                        validation is None or validation(command_stack)):
+                    (message,
+                     search,
+                     repeat_previous_search,
+                     invalidate_previous_search) = operation(command_stack,
+                                                             vocab,
+                                                             params)
                     if message is not None:
                         print(message)
                     if search is None:
@@ -82,14 +95,13 @@ def main_stuff(vocab: Vocab, command_stack: CommandStack, previous_search: str, 
             ]
             kana_list = vocab.get_kana(kanji)
             if len(kana_list) > 0:
-                out.append(color(' '.join(
-                        [
-                            f'{color(str(kana_index + 1), fg="grey")} {kana}' for kana_index,
-                            kana in enumerate(kana_list)
-                        ]
-                    ),
-                    fg='grey')
-                )
+                out.append(
+                    color(
+                        ' '.join(
+                            [
+                                f'{color(str(kana_index + 1), fg="grey")} {kana}' for kana_index,
+                                kana in enumerate(kana_list)]),
+                        fg='grey'))
             if vocab.get_known(kanji):
                 out.append(color('✓', fg='green'))
             print('  ' + ' '.join(out))
@@ -121,7 +133,6 @@ def replace_indices(
                 if kana_index >= 0 and kana_index < len(kana):
                     params[2] = kana[kana_index]
     return params
-
 
 
 if __name__ == '__main__':

@@ -183,7 +183,12 @@ class AddKanaCommand(Command):
 
 class ChangeKanaCommand(Command):
 
-    def __init__(self, vocab: Vocab, kanji: str, kana: str, new_kana: str) -> None:
+    def __init__(
+            self,
+            vocab: Vocab,
+            kanji: str,
+            kana: str,
+            new_kana: str) -> None:
         Command.__init__(self, vocab)
         self.__kanji = kanji
         self.__kana = kana
