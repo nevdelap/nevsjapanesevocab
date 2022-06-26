@@ -48,3 +48,4 @@ You need to know how to use a Japanese keyboard, on a phone, tablet or computer,
 If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. :)
 
 ![Screenshot](screenshot.jpg)
+![Screenshot](screenshot2.jpg)
