@@ -40,6 +40,7 @@ def change(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[T
     assert len(params) == 2
     kanji, new_kanji = params[:2]
     search = None
+    invalidate_previous_search_results = False
     if not vocab.contains(kanji):
         print(f'{kanji}は見つからない。')
     elif vocab.contains(new_kanji):
@@ -48,7 +49,8 @@ def change(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[T
     else:
         command_stack.do(ChangeCommand(vocab, kanji, new_kanji))
         search = new_kanji
-    return (None, search, False, True)
+        invalidate_previous_search_results = True
+    return (None, search, False, invalidate_previous_search_results)
 
 
 def delete(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
@@ -88,7 +90,7 @@ def change_kana(command_stack: CommandStack, vocab: str, params: [str]) -> Optio
             print(f'{kanji}は{new_kana}が既に有る。')
         else:
             command_stack.do(ChangeKanaCommand(vocab, kanji, kana, new_kana))
-    return (None, search, False, True)
+    return (None, search, False, False)
 
 
 def delete_kana(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
@@ -107,12 +109,13 @@ def delete_kana(command_stack: CommandStack, vocab: str, params: [str]) -> Optio
 def toggle_known_status(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
     assert len(params) == 1
     kanji = params[0]
+    search = None
     if not vocab.contains(kanji):
         print(f'{kanji}は見つからない。')
-        return (None, None, False, False)
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))
-        return (None, kanji, True, False)
+        search = kanji
+    return (None, kanji, False, False)
 
 
 def undo(command_stack: CommandStack, vocab: str, params: [str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:

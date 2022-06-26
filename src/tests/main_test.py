@@ -4,7 +4,7 @@ import sys
 import unittest
 from colors import color
 from io import StringIO
-from nevsjapanesevocab import main_loop, replace_indices
+from nevsjapanesevocab import main_stuff, replace_indices
 from unittest_data_provider import data_provider
 from src.commands import CommandStack
 from src.vocab import Vocab
@@ -161,7 +161,7 @@ class MainTestCase(unittest.TestCase):
                 sys.stdout.truncate(0)
                 sys.stdin.write(test_input + '\n')
                 sys.stdin.seek(0)
-                search, kanji_found = main_loop(vocab, command_stack, '', kanji_found)
+                search, kanji_found = main_stuff(vocab, command_stack, '', kanji_found)
                 sys.stdout.seek(0)
                 actual_output = MainTestCase.__stripEscape(sys.stdout.read())
                 if not re.search(expected_regex, actual_output, re.S):

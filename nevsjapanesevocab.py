@@ -7,8 +7,6 @@ from src.operations import get_operations
 from src.vocab import Vocab
 from typing import Optional, List
 
-# TODO - replace kanji
-
 def main() -> None:
     vocab_file = 'vocab.csv'
     try:
@@ -25,7 +23,7 @@ def main() -> None:
     search = ''
     kanji_found = []
     while True:
-        search, kanji_found = main_loop(vocab, command_stack, search, kanji_found)
+        search, kanji_found = main_stuff(vocab, command_stack, search, kanji_found)
         if search is None:
             break
     try:
@@ -35,8 +33,8 @@ def main() -> None:
         print(f'{vocab_file}が書き込みに失敗した。☹ {e}')
         sys.exit(1)
 
-
-def main_loop(vocab: Vocab, command_stack: CommandStack, previous_search: str, previous_kanji_found: List[str]) -> (Optional[str], List):
+# Driven by tests.
+def main_stuff(vocab: Vocab, command_stack: CommandStack, previous_search: str, previous_kanji_found: List[str]) -> (Optional[str], List):
     search = input('検索: ').strip()
     params = shlex.split(search)
     exact = False
