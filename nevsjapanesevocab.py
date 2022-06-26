@@ -10,6 +10,8 @@ from typing import Optional, List
 
 
 def main() -> None:
+    print(color('ネフの日本語語彙リスト', style='bold'))
+    
     vocab_file = 'vocab.csv'
     try:
         print('読み込み中...')
@@ -20,7 +22,6 @@ def main() -> None:
 
     command_stack = CommandStack()
 
-    print(color('ネフの日本語語彙リスト', style='bold'))
     print('hを押してヘルプを表示する。')
     search = ''
     kanji_found = []
@@ -114,7 +115,6 @@ def main_stuff(vocab: Vocab,
                 out.append(color('✓', fg='green'))
             print('  ' + ' '.join(out))
     else:
-        search = ''
         print('何も見つからない。')
     return search, kanji_found
 
