@@ -179,21 +179,21 @@ def stats(command_stack: CommandStack, vocab: Vocab, params: List[
 
 
 __operation_help: List[Tuple[Optional[str], Optional[str], str, int]] = [
-    (None, '<漢字|仮名>', '検索', 2),
-    ('l', '<漢字|仮名>', '辞書検索', 2),
-    ('a', '<漢字>', '新漢字', 3),
-    ('d', '<漢字>', '漢字削除', 3),
-    ('c', '<現在の漢字> <漢字>', '漢字変更', 1),
-    ('ak', '<漢字> <仮名>', '新仮名', 2),
-    ('dk', '<漢字> <仮名>', '仮名削除', 2),
-    ('ck', '<漢字> <現在の仮名> <仮名>', '仮名変更', 1),
-    ('t', '<漢字>', '分かったか(%s)否か\n\t\t\t\t  を切り換える。' % color('✓', fg='green'), 3),
-    ('u', None, '元に戻す。', 4),
-    ('r', None, '遣り直す。', 4),
-    ('s', None, '書き込む。', 4),
-    ('k', None, 'データ', 4),
-    ('h', None, 'この使い方を表示する。', 4),
-    ('q', None, '終了', 4),
+    (None, '<漢字|仮名>', '検索', 2, 2),
+    ('l', '<漢字|仮名>', '辞書検索', 2, 2),
+    ('a', '<漢字>', '新漢字', 3, 2),
+    ('d', '<漢字>', '漢字削除', 3, 2),
+    ('c', '<現在の漢字> <漢字>', '漢字変更', 1, 2),
+    ('ak', '<漢字> <仮名>', '新仮名', 2, 2),
+    ('dk', '<漢字> <仮名>', '仮名削除', 2, 2),
+    ('ck', '<漢字> <現在の仮名> <仮名>', '仮名変更', 0, 0),
+    ('t', '<漢字>', '分かったか(%s)\n\t\t\t\t  否かを\n\t\t\t\t  切り換える。' % color('✓', fg='green'), 3, 2),
+    ('u', None, '元に戻す。', 4, 2),
+    ('r', None, '遣り直す。', 4, 2),
+    ('s', None, '書き込む。', 4, 2),
+    ('k', None, 'データ', 4, 2),
+    ('h', None, 'この使い方\n\t\t\t\t  を表示する。', 4, 2),
+    ('q', None, '終了', 4, 2),
 ]
 
 
@@ -204,13 +204,13 @@ def show_help(command_stack: CommandStack,
                                                           bool,
                                                           bool]]:
     print('\n  使い方:\n')
-    for (command, params, help_text, tabs) in __operation_help:
+    for (command, params, help_text, tabs, spaces) in __operation_help:
         out = []
         if command is not None:
             out.append(color(command, style='bold'))
         if params is not None:
             out.append(color(params, style='bold'))
-        out.append('\t' * tabs + help_text)
+        out.append('\t' * tabs + ' ' * spaces + help_text)
         print('    ' + ' '.join(out))
     print()
     return (None, None, False, False)
