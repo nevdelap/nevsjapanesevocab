@@ -1,3 +1,4 @@
 #!/bin/bash
 set -e
-mypy *.py src/*.py
+export MYPYPATH=$PWD/src
+mypy nevsjapanesevocab.py

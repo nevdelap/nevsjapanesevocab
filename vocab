@@ -1,10 +1,14 @@
 #!/bin/bash
 set -e
-cd ~/storage/shared/nevsjapanesevocab
+if [ -d ~/storage/shared/nevsjapanesevocab]; then
+    # Running in Termux. 
+    cd ~/storage/shared/nevsjapanesevocab
+fi
 if ps -ef | grep main.py | grep -v grep; then
     echo 'Already running.'
     sleep 2
     exit 0
 fi
 # This runs on Android where it cannot be +x'ed
+export PYTHONPATH=$PWD/src
 python nevsjapanesevocab.py || read -p "Press enter to quit."

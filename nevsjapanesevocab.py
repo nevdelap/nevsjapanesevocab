@@ -3,10 +3,10 @@ import readline
 import shlex
 import sys
 from colors import color  # type: ignore
-from src.commands import CommandStack
-from src.operations import get_operations
-from src.vocab import Vocab
-from typing import Optional, List
+from commands import CommandStack
+from operations import get_operations
+from vocab import Vocab
+from typing import List, Optional, Tuple
 
 
 def main() -> None:
@@ -23,10 +23,10 @@ def main() -> None:
     command_stack = CommandStack()
 
     print('hを押してヘルプを表示する。')
-    search = ''
-    kanji_found = []
+    search: Optional[str] = ''
+    kanji_found: List[str] = []
     while True:
-        search, kanji_found = main_stuff(
+        (search, kanji_found) = main_stuff(
             vocab, command_stack, search, kanji_found)
         if search is None:
             break
@@ -42,14 +42,14 @@ def main() -> None:
 
 def main_stuff(vocab: Vocab,
                command_stack: CommandStack,
-               previous_search: str,
-               previous_kanji_found: List[str]) -> (Optional[str],
-                                                    List):
-    search = input('検索: ').strip()
+               previous_search: Optional[str],
+               previous_kanji_found: List[str]) -> Tuple[Optional[str],
+                                                         List]:
+    search: str = input('検索: ').strip()
     params = shlex.split(search)
     exact = False
     if len(params) == 0:
-        search = previous_search
+        search = '' if previous_search is None else previous_search
     else:
         params = replace_indices(
             vocab,
@@ -125,7 +125,7 @@ def main_stuff(vocab: Vocab,
 
 def replace_indices(
         vocab: Vocab,
-        previous_search: str,
+        previous_search: Optional[str],
         kanji_found: list[str],
         params: list[str]) -> list[str]:
     """ Given a set of search results, and command
@@ -137,7 +137,8 @@ def replace_indices(
     assert all(len(p) > 0 for p in params)
     if len(params) > 1 and params[1].isnumeric():
         kanji_index = int(params[1]) - 1
-        if kanji_index == -1 and len(previous_search) > 0:
+        if kanji_index == - \
+                1 and previous_search is not None and len(previous_search) > 0:
             params[1] = previous_search
         elif kanji_index >= 0 and kanji_index < len(kanji_found):
             kanji = kanji_found[kanji_index]

@@ -6,8 +6,8 @@ from colors import color
 from io import StringIO
 from nevsjapanesevocab import main_stuff, replace_indices
 from unittest_data_provider import data_provider
-from src.commands import CommandStack
-from src.vocab import Vocab
+from commands import CommandStack
+from vocab import Vocab
 
 # English words will never exist in the real data. I'm taking
 # advantage of that to allow the tests to expect things
@@ -26,6 +26,7 @@ class MainTestCase(unittest.TestCase):
         self.vocab.add_kana('new2', 'kana2')
         self.vocab.add_kana('new2', 'kana3')
 
+    # TODO: index 0
     def replace_indices():
         return [
             ('new', ['n', '-50'], ['n', '-50']),
@@ -51,7 +52,7 @@ class MainTestCase(unittest.TestCase):
     def test_replace_indices(self, search, params, expected_result):
         found_kanji = self.vocab.search(search)
         self.assertEqual(replace_indices(
-            self.vocab, found_kanji, params), expected_result)
+            self.vocab, '', found_kanji, params), expected_result)
 
     __io = [
         # Search found and not found.

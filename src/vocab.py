@@ -1,6 +1,7 @@
 import pykakasi  # type: ignore
 import sys
 from collections import OrderedDict
+from typing import Dict, List, Optional, Tuple
 from unicodedata import normalize
 
 
@@ -22,9 +23,9 @@ class Vocab:
         exceptions on format errors."""
         self.__filename = filename
         self.__kks = pykakasi.kakasi()
-        self.__list_to_kanji = {}
-        self.__kanji_to_list = {}
-        self.__kanji_to_info = {}
+        self.__list_to_kanji: Dict[str, List[str]] = {}
+        self.__kanji_to_list: Dict[str, str] = {}
+        self.__kanji_to_info: Dict[str, Tuple[bool, List[str]]] = {}
         with open(self.__filename) as f:
             lines = f.readlines()
             for line_number, line in enumerate(lines):
@@ -34,7 +35,7 @@ class Vocab:
                     raise Exception(
                         f"line {line_number + 1}: bad line '{line}', {len(parts)} fields, expected at least 4."
                     )
-                list_name, kanji, known = parts[:3]
+                (list_name, kanji, known) = parts[:3]
                 if not Vocab.valid_list_name(list_name):
                     raise Exception(
                         f"line {line_number + 1}: bad list name '{list_name}', expected numeric."
@@ -47,7 +48,6 @@ class Vocab:
                     raise Exception(
                         f"line {line_number + 1}: bad known status '{known}', expected 0 or 1."
                     )
-                known = known == '1'
                 kana_list = parts[3:]
                 if kana_list == ['']:
                     kana_list = []
@@ -60,22 +60,30 @@ class Vocab:
                     self.__list_to_kanji[list_name] = []
                 self.__list_to_kanji[list_name].append(kanji)
                 self.__kanji_to_list[kanji] = list_name
-                self.__kanji_to_info[kanji] = (known, kana_list)
+                self.__kanji_to_info[kanji] = (known == '1', kana_list)
 
     def save(self) -> None:
         """Saves the vocab back to its original file."""
         with open(self.__filename, 'w') as f:
             for list_name in sorted(self.__list_to_kanji):
                 for kanji in sorted(self.__list_to_kanji[list_name]):
-                    known, kana_list = self.__kanji_to_info[kanji]
-                    known = 1 if known else 0
-                    kana_list = ','.join(kana_list)
+                    (known, kana_list) = self.__kanji_to_info[kanji]
                     f.write(
                         normalize(
                             'NFC', '%s,%s,%s,%s\n' %
-                            (list_name, kanji, known, kana_list)))
+                            (
+                                list_name,
+                                kanji,
+                                1 if known else 0,
+                                ','.join(kana_list)
+                            )
+                        )
+                    )
 
-    def get_stats(self) -> (int, int, int):
+    def get_filename(self) -> str:
+        return self.__filename
+
+    def get_stats(self) -> Tuple[int, int, int]:
         """Returns a tuple of (known, learning, total)
         counts."""
         known_count = 0
@@ -104,7 +112,7 @@ class Vocab:
                 kana in self.__kanji_to_info[kanji][1]
             )
 
-    def search(self, s, exact: bool = False) -> [str]:
+    def search(self, s, exact: bool = False) -> List[str]:
         """Search for a string in the kanji and their kana.
         Parameters
         ==========
@@ -236,16 +244,20 @@ class Vocab:
         kana_list = self.__kanji_to_info[kanji][1]
         self.__kanji_to_info[kanji] = (known, kana_list)
 
+    @staticmethod
     def valid_index(i: int) -> bool:
         return isinstance(i, int) and i >= 0
 
-    def valid_kana_list(kana_list: list) -> bool:
+    @staticmethod
+    def valid_kana_list(kana_list: List[str]) -> bool:
         return isinstance(kana_list, list) and \
             all(isinstance(k, str) and len(k) > 0 for k in kana_list)
 
-    def valid_list_name(list_name) -> bool:
+    @staticmethod
+    def valid_list_name(list_name: str) -> bool:
         return isinstance(list_name, str) and \
             list_name.isnumeric()
 
+    @staticmethod
     def valid_string(s: str) -> bool:
         return isinstance(s, str) and len(s) > 0

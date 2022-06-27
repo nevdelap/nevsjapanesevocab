@@ -1,6 +1,6 @@
 import unittest
-from src.commands import *
-from src.vocab import Vocab
+from commands import *
+from vocab import Vocab
 
 
 class CommandsTestCase(unittest.TestCase):

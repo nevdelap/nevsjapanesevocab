@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from colors import color
-from src.vocab import Vocab
+from colors import color  # type: ignore
+from typing import List, Optional
+from vocab import Vocab
 
 
 class Command(ABC):
@@ -37,7 +38,7 @@ class CommandStack:
     commands."""
 
     def __init__(self) -> None:
-        self.__commands = []
+        self.__commands: List[Command] = []
         self.__current = -1
         assert not self.undoable()
         assert not self.redoable()
@@ -80,8 +81,8 @@ class AddCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__list_name = None
+        self.__kanji: str = kanji
+        self.__list_name: Optional[str] = None
 
     def do(self) -> None:
         self.__list_name = self.vocab.add(self.__kanji)
@@ -97,7 +98,7 @@ class AddCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
 
 
@@ -108,7 +109,7 @@ class DeleteCommand(Command):
         self.__kanji = kanji
         self.__known = self.vocab.get_known(kanji)
         self.__kana = self.vocab.get_kana(kanji)
-        self.__list_name = None
+        self.__list_name: Optional[str] = None
 
     def do(self) -> None:
         self.__list_name = self.vocab.delete(self.__kanji)
@@ -126,7 +127,7 @@ class DeleteCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
 
 
@@ -151,7 +152,7 @@ class ChangeCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__new_kanji}を{self.__kanji}に戻した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kanji}を{self.__new_kanji}に変更した。'
 
 
@@ -177,7 +178,7 @@ class AddKanaCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__kana}は{self.__kanji}から削除した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kana}は{self.__kanji}に追加した。'
 
 
@@ -208,7 +209,7 @@ class ChangeKanaCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__kanji}は{self.__new_kana}を{self.__kana}に戻した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kanji}は{self.__kana}を{self.__new_kana}に変更した。'
 
 
@@ -234,7 +235,7 @@ class DeleteKanaCommand(Command):
     def _undone_message(self) -> str:
         return f'{self.__kana}は{self.__kanji}に追加した。'
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return f'{self.__kana}は{self.__kanji}から削除した。'
 
 
@@ -259,7 +260,7 @@ class ToggleKnownCommand(Command):
     def _undone_message(self) -> str:
         return self.__message(True)
 
-    def _redone_message(self) -> int:
+    def _redone_message(self) -> str:
         return self.__message(False)
 
     def __message(self, redo) -> str:
