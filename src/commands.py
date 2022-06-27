@@ -8,7 +8,7 @@ class Command(ABC):
     """Base class for undoable and redoable commands."""
 
     def __init__(self, vocab: Vocab) -> None:
-        self.vocab = vocab
+        self.vocab: Vocab = vocab
 
     @abstractmethod
     def do(self) -> None:
@@ -39,7 +39,7 @@ class CommandStack:
 
     def __init__(self) -> None:
         self.__commands: List[Command] = []
-        self.__current = -1
+        self.__current: int = -1
         assert not self.undoable()
         assert not self.redoable()
 
@@ -106,9 +106,9 @@ class DeleteCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__known = self.vocab.get_known(kanji)
-        self.__kana = self.vocab.get_kana(kanji)
+        self.__kanji: str = kanji
+        self.__known: bool = self.vocab.get_known(kanji)
+        self.__kana: List[str] = self.vocab.get_kana(kanji)
         self.__list_name: Optional[str] = None
 
     def do(self) -> None:
@@ -135,8 +135,8 @@ class ChangeCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str, new_kanji: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__new_kanji = new_kanji
+        self.__kanji: str = kanji
+        self.__new_kanji: str = new_kanji
 
     def do(self) -> None:
         self.redo()
@@ -160,9 +160,9 @@ class AddKanaCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str, kana: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__kana = kana
-        self.__index = -1
+        self.__kanji: str = kanji
+        self.__kana: str = kana
+        self.__index: int = -1
 
     def do(self) -> None:
         self.__index = self.vocab.add_kana(self.__kanji, self.__kana)
@@ -191,9 +191,9 @@ class ChangeKanaCommand(Command):
             kana: str,
             new_kana: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__kana = kana
-        self.__new_kana = new_kana
+        self.__kanji: str = kanji
+        self.__kana: str = kana
+        self.__new_kana: str = new_kana
 
     def do(self) -> None:
         self.redo()
@@ -217,9 +217,9 @@ class DeleteKanaCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str, kana: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__kana = kana
-        self.__index = -1
+        self.__kanji: str = kanji
+        self.__kana: str = kana
+        self.__index: int = -1
 
     def do(self) -> None:
         self.__index = self.vocab.delete_kana(self.__kanji, self.__kana)
@@ -243,8 +243,8 @@ class ToggleKnownCommand(Command):
 
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
-        self.__kanji = kanji
-        self.__known = vocab.get_known(kanji)
+        self.__kanji: str = kanji
+        self.__known: bool = vocab.get_known(kanji)
 
     def do(self) -> None:
         self.redo()

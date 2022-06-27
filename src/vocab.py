@@ -1,6 +1,6 @@
-import pykakasi  # type: ignore
 import sys
 from collections import OrderedDict
+from pykakasi import kakasi  # type: ignore
 from typing import Dict, List, Optional, Tuple
 from unicodedata import normalize
 
@@ -21,8 +21,8 @@ class Vocab:
     def __init__(self, filename: str) -> None:
         """Loads vocabulary from a file, and raises
         exceptions on format errors."""
-        self.__filename = filename
-        self.__kks = pykakasi.kakasi()
+        self.__filename: str = filename
+        self.__kks: kakasi = kakasi()
         self.__list_to_kanji: Dict[str, List[str]] = {}
         self.__kanji_to_list: Dict[str, str] = {}
         self.__kanji_to_info: Dict[str, Tuple[bool, List[str]]] = {}

@@ -4,9 +4,9 @@
 
 This is a Python terminal application that I use on my phone and tablet to manage Japanese vocabulary that I am learning. I've used various Android apps but I wanted something that does exactly what I require, and I have zero interest in App development. ;)
 
-It is Python 3 with tests, full undo/redo, and uses Pykakasi for kanji to kana conversion. Its feature set is just exactly what I personally need.
+It is Python 3 with typing, tests, full undo/redo, and uses [Pykakasi](https://github.com/miurahr/pykakasi) for kanji to kana conversion, and [Jamdict](https://github.com/neocl/jamdict) for dictionary lookups. Its feature set is just exactly what I personally need, I need even fewer Android apps.
 
-**NOTE: I don't expect anyone to use this. This repo and these instructions are for my own use.**
+**NOTE: I don't expect anyone to use this, you have to be a terminal nut for a start. This repo and these instructions are for my own use.**
 
 ## Vocabulary
 
@@ -47,5 +47,5 @@ You need to know how to use a Japanese keyboard, on a phone, tablet or computer,
 
 If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. :)
 
-![Screenshot](screenshot.jpg)
-![Screenshot](screenshot2.jpg)
+<img src="screenshot.jpg" alt="A screenshot." width="480px"/>
+<img src="screenshot2.jpg" alt="Another screenshot." width="480px"/>

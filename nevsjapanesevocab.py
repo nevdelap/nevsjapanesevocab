@@ -44,7 +44,7 @@ def main_stuff(vocab: Vocab,
                command_stack: CommandStack,
                previous_search: Optional[str],
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
-                                                         List]:
+                                                         List[str]]:
     search: str = input('検索: ').strip()
     params = shlex.split(search)
     exact = False
@@ -137,8 +137,8 @@ def replace_indices(
     assert all(len(p) > 0 for p in params)
     if len(params) > 1 and params[1].isnumeric():
         kanji_index = int(params[1]) - 1
-        if kanji_index == - \
-                1 and previous_search is not None and len(previous_search) > 0:
+        if kanji_index == -1 \
+                and previous_search is not None and len(previous_search) > 0:
             params[1] = previous_search
         elif kanji_index >= 0 and kanji_index < len(kanji_found):
             kanji = kanji_found[kanji_index]
