@@ -2,7 +2,7 @@ import contextlib
 import io
 import unittest
 from unittest_data_provider import data_provider
-from src.vocab import Vocab
+from vocab import Vocab
 
 
 class VocabTestCase(unittest.TestCase):

@@ -1,6 +1,7 @@
+import sys
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
-from src.commands import *
+from commands import *
 from typing import Optional, Tuple
 
 """
@@ -18,8 +19,8 @@ Operations return:
 jam = Jamdict()
 
 
-def look_up(command_stack: CommandStack, vocab: str, params: [
-            str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def look_up(command_stack: CommandStack, vocab: Vocab, params: List[
+            str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 1
     search = params[0]
     result = jam.lookup(search)
@@ -31,8 +32,8 @@ def look_up(command_stack: CommandStack, vocab: str, params: [
     return (None, None, False, False)
 
 
-def add(command_stack: CommandStack, vocab: str, params: [
-        str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def add(command_stack: CommandStack, vocab: Vocab, params: List[
+        str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 1
     kanji = params[0]
     if vocab.contains(kanji):
@@ -42,8 +43,8 @@ def add(command_stack: CommandStack, vocab: str, params: [
     return (None, kanji, False, False)
 
 
-def change(command_stack: CommandStack, vocab: str, params: [
-           str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def change(command_stack: CommandStack, vocab: Vocab, params: List[
+           str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 2
     kanji, new_kanji = params[:2]
     search = None
@@ -60,8 +61,8 @@ def change(command_stack: CommandStack, vocab: str, params: [
     return (None, search, False, invalidate_previous_search_results)
 
 
-def delete(command_stack: CommandStack, vocab: str, params: [
-           str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def delete(command_stack: CommandStack, vocab: Vocab, params: List[
+           str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 1
     kanji = params[0]
     invalidate_previous_search_results = False
@@ -74,8 +75,12 @@ def delete(command_stack: CommandStack, vocab: str, params: [
     return (None, None, False, invalidate_previous_search_results)
 
 
-def add_kana(command_stack: CommandStack, vocab: str, params: [
-             str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def add_kana(command_stack: CommandStack,
+             vocab: Vocab,
+             params: List[str]) -> Optional[Tuple[Optional[str],
+                                                  Optional[str],
+                                                  bool,
+                                                  bool]]:
     assert len(params) == 2
     kanji, kana = params[:2]
     if vocab.contains(kanji, kana):
@@ -87,9 +92,9 @@ def add_kana(command_stack: CommandStack, vocab: str, params: [
 
 def change_kana(
     command_stack: CommandStack,
-    vocab: str,
-    params: [str]
-) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+    vocab: Vocab,
+    params: List[str]
+) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 3
     kanji, kana, new_kana = params[:3]
     search = None
@@ -108,9 +113,9 @@ def change_kana(
 
 def delete_kana(
     command_stack: CommandStack,
-    vocab: str,
-    params: [str]
-) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+    vocab: Vocab,
+    params: List[str]
+) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 2
     kanji, kana = params[:2]
     invalidate_previous_search_results = False
@@ -123,8 +128,12 @@ def delete_kana(
     return (None, None, False, invalidate_previous_search_results)
 
 
-def toggle_known_status(command_stack: CommandStack, vocab: str, params: [
-                        str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def toggle_known_status(command_stack: CommandStack,
+                        vocab: Vocab,
+                        params: List[str]) -> Optional[Tuple[Optional[str],
+                                                             Optional[str],
+                                                             bool,
+                                                             bool]]:
     assert len(params) == 1
     kanji = params[0]
     search = None
@@ -136,40 +145,40 @@ def toggle_known_status(command_stack: CommandStack, vocab: str, params: [
     return (None, kanji, False, False)
 
 
-def undo(command_stack: CommandStack, vocab: str, params: [
-         str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def undo(command_stack: CommandStack, vocab: Vocab, params: List[
+         str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 0
     message = command_stack.undo()
     return (message, None, False, True)
 
 
-def redo(command_stack: CommandStack, vocab: str, params: [
-         str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def redo(command_stack: CommandStack, vocab: Vocab, params: List[
+         str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 0
     message = command_stack.redo()
     return (message, None, False, True)
 
 
-def save(command_stack: CommandStack, vocab: str, params: [
-         str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def save(command_stack: CommandStack, vocab: Vocab, params: List[
+         str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 0
     try:
         print('書き込み中...')
         vocab.save()
     except Exception as e:
-        print(f'{vocab_file}が書き込みに失敗した。☹ {e}')
+        print(f'{vocab.get_filename()}が書き込みに失敗した。☹ {e}')
         sys.exit(1)
     return (None, None, False, False)
 
 
-def stats(command_stack: CommandStack, vocab: str, params: [
-          str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def stats(command_stack: CommandStack, vocab: Vocab, params: List[
+          str]) -> Optional[Tuple[Optional[str], Optional[str], bool, bool]]:
     assert len(params) == 0
     print('データ:\n  分かった: %d\n  学んでいる %d\n  合計: %d\n' % vocab.get_stats())
     return (None, None, False, False)
 
 
-__operation_help = [
+__operation_help: List[Tuple[Optional[str], Optional[str], str, int]] = [
     (None, '<漢字|仮名>', '検索', 2),
     ('l', '<漢字|仮名>', '辞書検索', 2),
     ('a', '<漢字>', '新漢字', 3),
@@ -188,8 +197,12 @@ __operation_help = [
 ]
 
 
-def show_help(command_stack: CommandStack, vocab: str, params: [
-              str]) -> Optional[Tuple[str, Optional[str], bool, bool]]:
+def show_help(command_stack: CommandStack,
+              vocab: Vocab,
+              params_unused: List[str]) -> Optional[Tuple[Optional[str],
+                                                          Optional[str],
+                                                          bool,
+                                                          bool]]:
     print('\n  使い方:\n')
     for (command, params, help_text, tabs) in __operation_help:
         out = []
@@ -219,7 +232,7 @@ __operations = {
     'h': (0, None, None, show_help)
 }
 
-assert sorted([operation[0] for operation in __operation_help if operation[0] not in [
+assert sorted([str(operation[0]) for operation in __operation_help if operation[0] not in [
               None, 'q']]) == sorted(list(__operations))
 
 
