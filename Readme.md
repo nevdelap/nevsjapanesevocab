@@ -49,3 +49,5 @@ If anyone want's to tell me better translations than I have in the program's UI,
 
 <img src="screenshot.jpg" alt="A screenshot." width="480px"/>
 <img src="screenshot2.jpg" alt="Another screenshot." width="480px"/>
+<img src="screenshot3.jpg" alt="Another screenshot." width="960px"/>
+
