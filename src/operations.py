@@ -178,7 +178,7 @@ def stats(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, None, False, False)
 
 
-__operation_help: List[Tuple[Optional[str], Optional[str], str, int]] = [
+__operation_help: List[Tuple[Optional[str], Optional[str], str, int, int]] = [
     (None, '<漢字|仮名>', '検索', 2, 2),
     ('l', '<漢字|仮名>', '辞書検索', 2, 2),
     ('a', '<漢字>', '新漢字', 3, 2),

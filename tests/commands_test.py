@@ -6,7 +6,7 @@ from vocab import Vocab
 class CommandsTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.vocab = Vocab('src/tests/test_data/vocab_good.csv')
+        self.vocab = Vocab('tests/test_data/vocab_good.csv')
         self.commandStack = CommandStack()
 
     def test_NewCommand(self):

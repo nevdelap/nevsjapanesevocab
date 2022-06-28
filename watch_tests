@@ -1,5 +1,0 @@
-#!/bin/bash
-set -e
-export PYTHONPATH=$PWD/src:$PWD/src/tests
-find . -name "*.py" -print | \
-    entr -c python run_tests.py

@@ -47,7 +47,7 @@ You need to know how to use a Japanese keyboard, on a phone, tablet or computer,
 
 If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. :)
 
-<img src="screenshot.jpg" alt="A screenshot." width="480px"/>
-<img src="screenshot2.jpg" alt="Another screenshot." width="480px"/>
-<img src="screenshot3.jpg" alt="Another screenshot." width="960px"/>
+<img src="screenshots/screenshot.jpg" width="480">
+<img src="screenshots/screenshot2.jpg" width="480">
+<img src="screenshots/screenshot3.jpg" width="960">
 

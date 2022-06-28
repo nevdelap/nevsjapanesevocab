@@ -18,7 +18,7 @@ from vocab import Vocab
 class MainTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.vocab = Vocab('src/tests/test_data/vocab_good.csv')
+        self.vocab = Vocab('tests/test_data/vocab_good.csv')
         self.vocab.add('new')
         self.vocab.add('new2')
         self.vocab.add('new3')
@@ -152,7 +152,7 @@ class MainTestCase(unittest.TestCase):
         sys.stdin = StringIO()
         sys.stdout = StringIO()
         try:
-            vocab = Vocab('src/tests/test_data/vocab_good.csv')
+            vocab = Vocab('tests/test_data/vocab_good.csv')
             command_stack = CommandStack()
             kanji_found = []
             for test_input, expected_regex in self.__io:

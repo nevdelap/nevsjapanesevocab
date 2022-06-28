@@ -8,7 +8,7 @@ from vocab import Vocab
 class VocabTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.vocab = Vocab('src/tests/test_data/vocab_good.csv')
+        self.vocab = Vocab('tests/test_data/vocab_good.csv')
 
     def test_contains(self):
         self.assertTrue(self.vocab.contains('送る'))
@@ -104,5 +104,5 @@ class VocabTestCase(unittest.TestCase):
     @data_provider(bad_files_provider)
     def test_bad_files(self, filename, expectedError):
         with self.assertRaises(Exception) as context:
-            Vocab(f'src/tests/test_data/{filename}')
+            Vocab(f'tests/test_data/{filename}')
         self.assertIn(expectedError, str(context.exception))

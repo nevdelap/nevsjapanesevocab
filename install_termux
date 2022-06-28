@@ -1,4 +1,0 @@
-#!/bin/bash
-set -e
-cd ~/storage/shared/nevsjapanesevocab
-cp vocab ~/.shortcuts/

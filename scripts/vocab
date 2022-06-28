@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+if pgrep nevsjapanesevocab.py; then
+    echo 'Already running.'
+    sleep 2
+    exit 0
+fi
+if [ -d ~/storage/shared/nevsjapanesevocab ]; then
+    # Running in Termux.
+    cd ~/storage/shared/nevsjapanesevocab
+    export PYTHONPATH="$PWD/src"
+else
+    # Running in Linux.
+    SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+    cd "$SCRIPT_DIR/.."
+    export PYTHONPATH="$SCRIPT_DIR/../src"
+fi
+# This runs on Android where it cannot be +x'ed
+python nevsjapanesevocab.py || read -rp "Press enter to quit."
