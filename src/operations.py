@@ -2,7 +2,8 @@ import sys
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
 from commands import *
-from typing import Optional, Tuple
+from vocab import Vocab
+from typing import Callable, Dict, Final, List, Optional, Tuple
 
 """
 
@@ -16,7 +17,7 @@ Operations return:
 """
 
 
-jam = Jamdict()
+jam: Final = Jamdict()
 
 
 def look_up(command_stack: CommandStack, vocab: Vocab, params: List[
@@ -216,7 +217,7 @@ def show_help(command_stack: CommandStack,
     return (None, None, False, False)
 
 
-__operations = {
+__operations: Dict[str, Tuple[int, Optional[Callable[[CommandStack], bool]], Optional[str], Callable[[CommandStack, Vocab, List[str]], Optional[Tuple[Optional[str], Optional[str], bool, bool]]]]] = {
     'l': (1, None, '使い方: l <漢字|仮名>', look_up),
     'a': (1, None, '使い方: a <漢字>', add),
     'd': (1, None, '使い方: d <漢字>', delete),
@@ -236,5 +237,5 @@ assert sorted([str(operation[0]) for operation in __operation_help if operation[
               None, 'q']]) == sorted(list(__operations))
 
 
-def get_operations():
+def get_operations() -> Dict[str, Tuple[int, Optional[Callable[[CommandStack], bool]], Optional[str], Callable[[CommandStack, Vocab, List[str]], Optional[Tuple[Optional[str], Optional[str], bool, bool]]]]]:
     return __operations

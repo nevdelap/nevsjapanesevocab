@@ -1,7 +1,7 @@
 import sys
 from collections import OrderedDict
-from pykakasi import kakasi  # type: ignore
-from typing import Dict, List, Optional, Tuple
+from pykakasi import kakasi
+from typing import Dict, Final, List, Optional, Tuple
 from unicodedata import normalize
 
 
@@ -16,7 +16,7 @@ class Vocab:
     purposes.
     """
 
-    __itemsPerList: int = 100
+    __itemsPerList: Final = 100
 
     def __init__(self, filename: str) -> None:
         """Loads vocabulary from a file, and raises
@@ -103,7 +103,7 @@ class Vocab:
         assert self.contains(kanji), kanji
         return self.__kanji_to_list[kanji]
 
-    def contains(self, kanji: str, kana: str = None) -> bool:
+    def contains(self, kanji: str, kana: Optional[str] = None) -> bool:
         assert Vocab.valid_string(kanji), kanji
         assert kana is None or Vocab.valid_string(kana), kana
         return kanji in self.__kanji_to_info \
@@ -112,7 +112,7 @@ class Vocab:
                 kana in self.__kanji_to_info[kanji][1]
             )
 
-    def search(self, s, exact: bool = False) -> List[str]:
+    def search(self, s: str, exact: bool = False) -> List[str]:
         """Search for a string in the kanji and their kana.
         Parameters
         ==========
@@ -128,7 +128,7 @@ class Vocab:
                 kanji_found.append(kanji)
         return kanji_found
 
-    def add(self, kanji: str, list_name: str = None) -> str:
+    def add(self, kanji: str, list_name: Optional[str] = None) -> str:
         assert Vocab.valid_string(kanji), kanji
         assert not self.contains(kanji), kanji
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
@@ -143,7 +143,7 @@ class Vocab:
         assert self.contains(kanji), kanji
         return list_name
 
-    def change(self, kanji: str, new_kanji: str):
+    def change(self, kanji: str, new_kanji: str) -> None:
         assert Vocab.valid_string(kanji), kanji
         assert self.contains(kanji), kanji
         assert Vocab.valid_string(new_kanji), kanji
@@ -179,7 +179,7 @@ class Vocab:
         assert not self.contains(kanji), kanji
         return list_name
 
-    def add_kana(self, kanji: str, kana: str, index: int = None) -> int:
+    def add_kana(self, kanji: str, kana: str, index: Optional[int] = None) -> int:
         assert Vocab.valid_string(kanji), kanji
         assert self.contains(kanji), kanji
         assert Vocab.valid_string(kana), kana
@@ -191,12 +191,12 @@ class Vocab:
         assert self.contains(kanji, kana), kanji + ', ' + kana
         return self.__kanji_to_info[kanji][1].index(kana)
 
-    def get_kana(self, kanji: str) -> list:
+    def get_kana(self, kanji: str) -> List[str]:
         assert Vocab.valid_string(kanji), kanji
         assert self.contains(kanji), kanji
         return self.__kanji_to_info[kanji][1]
 
-    def replace_all_kana(self, kanji: str, kana_list: list) -> None:
+    def replace_all_kana(self, kanji: str, kana_list: List[str]) -> None:
         assert Vocab.valid_string(kanji), kanji
         assert Vocab.valid_kana_list(kana_list), kana_list
         known = self.__kanji_to_info[kanji][0]

@@ -6,13 +6,13 @@ from colors import color  # type: ignore
 from commands import CommandStack
 from operations import get_operations
 from vocab import Vocab
-from typing import List, Optional, Tuple
+from typing import Final, List, Optional, Tuple
 
 
 def main() -> None:
     print(color('ネフの日本語語彙リスト', style='bold'))
 
-    vocab_file = 'vocab.csv'
+    vocab_file: Final = 'vocab.csv'
     try:
         print('読み込み中...')
         vocab = Vocab(vocab_file)
@@ -45,7 +45,7 @@ def main_stuff(vocab: Vocab,
                previous_search: Optional[str],
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
                                                          List[str]]:
-    search: str = input('検索: ').strip()
+    search = input('検索: ').strip()
     params = shlex.split(search)
     exact = False
     if len(params) == 0:
@@ -69,7 +69,7 @@ def main_stuff(vocab: Vocab,
                         validation is None or validation(command_stack)):
                     (
                         message,
-                        search,
+                        new_search,
                         repeat_previous_search,
                         invalidate_previous_search
                     ) = operation(
@@ -81,11 +81,12 @@ def main_stuff(vocab: Vocab,
                         print(message)
                     if invalidate_previous_search:
                         previous_kanji_found = []
-                    if search is None:
+                    if new_search is None:
                         search = previous_search
                         if not repeat_previous_search:
                             return search, previous_kanji_found
                     else:
+                        search = new_search
                         exact = True
                 else:
                     print(error_message)

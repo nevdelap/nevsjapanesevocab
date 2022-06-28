@@ -263,6 +263,6 @@ class ToggleKnownCommand(Command):
     def _redone_message(self) -> str:
         return self.__message(False)
 
-    def __message(self, redo) -> str:
+    def __message(self, redo: bool) -> str:
         return f'{self.__kanji}のステータスが%sに変更された。' % ('既知(%s)' % color(
             '✓', fg='green') if redo == self.__known else '未知')
