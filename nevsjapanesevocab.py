@@ -82,7 +82,7 @@ def main_stuff(vocab: Vocab,
                     if invalidate_previous_search:
                         previous_kanji_found = []
                     if new_search is None:
-                        search = previous_search
+                        search = '' if previous_search is None else previous_search
                         if not repeat_previous_search:
                             return search, previous_kanji_found
                     else:

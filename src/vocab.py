@@ -4,9 +4,11 @@ from pykakasi import kakasi
 from typing import Dict, Final, List, NamedTuple, Optional, Tuple
 from unicodedata import normalize
 
+
 class KanjiInfo(NamedTuple):
     known: bool
     kana_list: List[str]
+
 
 class Vocab:
     """Vocab stores kanji being learned, the readings being
@@ -63,7 +65,8 @@ class Vocab:
                     self.__list_to_kanji[list_name] = []
                 self.__list_to_kanji[list_name].append(kanji)
                 self.__kanji_to_list[kanji] = list_name
-                self.__kanji_to_info[kanji] = KanjiInfo(known == '1', kana_list)
+                self.__kanji_to_info[kanji] = KanjiInfo(
+                    known == '1', kana_list)
 
     def save(self) -> None:
         """Saves the vocab back to its original file."""
@@ -183,7 +186,11 @@ class Vocab:
         assert not self.contains(kanji), kanji
         return list_name
 
-    def add_kana(self, kanji: str, kana: str, index: Optional[int] = None) -> int:
+    def add_kana(
+            self,
+            kanji: str,
+            kana: str,
+            index: Optional[int] = None) -> int:
         assert Vocab.valid_string(kanji), kanji
         assert self.contains(kanji), kanji
         assert Vocab.valid_string(kana), kana
