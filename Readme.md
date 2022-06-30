@@ -14,38 +14,38 @@ The original list is Kanshudo's top 5000 words by usefulness, stripped of hiraga
 
 Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 
-## Installation
+## Setup on Linux
 
-This is my setup, the bits relevant to this at least.
+1. Standard old dev environment, VS Code, all my extensions, Python 3, `entr`, on Arch.
+1. The Python packages and tools listed below.
+1. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
+## Setup On Android
 
 1. Install [Termux](https://f-droid.org/en/packages/com.termux/) from F-Droid.
 1. Install [Termux Widget](https://f-droid.org/en/packages/com.termux.widget/) from F-Droid.
 1. Install [Code Editor](https://play.google.com/store/apps/details?id=com.rhmsoft.code).
 1. `pkg update`
-1. `pkg install git python`
+1. `pkg install entr git python`
 1. `termux-setup-storage`
 1. `ssh-keygen`
 1. `cat .ssh/id_rsa.pub # Copy it into GitHub.`
 1. `mkdir -p ~/.shortcuts`
 1. `chmod 700 ~/.shortcuts`
 1. `cd ~/storage/shared/`
-1. `git clone git@bitbucket.org:nevdelap/nevsjapanesevocab.git`
+1. `git clone git@github.com:nevdelap/nevsjapanesevocab.git`
 1. `cd nevsjapanesevocab`
 1. `bash install_termux`
 1. `pip install --upgrade wheel`
 1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data mypy pykakasi readline unittest-data-provider`
-1. Create a Termux Widget to run `.shortcuts/vocab`
-
-## Other
-
-1. When editing on the computer I add this to VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
-1. The `watch_tests` script requires `entr`.
+1. Create a Termux Widget to run `~/.shortcuts/vocab`
 
 ## Usage
 
 You need to know how to use a Japanese keyboard, on a phone, tablet or computer, or use an IME for a computer, otherwise the usage is there, in Japanese.
 
 If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. :)
+
+The usage doesn't describe some features of indexing the search results and referring to the last search as 0, because describing it is beyond my Japanese. They are for driving it fast on the Android device where you don't have a full keyboard. :P
 
 <img src="screenshots/screenshot.jpg" width="480">
 <img src="screenshots/screenshot2.jpg" width="480">
