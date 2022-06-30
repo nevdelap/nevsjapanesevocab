@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-if pgrep nevsjapanesevocab.py; then
+if ps -ef | grep nevsjapanesevocab.py | grep -qv grep; then
     echo 'Already running.'
     sleep 2
     exit 0
