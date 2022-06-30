@@ -1,9 +1,12 @@
 import sys
 from collections import OrderedDict
 from pykakasi import kakasi
-from typing import Dict, Final, List, Optional, Tuple
+from typing import Dict, Final, List, NamedTuple, Optional, Tuple
 from unicodedata import normalize
 
+class KanjiInfo(NamedTuple):
+    known: bool
+    kana_list: List[str]
 
 class Vocab:
     """Vocab stores kanji being learned, the readings being
@@ -25,7 +28,7 @@ class Vocab:
         self.__kks: kakasi = kakasi()
         self.__list_to_kanji: Dict[str, List[str]] = {}
         self.__kanji_to_list: Dict[str, str] = {}
-        self.__kanji_to_info: Dict[str, Tuple[bool, List[str]]] = {}
+        self.__kanji_to_info: Dict[str, KanjiInfo] = {}
         with open(self.__filename) as f:
             lines = f.readlines()
             for line_number, line in enumerate(lines):
@@ -60,7 +63,7 @@ class Vocab:
                     self.__list_to_kanji[list_name] = []
                 self.__list_to_kanji[list_name].append(kanji)
                 self.__kanji_to_list[kanji] = list_name
-                self.__kanji_to_info[kanji] = (known == '1', kana_list)
+                self.__kanji_to_info[kanji] = KanjiInfo(known == '1', kana_list)
 
     def save(self) -> None:
         """Saves the vocab back to its original file."""
@@ -136,10 +139,11 @@ class Vocab:
             list_name = self.new_kanji_list_name()
         kana = ''.join([result['hira']
                        for result in self.__kks.convert(kanji)])
+        known = False
         kana_list = [kana] if kana != kanji else []
         self.__list_to_kanji[list_name].append(kanji)
         self.__kanji_to_list[kanji] = list_name
-        self.__kanji_to_info[kanji] = (False, kana_list)
+        self.__kanji_to_info[kanji] = KanjiInfo(known, kana_list)
         assert self.contains(kanji), kanji
         return list_name
 
@@ -200,7 +204,7 @@ class Vocab:
         assert Vocab.valid_string(kanji), kanji
         assert Vocab.valid_kana_list(kana_list), kana_list
         known = self.__kanji_to_info[kanji][0]
-        self.__kanji_to_info[kanji] = (known, kana_list)
+        self.__kanji_to_info[kanji] = KanjiInfo(known, kana_list)
 
     def change_kana(self, kanji: str, kana: str, new_kana: str) -> None:
         assert Vocab.valid_string(kanji), kanji
@@ -211,7 +215,7 @@ class Vocab:
         assert not self.contains(kanji, new_kana), kanji
         known, kana_list = self.__kanji_to_info[kanji]
         kana_list[kana_list.index(kana)] = new_kana
-        self.__kanji_to_info[kanji] = (known, kana_list)
+        self.__kanji_to_info[kanji] = KanjiInfo(known, kana_list)
         assert not self.contains(kanji, kana), kanji
         assert self.contains(kanji, new_kana), kanji
 
@@ -235,14 +239,14 @@ class Vocab:
         assert self.contains(kanji), kanji
         known, kana_list = self.__kanji_to_info[kanji]
         new_known = not known
-        self.__kanji_to_info[kanji] = (new_known, kana_list)
+        self.__kanji_to_info[kanji] = KanjiInfo(new_known, kana_list)
         return new_known
 
     def set_known(self, kanji: str, known: bool) -> None:
         assert Vocab.valid_string(kanji), kanji
         assert isinstance(known, bool)
         kana_list = self.__kanji_to_info[kanji][1]
-        self.__kanji_to_info[kanji] = (known, kana_list)
+        self.__kanji_to_info[kanji] = KanjiInfo(known, kana_list)
 
     @staticmethod
     def valid_index(i: int) -> bool:
