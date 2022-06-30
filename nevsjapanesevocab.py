@@ -37,9 +37,8 @@ def main() -> None:
         print(f'{vocab_file}が書き込みに失敗した。☹ {e}')
         sys.exit(1)
 
+
 # Driven by tests.
-
-
 def main_stuff(vocab: Vocab,
                command_stack: CommandStack,
                previous_search: Optional[str],
@@ -116,7 +115,7 @@ def main_stuff(vocab: Vocab,
                                 f'{color(str(kana_index + 1), fg="grey")} {kana}' for kana_index,
                                 kana in enumerate(kana_list)]),
                         fg='grey'))
-            if vocab.get_known(kanji):
+            if vocab.is_known(kanji):
                 out.append(color('✓', fg='green'))
             print('  ' + ' '.join(out))
     else:
@@ -132,9 +131,9 @@ def replace_indices(
     """ Given a set of search results, and command
     parameters that reference kanji and kana by index in
     those results, replace the indices with the kanji and
-    kana."""
+    kana. Replace index 0 with the previous search term."""
     assert all(Vocab.valid_string(kanji) for kanji in kanji_found)
-    assert all(vocab.contains(kanji) for kanji in kanji_found)
+    assert all(kanji in vocab for kanji in kanji_found)
     assert all(len(p) > 0 for p in params)
     if len(params) > 1 and params[1].isnumeric():
         kanji_index = int(params[1]) - 1

@@ -49,7 +49,7 @@ def add(command_stack: CommandStack, vocab: Vocab,
         params: List[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
-    if vocab.contains(kanji):
+    if kanji in vocab:
         print(f'{kanji}は既に有る。')
     else:
         command_stack.do(AddCommand(vocab, kanji))
@@ -62,9 +62,9 @@ def change(command_stack: CommandStack, vocab: Vocab,
     kanji, new_kanji = params[:2]
     search = None
     invalidate_previous_search_results = False
-    if not vocab.contains(kanji):
+    if not kanji in vocab:
         print(f'{kanji}は見つからない。')
-    elif vocab.contains(new_kanji):
+    elif new_kanji in vocab:
         print(f'{new_kanji}は既に有る。')
         search = new_kanji
     else:
@@ -79,7 +79,7 @@ def delete(command_stack: CommandStack, vocab: Vocab,
     assert len(params) == 1
     kanji = params[0]
     invalidate_previous_search_results = False
-    if not vocab.contains(kanji):
+    if not kanji in vocab:
         print(f'{kanji}は見つからない。')
     else:
         command_stack.do(DeleteCommand(vocab, kanji))
@@ -104,7 +104,7 @@ def change_kana(command_stack: CommandStack, vocab: Vocab,
     assert len(params) == 3
     kanji, kana, new_kana = params[:3]
     search = None
-    if not vocab.contains(kanji):
+    if not kanji in vocab:
         print(f'{kanji}は見つからない。')
     elif not vocab.contains(kanji, kana):
         print(f'{kanji}は{kana}が見つからない。')
@@ -138,7 +138,7 @@ def toggle_known_status(
     assert len(params) == 1
     kanji = params[0]
     search = None
-    if not vocab.contains(kanji):
+    if not kanji in vocab:
         print(f'{kanji}は見つからない。')
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))
@@ -167,7 +167,7 @@ def save(command_stack: CommandStack, vocab: Vocab,
         print('書き込み中...')
         vocab.save()
     except Exception as e:
-        print(f'{vocab.get_filename()}が書き込みに失敗した。☹ {e}')
+        print(f'{vocab.filename}が書き込みに失敗した。☹ {e}')
         sys.exit(1)
     return (None, None, False, False)
 

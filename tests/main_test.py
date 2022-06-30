@@ -2,11 +2,11 @@ import contextlib
 import re
 import sys
 import unittest
-from colors import color
+from colors import color  # type: ignore
+from commands import CommandStack
 from io import StringIO
 from nevsjapanesevocab import main_stuff, replace_indices
-from unittest_data_provider import data_provider
-from commands import CommandStack
+from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
 # English words will never exist in the real data. I'm taking
@@ -27,6 +27,7 @@ class MainTestCase(unittest.TestCase):
         self.vocab.add_kana('new2', 'kana3')
 
     # TODO: index 0
+    @staticmethod
     def replace_indices():
         return [
             ('new', ['n', '-50'], ['n', '-50']),

@@ -86,7 +86,8 @@ class Vocab:
                         )
                     )
 
-    def get_filename(self) -> str:
+    @property
+    def filename(self) -> str:
         return self.__filename
 
     def get_stats(self) -> Tuple[int, int, int]:
@@ -106,8 +107,12 @@ class Vocab:
     def get_list_name(self, kanji: str) -> str:
         "A numeric name of the list that the kanji is in."
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         return self.__kanji_to_list[kanji]
+
+    def __contains__(self, kanji: str) -> bool:
+        assert Vocab.valid_string(kanji), kanji
+        return kanji in self.__kanji_to_info
 
     def contains(self, kanji: str, kana: Optional[str] = None) -> bool:
         assert Vocab.valid_string(kanji), kanji
@@ -136,7 +141,7 @@ class Vocab:
 
     def add(self, kanji: str, list_name: Optional[str] = None) -> str:
         assert Vocab.valid_string(kanji), kanji
-        assert not self.contains(kanji), kanji
+        assert not kanji in self, kanji
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
         if list_name is None:
             list_name = self.new_kanji_list_name()
@@ -147,14 +152,14 @@ class Vocab:
         self.__list_to_kanji[list_name].append(kanji)
         self.__kanji_to_list[kanji] = list_name
         self.__kanji_to_info[kanji] = KanjiInfo(known, kana_list)
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         return list_name
 
     def change(self, kanji: str, new_kanji: str) -> None:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         assert Vocab.valid_string(new_kanji), kanji
-        assert not self.contains(new_kanji), kanji
+        assert new_kanji not in self, kanji
         assert new_kanji != kanji
         list_name = self.__kanji_to_list[kanji]
         self.__list_to_kanji[list_name].append(new_kanji)
@@ -163,8 +168,8 @@ class Vocab:
         self.__kanji_to_list.pop(kanji)
         self.__kanji_to_info[new_kanji] = self.__kanji_to_info[kanji]
         self.__kanji_to_info.pop(kanji)
-        assert not self.contains(kanji), kanji
-        assert self.contains(new_kanji), kanji
+        assert not kanji in self, kanji
+        assert new_kanji in self, kanji
         assert self.get_list_name(new_kanji) == list_name
 
     # Public for tests.
@@ -178,12 +183,12 @@ class Vocab:
 
     def delete(self, kanji: str) -> str:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         list_name = self.__kanji_to_list[kanji]
         self.__list_to_kanji[list_name].remove(kanji)
         self.__kanji_to_list.pop(kanji)
         self.__kanji_to_info.pop(kanji)
-        assert not self.contains(kanji), kanji
+        assert not kanji in self, kanji
         return list_name
 
     def add_kana(
@@ -192,7 +197,7 @@ class Vocab:
             kana: str,
             index: Optional[int] = None) -> int:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         assert Vocab.valid_string(kana), kana
         assert not self.contains(kanji, kana), kanji
         assert index is None or Vocab.valid_index(index)
@@ -204,7 +209,7 @@ class Vocab:
 
     def get_kana(self, kanji: str) -> List[str]:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         return self.__kanji_to_info[kanji][1]
 
     def replace_all_kana(self, kanji: str, kana_list: List[str]) -> None:
@@ -215,7 +220,7 @@ class Vocab:
 
     def change_kana(self, kanji: str, kana: str, new_kana: str) -> None:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         assert Vocab.valid_string(kana), kana
         assert self.contains(kanji, kana), kanji
         assert Vocab.valid_string(new_kana), kana
@@ -228,7 +233,7 @@ class Vocab:
 
     def delete_kana(self, kanji: str, kana: str) -> int:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         assert Vocab.valid_string(kana), kana
         assert self.contains(kanji, kana), kanji
         index = self.__kanji_to_info[kanji][1].index(kana)
@@ -236,14 +241,14 @@ class Vocab:
         assert not self.contains(kanji, kana), kanji
         return index
 
-    def get_known(self, kanji: str) -> bool:
+    def is_known(self, kanji: str) -> bool:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         return self.__kanji_to_info[kanji][0]
 
     def toggle_known(self, kanji: str) -> bool:
         assert Vocab.valid_string(kanji), kanji
-        assert self.contains(kanji), kanji
+        assert kanji in self, kanji
         known, kana_list = self.__kanji_to_info[kanji]
         new_known = not known
         self.__kanji_to_info[kanji] = KanjiInfo(new_known, kana_list)

@@ -107,7 +107,7 @@ class DeleteCommand(Command):
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
         self.__kanji: str = kanji
-        self.__known: bool = self.vocab.get_known(kanji)
+        self.__known: bool = self.vocab.is_known(kanji)
         self.__kana: List[str] = self.vocab.get_kana(kanji)
         self.__list_name: Optional[str] = None
 
@@ -244,7 +244,7 @@ class ToggleKnownCommand(Command):
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
         self.__kanji: str = kanji
-        self.__known: bool = vocab.get_known(kanji)
+        self.__known: bool = vocab.is_known(kanji)
 
     def do(self) -> None:
         self.redo()

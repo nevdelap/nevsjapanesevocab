@@ -1,7 +1,7 @@
 import contextlib
 import io
 import unittest
-from unittest_data_provider import data_provider
+from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
 
@@ -20,11 +20,11 @@ class VocabTestCase(unittest.TestCase):
         self.assertFalse(self.vocab.contains('new'))
         list_name = self.vocab.add('new')
         self.assertEqual(self.vocab.get_list_name('new'), list_name)
-        self.assertEqual(self.vocab.get_known('new'), False)
+        self.assertEqual(self.vocab.is_known('new'), False)
         self.assertEqual(self.vocab.toggle_known('new'), True)
-        self.assertEqual(self.vocab.get_known('new'), True)
+        self.assertEqual(self.vocab.is_known('new'), True)
         self.assertEqual(self.vocab.toggle_known('new'), False)
-        self.assertEqual(self.vocab.get_known('new'), False)
+        self.assertEqual(self.vocab.is_known('new'), False)
         self.assertTrue(self.vocab.contains('new'))
         self.assertEqual(self.vocab.delete('new'), list_name)
 
@@ -82,6 +82,7 @@ class VocabTestCase(unittest.TestCase):
         self.assertTrue(self.vocab.contains('new', 'kana3'))
         self.assertEqual(['kana3', 'kana2'], self.vocab.get_kana('new'))
 
+    @staticmethod
     def bad_files_provider():
         return [
             (
