@@ -5,23 +5,35 @@ from commands import *
 from vocab import Vocab
 from typing import Callable, Dict, Final, List, Optional, Tuple
 
-"""
+# A function that can be called to check if the operation is
+# possible given the current state of things.
+OperationPrecheck = Callable[[CommandStack], bool]
 
-Operations return:
+OperationResult = Tuple[
+    Optional[str],  # a message to display.
+    # a string to search for, otherwise repeat the previous search,
+    Optional[str],
+    bool,  # or whether to repeat the previous search.
+    bool,  # whether to invalidate the previous search results.
+]
 
-- optional message to display,
-- an optional string to search for, otherwise repeat the previous search,
-- whether to repeat the previous search,
-- whether to invalidate the previous search results.
+# Signature of the method function an operation.
+Operation = Callable[[CommandStack, Vocab, List[str]], OperationResult]
 
-"""
+# Definition of an operation.
+OperationDescriptor = Tuple[
+    int,  # number of params
+    Optional[OperationPrecheck],
+    Optional[str],  # params
+    Operation
+]
 
 
 jam: Final = Jamdict()
 
 
-def look_up(command_stack: CommandStack, vocab: Vocab, params: List[
-            str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def look_up(command_stack: CommandStack, vocab: Vocab,
+            params: List[str]) -> OperationResult:
     assert len(params) == 1
     search = params[0]
     result = jam.lookup(search)
@@ -33,8 +45,8 @@ def look_up(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, None, False, False)
 
 
-def add(command_stack: CommandStack, vocab: Vocab, params: List[
-        str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def add(command_stack: CommandStack, vocab: Vocab,
+        params: List[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     if vocab.contains(kanji):
@@ -44,8 +56,8 @@ def add(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, kanji, False, False)
 
 
-def change(command_stack: CommandStack, vocab: Vocab, params: List[
-           str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def change(command_stack: CommandStack, vocab: Vocab,
+           params: List[str]) -> OperationResult:
     assert len(params) == 2
     kanji, new_kanji = params[:2]
     search = None
@@ -62,8 +74,8 @@ def change(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, search, False, invalidate_previous_search_results)
 
 
-def delete(command_stack: CommandStack, vocab: Vocab, params: List[
-           str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def delete(command_stack: CommandStack, vocab: Vocab,
+           params: List[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     invalidate_previous_search_results = False
@@ -76,12 +88,8 @@ def delete(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, None, False, invalidate_previous_search_results)
 
 
-def add_kana(command_stack: CommandStack,
-             vocab: Vocab,
-             params: List[str]) -> Tuple[Optional[str],
-                                         Optional[str],
-                                         bool,
-                                         bool]:
+def add_kana(command_stack: CommandStack, vocab: Vocab,
+             params: List[str]) -> OperationResult:
     assert len(params) == 2
     kanji, kana = params[:2]
     if vocab.contains(kanji, kana):
@@ -91,11 +99,8 @@ def add_kana(command_stack: CommandStack,
     return (None, kanji, False, False)
 
 
-def change_kana(
-    command_stack: CommandStack,
-    vocab: Vocab,
-    params: List[str]
-) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def change_kana(command_stack: CommandStack, vocab: Vocab,
+                params: List[str]) -> OperationResult:
     assert len(params) == 3
     kanji, kana, new_kana = params[:3]
     search = None
@@ -112,11 +117,8 @@ def change_kana(
     return (None, search, False, False)
 
 
-def delete_kana(
-    command_stack: CommandStack,
-    vocab: Vocab,
-    params: List[str]
-) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def delete_kana(command_stack: CommandStack, vocab: Vocab,
+                params: List[str]) -> OperationResult:
     assert len(params) == 2
     kanji, kana = params[:2]
     invalidate_previous_search_results = False
@@ -129,12 +131,10 @@ def delete_kana(
     return (None, None, False, invalidate_previous_search_results)
 
 
-def toggle_known_status(command_stack: CommandStack,
-                        vocab: Vocab,
-                        params: List[str]) -> Tuple[Optional[str],
-                                                    Optional[str],
-                                                    bool,
-                                                    bool]:
+def toggle_known_status(
+        command_stack: CommandStack,
+        vocab: Vocab,
+        params: List[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     search = None
@@ -146,22 +146,22 @@ def toggle_known_status(command_stack: CommandStack,
     return (None, kanji, False, False)
 
 
-def undo(command_stack: CommandStack, vocab: Vocab, params: List[
-         str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def undo(command_stack: CommandStack, vocab: Vocab,
+         params: List[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.undo()
     return (message, None, False, True)
 
 
-def redo(command_stack: CommandStack, vocab: Vocab, params: List[
-         str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def redo(command_stack: CommandStack, vocab: Vocab,
+         params: List[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.redo()
     return (message, None, False, True)
 
 
-def save(command_stack: CommandStack, vocab: Vocab, params: List[
-         str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def save(command_stack: CommandStack, vocab: Vocab,
+         params: List[str]) -> OperationResult:
     assert len(params) == 0
     try:
         print('書き込み中...')
@@ -172,14 +172,23 @@ def save(command_stack: CommandStack, vocab: Vocab, params: List[
     return (None, None, False, False)
 
 
-def stats(command_stack: CommandStack, vocab: Vocab, params: List[
-          str]) -> Tuple[Optional[str], Optional[str], bool, bool]:
+def stats(command_stack: CommandStack, vocab: Vocab,
+          params: List[str]) -> OperationResult:
     assert len(params) == 0
     print('データ:\n  分かった: %d\n  学んでいる %d\n  合計: %d\n' % vocab.get_stats())
     return (None, None, False, False)
 
 
-__operation_help: List[Tuple[Optional[str], Optional[str], str, int, int]] = [
+OperationHelp = List[
+    Tuple[
+        Optional[str],  # command.
+        Optional[str],  # parameters.
+        str,  # help text.
+        int, int  # tabs and spaces to help layout.
+    ]
+]
+
+__operation_help: OperationHelp = [
     (None, '<漢字|仮名>', '検索', 2, 2),
     ('l', '<漢字|仮名>', '辞書検索', 2, 2),
     ('a', '<漢字>', '新漢字', 3, 2),
@@ -198,12 +207,8 @@ __operation_help: List[Tuple[Optional[str], Optional[str], str, int, int]] = [
 ]
 
 
-def show_help(command_stack: CommandStack,
-              vocab: Vocab,
-              params_unused: List[str]) -> Tuple[Optional[str],
-                                                 Optional[str],
-                                                 bool,
-                                                 bool]:
+def show_help(command_stack: CommandStack, vocab: Vocab,
+              params_unused: List[str]) -> OperationResult:
     print('\n  使い方:\n')
     for (command, params, help_text, tabs, spaces) in __operation_help:
         out = []
@@ -217,84 +222,30 @@ def show_help(command_stack: CommandStack,
     return (None, None, False, False)
 
 
-__operations: Dict[str,
-                   Tuple[int,
-                         Optional[Callable[[CommandStack],
-                                           bool]],
-                         Optional[str],
-                         Callable[[CommandStack,
-                                   Vocab,
-                                   List[str]],
-                                  Tuple[Optional[str],
-                                        Optional[str],
-                                        bool,
-                                        bool]]]] = {'l': (1,
-                                                          None,
-                                                          '使い方: l <漢字|仮名>',
-                                                          look_up),
-                                                    'a': (1,
-                                                          None,
-                                                          '使い方: a <漢字>',
-                                                          add),
-                                                    'd': (1,
-                                                          None,
-                                                          '使い方: d <漢字>',
-                                                          delete),
-                                                    'c': (2,
-                                                          None,
-                                                          '使い方: c <現在の漢字> <漢字>',
-                                                          change),
-                                                    'ak': (2,
-                                                           None,
-                                                           '使い方: a <漢字> <仮名>',
-                                                           add_kana),
-                                                    'dk': (2,
-                                                           None,
-                                                           '使い方: d <漢字> <仮名>',
-                                                           delete_kana),
-                                                    'ck': (3,
-                                                           None,
-                                                           '使い方: c <漢字> <現在の仮名> <仮名>',
-                                                           change_kana),
-                                                    't': (1,
-                                                          None,
-                                                          '使い方: t <漢字>',
-                                                          toggle_known_status),
-                                                    'u': (0,
-                                                          lambda command_stack: command_stack.undoable(),
-                                                          '元に戻すものがない。',
-                                                          undo),
-                                                    'r': (0,
-                                                          lambda command_stack: command_stack.redoable(),
-                                                          '遣り直しものがない。',
-                                                          redo),
-                                                    's': (0,
-                                                          None,
-                                                          None,
-                                                          save),
-                                                    'k': (0,
-                                                          None,
-                                                          None,
-                                                          stats),
-                                                    'h': (0,
-                                                          None,
-                                                          None,
-                                                          show_help)}
+OperationsDescriptors = Dict[
+    str,  # command
+    OperationDescriptor
+]
+
+__operations: OperationsDescriptors = {
+    'l': (1, None, '使い方: l <漢字|仮名>', look_up),
+    'a': (1, None, '使い方: a <漢字>', add),
+    'd': (1, None, '使い方: d <漢字>', delete),
+    'c': (2, None, '使い方: c <現在の漢字> <漢字>', change),
+    'ak': (2, None, '使い方: a <漢字> <仮名>', add_kana),
+    'dk': (2, None, '使い方: d <漢字> <仮名>', delete_kana),
+    'ck': (3, None, '使い方: c <漢字> <現在の仮名> <仮名>', change_kana),
+    't': (1, None, '使い方: t <漢字>', toggle_known_status),
+    'u': (0, lambda command_stack: command_stack.undoable(), '元に戻すものがない。', undo),
+    'r': (0, lambda command_stack: command_stack.redoable(), '遣り直しものがない。', redo),
+    's': (0, None, None, save),
+    'k': (0, None, None, stats),
+    'h': (0, None, None, show_help)
+}
 
 assert sorted([str(operation[0]) for operation in __operation_help if operation[0] not in [
               None, 'q']]) == sorted(list(__operations))
 
 
-def get_operations() -> Dict[str,
-                             Tuple[int,
-                                   Optional[Callable[[CommandStack],
-                                                     bool]],
-                                   Optional[str],
-                                   Callable[[CommandStack,
-                                             Vocab,
-                                             List[str]],
-                                            Tuple[Optional[str],
-                                                  Optional[str],
-                                                  bool,
-                                                  bool]]]]:
+def get_operations() -> OperationsDescriptors:
     return __operations
