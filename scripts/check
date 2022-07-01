@@ -3,6 +3,4 @@ set -e
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 export MYPYPATH=$SCRIPT_DIR/../src:$SCRIPT_DIR/../tests
-reset
-mypy --strict nevsjapanesevocab.py &&
-mypy --strict tests/run_tests.py
+mypy --strict nevsjapanesevocab.py src/*.py tests/*.py 

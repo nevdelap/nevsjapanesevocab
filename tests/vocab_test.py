@@ -1,116 +1,103 @@
 import contextlib
 import io
-import unittest
+import pytest
 from typing import List, Tuple
 from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
 
-class VocabTestCase(unittest.TestCase):
+@pytest.fixture
+def vocab() -> Vocab:
+    return Vocab('tests/test_data/vocab_good.csv')
 
-    def setUp(self) -> None:
-        self.vocab = Vocab('tests/test_data/vocab_good.csv')
 
-    def test_contains(self) -> None:
-        self.assertTrue(self.vocab.contains('送る'))
-        self.assertTrue(self.vocab.contains('送る', 'おくる'))
-        self.assertFalse(self.vocab.contains('junk'))
-        self.assertFalse(self.vocab.contains('送る', 'junk'))
+def test_contains(vocab: Vocab) -> None:
+    assert '送る' in vocab
+    assert 'junk' not in vocab
+    assert vocab.contains('送る', 'おくる')
+    assert not vocab.contains('送る', 'junk')
 
-    def test_add_delete_kanji(self) -> None:
-        self.assertFalse(self.vocab.contains('new'))
-        list_name = self.vocab.add('new')
-        self.assertEqual(self.vocab.get_list_name('new'), list_name)
-        self.assertEqual(self.vocab.is_known('new'), False)
-        self.assertEqual(self.vocab.toggle_known('new'), True)
-        self.assertEqual(self.vocab.is_known('new'), True)
-        self.assertEqual(self.vocab.toggle_known('new'), False)
-        self.assertEqual(self.vocab.is_known('new'), False)
-        self.assertTrue(self.vocab.contains('new'))
-        self.assertEqual(self.vocab.delete('new'), list_name)
 
-    def test_change_kanji(self) -> None:
-        self.assertFalse(self.vocab.contains('new'))
-        list_name = self.vocab.add('new')
-        self.vocab.add_kana('new', 'kana')
-        self.vocab.add_kana('new', 'kana2')
-        self.assertTrue(self.vocab.contains('new'))
-        self.assertTrue(self.vocab.contains('new', 'kana'))
-        self.assertTrue(self.vocab.contains('new', 'kana2'))
-        self.assertFalse(self.vocab.contains('NEW'))
-        self.assertFalse(self.vocab.contains('NEW', 'kana'))
-        self.assertFalse(self.vocab.contains('NEW', 'kana2'))
-        self.vocab.change('new', 'NEW')
-        self.assertFalse(self.vocab.contains('new'))
-        self.assertFalse(self.vocab.contains('new', 'kana'))
-        self.assertFalse(self.vocab.contains('new', 'kana2'))
-        self.assertTrue(self.vocab.contains('NEW'))
-        self.assertTrue(self.vocab.contains('NEW', 'kana'))
-        self.assertTrue(self.vocab.contains('NEW', 'kana2'))
+def test_add_delete_kanji(vocab: Vocab) -> None:
+    assert not vocab.contains('new')
+    list_name = vocab.add('new')
+    assert vocab.get_list_name('new') == list_name
+    assert not vocab.is_known('new')
+    assert vocab.toggle_known('new')
+    assert vocab.is_known('new')
+    assert not vocab.toggle_known('new')
+    assert not vocab.is_known('new')
+    assert vocab.contains('new')
+    assert vocab.delete('new') == list_name
 
-    def test_add_delete_kana(self) -> None:
-        self.assertFalse(self.vocab.contains('送る', 'new'))
-        index = self.vocab.add_kana('送る', 'new')
-        self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new'])
-        index2 = self.vocab.add_kana('送る', 'new2')
-        self.assertTrue(self.vocab.contains('送る', 'new2'))
-        self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new', 'new2'])
-        self.assertEqual(self.vocab.delete_kana('送る', 'new2'), index2)
-        self.assertFalse(self.vocab.contains('送る', 'new2'))
-        self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new'])
-        index2 = self.vocab.add_kana('送る', 'new2')
-        self.assertEqual(self.vocab.delete_kana('送る', 'new'), index)
-        self.assertFalse(self.vocab.contains('送る', 'new'))
-        self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new2'])
-        self.assertEqual(self.vocab.delete_kana('送る', 'new2'), index)
-        self.assertFalse(self.vocab.contains('送る', 'new2'))
-        self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
 
-    def test_change_kana(self) -> None:
-        self.assertFalse(self.vocab.contains('new'))
-        list_name = self.vocab.add('new')
-        self.vocab.add_kana('new', 'kana')
-        self.vocab.add_kana('new', 'kana2')
-        self.assertTrue(self.vocab.contains('new'))
-        self.assertTrue(self.vocab.contains('new', 'kana'))
-        self.assertTrue(self.vocab.contains('new', 'kana2'))
-        self.assertFalse(self.vocab.contains('new', 'kana3'))
-        self.assertEqual(['kana', 'kana2'], self.vocab.get_kana('new'))
-        self.vocab.change_kana('new', 'kana', 'kana3')
-        self.assertTrue(self.vocab.contains('new'))
-        self.assertFalse(self.vocab.contains('new', 'kana'))
-        self.assertTrue(self.vocab.contains('new', 'kana2'))
-        self.assertTrue(self.vocab.contains('new', 'kana3'))
-        self.assertEqual(['kana3', 'kana2'], self.vocab.get_kana('new'))
+def test_change_kanji(vocab: Vocab) -> None:
+    assert not vocab.contains('new')
+    list_name = vocab.add('new')
+    vocab.add_kana('new', 'kana')
+    vocab.add_kana('new', 'kana2')
+    assert vocab.contains('new')
+    assert vocab.contains('new', 'kana')
+    assert vocab.contains('new', 'kana2')
+    assert not vocab.contains('NEW')
+    assert not vocab.contains('NEW', 'kana')
+    assert not vocab.contains('NEW', 'kana2')
+    vocab.change('new', 'NEW')
+    assert not vocab.contains('new')
+    assert not vocab.contains('new', 'kana')
+    assert not vocab.contains('new', 'kana2')
+    assert vocab.contains('NEW')
+    assert vocab.contains('NEW', 'kana')
+    assert vocab.contains('NEW', 'kana2')
 
-    @staticmethod
-    def bad_files_provider() -> List[
-        Tuple[
-            str, # test file.
-            str  # expected error.
-        ]
-    ]:
-        return [
-            (
-                'vocab_bad_kana.csv',
-                "line 3: bad kana list ',,'"),
-            (
-                'vocab_bad_kanji.csv',
-                "line 3: empty kanji ''."
-            ),
-            (
-                'vocab_bad_line.csv',
-                "line 3: bad line '0100,送る', 2 fields, expected at least 4."
-            ),
-            (
-                'vocab_bad_list_name.csv',
-                "line 3: bad list name 'asdd', expected numeric."
-            )
-        ]
 
-    # TODO: fix 'error: Untyped decorator makes function untyped'.
-    @data_provider(bad_files_provider)  # type: ignore
-    def test_bad_files(self, filename: str, expectedError: str) -> None:
-        with self.assertRaises(Exception) as context:
-            Vocab(f'tests/test_data/{filename}')
-        self.assertIn(expectedError, str(context.exception))
+def test_add_delete_kana(vocab: Vocab) -> None:
+    assert not vocab.contains('送る', 'new')
+    index = vocab.add_kana('送る', 'new')
+    assert vocab.get_kana('送る') == ['おくる', 'new']
+    index2 = vocab.add_kana('送る', 'new2')
+    assert vocab.contains('送る', 'new2')
+    assert vocab.get_kana('送る') == ['おくる', 'new', 'new2']
+    assert vocab.delete_kana('送る', 'new2') == index2
+    assert not vocab.contains('送る', 'new2')
+    assert vocab.get_kana('送る') == ['おくる', 'new']
+    index2 = vocab.add_kana('送る', 'new2')
+    assert vocab.delete_kana('送る', 'new') == index
+    assert not vocab.contains('送る', 'new')
+    assert vocab.get_kana('送る') == ['おくる', 'new2']
+    assert vocab.delete_kana('送る', 'new2') == index
+    assert not vocab.contains('送る', 'new2')
+    assert vocab.get_kana('送る') == ['おくる']
+
+
+def test_change_kana(vocab: Vocab) -> None:
+    assert not vocab.contains('new')
+    list_name = vocab.add('new')
+    vocab.add_kana('new', 'kana')
+    vocab.add_kana('new', 'kana2')
+    assert vocab.contains('new')
+    assert vocab.contains('new', 'kana')
+    assert vocab.contains('new', 'kana2')
+    assert not vocab.contains('new', 'kana3')
+    assert ['kana', 'kana2'] == vocab.get_kana('new')
+    vocab.change_kana('new', 'kana', 'kana3')
+    assert vocab.contains('new')
+    assert not vocab.contains('new', 'kana')
+    assert vocab.contains('new', 'kana2')
+    assert vocab.contains('new', 'kana3')
+    assert ['kana3', 'kana2'] == vocab.get_kana('new')
+
+
+@pytest.mark.parametrize("filename, expectedError",
+                         [('vocab_bad_kana.csv',
+                           "line 3: bad kana list ',,'"),
+                          ('vocab_bad_kanji.csv',
+                           "line 3: empty kanji ''."),
+                          ('vocab_bad_line.csv',
+                           "line 3: bad line '0100,送る', 2 fields, expected at least 4."),
+                          ('vocab_bad_list_name.csv',
+                           "line 3: bad list name 'asdd', expected numeric.")])
+def test_bad_files(filename: str, expectedError: str) -> None:
+    with pytest.raises(Exception) as e_info:
+        Vocab(f'tests/test_data/{filename}')
+    assert expectedError in str(e_info)

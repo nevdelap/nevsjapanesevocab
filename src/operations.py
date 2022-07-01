@@ -1,9 +1,9 @@
 import sys
 from colors import color  # type: ignore
-from jamdict import Jamdict  # type: ignore
 from commands import *
-from vocab import Vocab
+from jamdict import Jamdict  # type: ignore
 from typing import Callable, Dict, Final, List, Optional, Tuple
+from vocab import Vocab
 
 # A function that can be called to check if the operation is
 # possible given the current state of things.
@@ -62,7 +62,7 @@ def change(command_stack: CommandStack, vocab: Vocab,
     kanji, new_kanji = params[:2]
     search = None
     invalidate_previous_search_results = False
-    if not kanji in vocab:
+    if kanji not in vocab:
         print(f'{kanji}は見つからない。')
     elif new_kanji in vocab:
         print(f'{new_kanji}は既に有る。')
@@ -79,7 +79,7 @@ def delete(command_stack: CommandStack, vocab: Vocab,
     assert len(params) == 1
     kanji = params[0]
     invalidate_previous_search_results = False
-    if not kanji in vocab:
+    if kanji not in vocab:
         print(f'{kanji}は見つからない。')
     else:
         command_stack.do(DeleteCommand(vocab, kanji))
@@ -104,7 +104,7 @@ def change_kana(command_stack: CommandStack, vocab: Vocab,
     assert len(params) == 3
     kanji, kana, new_kana = params[:3]
     search = None
-    if not kanji in vocab:
+    if kanji not in vocab:
         print(f'{kanji}は見つからない。')
     elif not vocab.contains(kanji, kana):
         print(f'{kanji}は{kana}が見つからない。')
@@ -138,7 +138,7 @@ def toggle_known_status(
     assert len(params) == 1
     kanji = params[0]
     search = None
-    if not kanji in vocab:
+    if kanji not in vocab:
         print(f'{kanji}は見つからない。')
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))

@@ -141,7 +141,7 @@ class Vocab:
 
     def add(self, kanji: str, list_name: Optional[str] = None) -> str:
         assert Vocab.valid_string(kanji), kanji
-        assert not kanji in self, kanji
+        assert kanji not in self, kanji
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
         if list_name is None:
             list_name = self.new_kanji_list_name()
@@ -168,7 +168,7 @@ class Vocab:
         self.__kanji_to_list.pop(kanji)
         self.__kanji_to_info[new_kanji] = self.__kanji_to_info[kanji]
         self.__kanji_to_info.pop(kanji)
-        assert not kanji in self, kanji
+        assert kanji not in self, kanji
         assert new_kanji in self, kanji
         assert self.get_list_name(new_kanji) == list_name
 
@@ -188,7 +188,7 @@ class Vocab:
         self.__list_to_kanji[list_name].remove(kanji)
         self.__kanji_to_list.pop(kanji)
         self.__kanji_to_info.pop(kanji)
-        assert not kanji in self, kanji
+        assert kanji not in self, kanji
         return list_name
 
     def add_kana(

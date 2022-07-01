@@ -36,7 +36,7 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 1. `cd nevsjapanesevocab`
 1. `bash install_termux`
 1. `pip install --upgrade wheel`
-1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data mypy pykakasi readline unittest-data-provider`
+1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data mypy pykakasi pytest readline`
 1. Create a Termux Widget to run `~/.shortcuts/vocab`
 
 ## Usage

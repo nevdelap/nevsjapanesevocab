@@ -3,4 +3,4 @@ set -e
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 find . -name "*.py" -print | \
-    entr -c scripts/check
+    entr bash -c 'reset; scripts/check'
