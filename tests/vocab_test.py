@@ -1,22 +1,23 @@
 import contextlib
 import io
 import unittest
+from typing import List, Tuple
 from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
 
 class VocabTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.vocab = Vocab('tests/test_data/vocab_good.csv')
 
-    def test_contains(self):
+    def test_contains(self) -> None:
         self.assertTrue(self.vocab.contains('送る'))
         self.assertTrue(self.vocab.contains('送る', 'おくる'))
         self.assertFalse(self.vocab.contains('junk'))
         self.assertFalse(self.vocab.contains('送る', 'junk'))
 
-    def test_add_delete_kanji(self):
+    def test_add_delete_kanji(self) -> None:
         self.assertFalse(self.vocab.contains('new'))
         list_name = self.vocab.add('new')
         self.assertEqual(self.vocab.get_list_name('new'), list_name)
@@ -28,7 +29,7 @@ class VocabTestCase(unittest.TestCase):
         self.assertTrue(self.vocab.contains('new'))
         self.assertEqual(self.vocab.delete('new'), list_name)
 
-    def test_change_kanji(self):
+    def test_change_kanji(self) -> None:
         self.assertFalse(self.vocab.contains('new'))
         list_name = self.vocab.add('new')
         self.vocab.add_kana('new', 'kana')
@@ -47,7 +48,7 @@ class VocabTestCase(unittest.TestCase):
         self.assertTrue(self.vocab.contains('NEW', 'kana'))
         self.assertTrue(self.vocab.contains('NEW', 'kana2'))
 
-    def test_add_delete_kana(self):
+    def test_add_delete_kana(self) -> None:
         self.assertFalse(self.vocab.contains('送る', 'new'))
         index = self.vocab.add_kana('送る', 'new')
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる', 'new'])
@@ -65,7 +66,7 @@ class VocabTestCase(unittest.TestCase):
         self.assertFalse(self.vocab.contains('送る', 'new2'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
 
-    def test_change_kana(self):
+    def test_change_kana(self) -> None:
         self.assertFalse(self.vocab.contains('new'))
         list_name = self.vocab.add('new')
         self.vocab.add_kana('new', 'kana')
@@ -83,7 +84,12 @@ class VocabTestCase(unittest.TestCase):
         self.assertEqual(['kana3', 'kana2'], self.vocab.get_kana('new'))
 
     @staticmethod
-    def bad_files_provider():
+    def bad_files_provider() -> List[
+        Tuple[
+            str, # test file.
+            str  # expected error.
+        ]
+    ]:
         return [
             (
                 'vocab_bad_kana.csv',
@@ -102,8 +108,9 @@ class VocabTestCase(unittest.TestCase):
             )
         ]
 
-    @data_provider(bad_files_provider)
-    def test_bad_files(self, filename, expectedError):
+    # TODO: fix 'error: Untyped decorator makes function untyped'.
+    @data_provider(bad_files_provider)  # type: ignore
+    def test_bad_files(self, filename: str, expectedError: str) -> None:
         with self.assertRaises(Exception) as context:
             Vocab(f'tests/test_data/{filename}')
         self.assertIn(expectedError, str(context.exception))

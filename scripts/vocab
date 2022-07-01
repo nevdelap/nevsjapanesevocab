@@ -15,5 +15,5 @@ else
     cd "$SCRIPT_DIR/.."
     export PYTHONPATH="$SCRIPT_DIR/../src"
 fi
-# This runs on Android where it cannot be +x'ed
+# This runs on Android where it cannot be +x'ed.
 python nevsjapanesevocab.py || read -rp "Press enter to quit."

@@ -5,4 +5,4 @@ cd "$SCRIPT_DIR/.."
 export MYPYPATH=$SCRIPT_DIR/../src:$SCRIPT_DIR/../tests
 reset
 mypy --strict nevsjapanesevocab.py &&
-mypy tests/run_tests.py
+mypy --strict tests/run_tests.py

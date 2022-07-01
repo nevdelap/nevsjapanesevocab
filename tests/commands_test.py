@@ -5,11 +5,11 @@ from vocab import Vocab
 
 class CommandsTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.vocab = Vocab('tests/test_data/vocab_good.csv')
         self.commandStack = CommandStack()
 
-    def test_NewCommand(self):
+    def test_NewCommand(self) -> None:
         self.assertEqual(self.commandStack.current(), -1)
         self.commandStack.do(AddCommand(self.vocab, 'new'))
         self.assertEqual(self.commandStack.current(), 0)
@@ -30,7 +30,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertEqual(self.commandStack.current(), -1)
         self.assertFalse(self.vocab.contains('new'))
 
-    def test_ChangeCommand(self):
+    def test_ChangeCommand(self) -> None:
         self.assertEqual(self.commandStack.current(), -1)
         self.commandStack.do(AddCommand(self.vocab, 'new'))
         self.assertEqual(self.commandStack.current(), 0)
@@ -51,7 +51,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertEqual(self.commandStack.current(), -1)
         self.assertFalse(self.vocab.contains('new'))
 
-    def test_DeleteCommand(self):
+    def test_DeleteCommand(self) -> None:
         self.assertEqual(self.commandStack.current(), -1)
         self.vocab.toggle_known('送る')
         self.vocab.add_kana('送る', 'new')
@@ -79,7 +79,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertEqual(self.vocab.is_known('送る'), known)
         self.assertEqual(self.vocab.get_kana('送る'), kana)
 
-    def test_undo_redo(self):
+    def test_undo_redo(self) -> None:
         self.assertEqual(self.commandStack.current(), -1)
         self.commandStack.do(AddCommand(self.vocab, 'new'))
         self.assertEqual(self.commandStack.current(), 0)
@@ -102,7 +102,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertTrue(self.commandStack.undoable())
         self.assertFalse(self.commandStack.redoable())
 
-    def test_NewKanaCommand(self):
+    def test_NewKanaCommand(self) -> None:
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
         self.commandStack.do(AddKanaCommand(self.vocab, '送る', 'new'))
         self.assertTrue(self.vocab.contains('送る', 'new'))
@@ -119,7 +119,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertFalse(self.vocab.contains('送る', 'new'))
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
 
-    def test_ChangeKanaCommand(self):
+    def test_ChangeKanaCommand(self) -> None:
         self.assertEqual(self.commandStack.current(), -1)
         self.commandStack.do(AddCommand(self.vocab, 'new'))
         self.commandStack.do(AddKanaCommand(self.vocab, 'new', 'kana'))
@@ -149,7 +149,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertTrue(self.vocab.contains('new', 'kana2'))
         self.assertTrue(self.vocab.contains('new', 'kana3'))
 
-    def test_DeleteKanaCommand(self):
+    def test_DeleteKanaCommand(self) -> None:
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
         self.commandStack.do(AddKanaCommand(self.vocab, '送る', 'new'))
         self.assertTrue(self.vocab.contains('送る', 'new'))
@@ -188,7 +188,7 @@ class CommandsTestCase(unittest.TestCase):
         self.assertFalse(self.commandStack.undoable())
         self.assertEqual(self.vocab.get_kana('送る'), ['おくる'])
 
-    def test_ToggleStatusCommand(self):
+    def test_ToggleStatusCommand(self) -> None:
         known = self.vocab.is_known('送る')
         self.commandStack.do(ToggleKnownCommand(self.vocab, '送る'))
         self.assertEqual(self.vocab.is_known('送る'), not known)

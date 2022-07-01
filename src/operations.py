@@ -22,9 +22,9 @@ Operation = Callable[[CommandStack, Vocab, List[str]], OperationResult]
 
 # Definition of an operation.
 OperationDescriptor = Tuple[
-    int,  # number of params
+    int,  # number of params.
     Optional[OperationPrecheck],
-    Optional[str],  # params
+    Optional[str],  # params.
     Operation
 ]
 
@@ -223,7 +223,7 @@ def show_help(command_stack: CommandStack, vocab: Vocab,
 
 
 OperationsDescriptors = Dict[
-    str,  # command
+    str,  # command.
     OperationDescriptor
 ]
 

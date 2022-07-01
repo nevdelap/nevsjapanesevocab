@@ -6,6 +6,7 @@ from colors import color  # type: ignore
 from commands import CommandStack
 from io import StringIO
 from nevsjapanesevocab import main_stuff, replace_indices
+from typing import List, Tuple
 from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
@@ -17,7 +18,7 @@ from vocab import Vocab
 
 class MainTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.vocab = Vocab('tests/test_data/vocab_good.csv')
         self.vocab.add('new')
         self.vocab.add('new2')
@@ -26,9 +27,15 @@ class MainTestCase(unittest.TestCase):
         self.vocab.add_kana('new2', 'kana2')
         self.vocab.add_kana('new2', 'kana3')
 
-    # TODO: index 0
+    # TODO: index 0.
     @staticmethod
-    def replace_indices():
+    def replace_indices() -> List[
+        Tuple[
+            str, # search kanji.
+            List[str], # parameters.
+            List[str], # expected result.
+        ]
+    ]:
         return [
             ('new', ['n', '-50'], ['n', '-50']),
             ('new', ['n', '-1'], ['n', '-1']),
@@ -49,8 +56,9 @@ class MainTestCase(unittest.TestCase):
             ('new', ['n', '2', '999'], ['n', 'new2', '999']),
         ]
 
-    @data_provider(replace_indices)
-    def test_replace_indices(self, search, params, expected_result):
+    # TODO: fix 'error: Untyped decorator makes function untyped'.
+    @data_provider(replace_indices)  # type: ignore
+    def test_replace_indices(self, search: str, params: List[str], expected_result: List[str]) -> None:
         found_kanji = self.vocab.search(search)
         self.assertEqual(replace_indices(
             self.vocab, '', found_kanji, params), expected_result)
@@ -147,7 +155,7 @@ class MainTestCase(unittest.TestCase):
         ('t new2', 'new2は見つからない。'),
     ]
 
-    def test_usage(self):
+    def test_usage(self) -> None:
         stdin = sys.stdin
         stdout = sys.stdout
         sys.stdin = StringIO()
@@ -155,7 +163,7 @@ class MainTestCase(unittest.TestCase):
         try:
             vocab = Vocab('tests/test_data/vocab_good.csv')
             command_stack = CommandStack()
-            kanji_found = []
+            kanji_found: List[str] = []
             for test_input, expected_regex in self.__io:
                 sys.stdin.seek(0)
                 sys.stdout.seek(0)
@@ -178,5 +186,6 @@ class MainTestCase(unittest.TestCase):
             sys.stdin = stdin
             sys.stdout = stdout
 
-    def __stripEscape(s):
+    @staticmethod
+    def __stripEscape(s: str) -> str:
         return re.sub('\x1b\\[[\\d;]+m', '', s)
