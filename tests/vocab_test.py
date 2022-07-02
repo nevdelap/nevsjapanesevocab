@@ -1,5 +1,7 @@
 import contextlib
 import io
+import os
+import pathlib
 import pytest
 from typing import List, Tuple
 from unittest_data_provider import data_provider  # type: ignore
@@ -14,7 +16,9 @@ def vocab() -> Vocab:
 def test_new_kanji_list_name(vocab: Vocab) -> None:
     assert vocab.new_kanji_list_name() == '0100'
     assert vocab.count_in_current_list() == len(open(vocab.filename).readlines())
-    for i in range(0, vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
+    for i in range(
+            0,
+            vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
         vocab.add(f'new{i}')
     assert vocab.count_in_current_list() == vocab.ITEMS_PER_LIST - 1
     assert vocab.new_kanji_list_name() == '0100'
@@ -113,3 +117,21 @@ def test_bad_files(filename: str, expected_error: str) -> None:
     with pytest.raises(Exception) as e_info:
         Vocab(f'tests/test_data/{filename}')
     assert expected_error in str(e_info)
+
+
+def test_save(tmp_path: pathlib.Path, vocab: Vocab) -> None:
+    newfile = str(tmp_path / 'new.csv')
+    vocab.add('new')
+    vocab.add_kana('new', 'kana')
+    vocab.add_kana('new', 'new')
+    vocab.add_kana('new', 'kana2')
+    vocab.add('new2')
+    vocab.toggle_known('new2')
+    vocab.save(newfile)
+    vocab2 = Vocab(newfile)
+    assert 'new' in vocab
+    # expressly not kana 'new' that duplicates the kanji 'new'.
+    assert vocab.get_kana('new') == ['kana', 'kana2']
+    assert not vocab.is_known('new')
+    assert 'new2' in vocab
+    assert vocab.is_known('new2')

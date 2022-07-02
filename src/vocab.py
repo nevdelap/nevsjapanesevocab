@@ -69,12 +69,14 @@ class Vocab:
                 self.__kanji_to_info[kanji] = KanjiInfo(
                     known == '1', kana_list)
 
-    def save(self) -> None:
+    def save(self, filename: Optional[str] = None) -> None:
         """Saves the vocab back to its original file."""
-        with open(self.__filename, 'w') as f:
+        with open(self.__filename if filename is None else filename, 'w') as f:
             for list_name in sorted(self.__list_to_kanji):
                 for kanji in sorted(self.__list_to_kanji[list_name]):
                     (known, kana_list) = self.__kanji_to_info[kanji]
+                    if kanji in kana_list:
+                        kana_list.remove(kanji)
                     f.write(
                         normalize(
                             'NFC',
