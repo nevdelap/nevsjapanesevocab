@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from colors import color  # type: ignore
+from localisation import _
 from typing import List, Optional
 from vocab import Vocab
 
@@ -96,10 +97,12 @@ class AddCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
+        return _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
     def _redone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
+        return _('{kanji}-added-to-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
 
 class DeleteCommand(Command):
@@ -125,10 +128,12 @@ class DeleteCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
+        return _('{kanji}-added-to-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
     def _redone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
+        return _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
 
 class ChangeCommand(Command):
@@ -150,10 +155,12 @@ class ChangeCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__new_kanji}を{self.__kanji}に戻した。'
+        return _('{new_kanji}-changed-back-to-{kanji}').format(
+            new_kanji=self.__new_kanji, kanji=self.__kanji)
 
     def _redone_message(self) -> str:
-        return f'{self.__kanji}を{self.__new_kanji}に変更した。'
+        return _('{kanji}-changed-to-{new_kanji}').format(
+            kanji=self.__kanji, new_kanji=self.__new_kanji)
 
 
 class AddKanaCommand(Command):
@@ -176,10 +183,13 @@ class AddKanaCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kana}は{self.__kanji}から削除した。'
+        return _(
+            '{kana}-deleted-from-{kanji}').format(
+                kanji=self.__kanji, kana=self.__kana)
 
     def _redone_message(self) -> str:
-        return f'{self.__kana}は{self.__kanji}に追加した。'
+        return _('{kana}-added-to-{kanji}').format(
+            kanji=self.__kanji, kana=self.__kana)
 
 
 class ChangeKanaCommand(Command):
@@ -207,10 +217,12 @@ class ChangeKanaCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kanji}は{self.__new_kana}を{self.__kana}に戻した。'
+        return _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(
+            kanji=self.__kanji, kana=self.__kana, new_kana=self.__new_kana)
 
     def _redone_message(self) -> str:
-        return f'{self.__kanji}は{self.__kana}を{self.__new_kana}に変更した。'
+        return _('{kana}-changed-to-{new_kana}-for-{kanji}').format(
+            kanji=self.__kanji, kana=self.__kana, new_kana=self.__new_kana)
 
 
 class DeleteKanaCommand(Command):
@@ -233,10 +245,13 @@ class DeleteKanaCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kana}は{self.__kanji}に追加した。'
+        return _('{kana}-added-to-{kanji}').format(
+            kanji=self.__kanji, kana=self.__kana)
 
     def _redone_message(self) -> str:
-        return f'{self.__kana}は{self.__kanji}から削除した。'
+        return _(
+            '{kana}-deleted-from-{kanji}').format(
+                kanji=self.__kanji, kana=self.__kana)
 
 
 class ToggleKnownCommand(Command):
@@ -265,5 +280,7 @@ class ToggleKnownCommand(Command):
 
     def __message(self, redo: bool) -> str:
         green_tick = color('✓', fg='green')
-        known_status = f'既知({green_tick})' if redo == self.__known else '未知'
-        return f'{self.__kanji}のステータスが{known_status}に変更された。'
+        known_status = _('already-known') + \
+            f'({green_tick})' if redo == self.__known else _('unknown')
+        return _('toggled-the-{known_status}-of-{kanji}').format(
+            kanji=self.__kanji, known_status=known_status)

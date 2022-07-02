@@ -3,25 +3,27 @@ import readline
 import sys
 from colors import color  # type: ignore
 from commands import CommandStack
-from operations import get_operations
+from localisation import _, set_locale
+from operations import format_help, get_operations
 from vocab import Vocab
 from typing import Final, List, Optional, Tuple
 
 
 def main() -> None:
-    print(color('ネフの日本語語彙リスト', style='bold'))
+    set_locale('ja')
+    print(color(_('nevs-japanese-vocab-list'), style='bold'))
 
     vocab_file: Final = 'vocab.csv'
     try:
-        print('読み込み中...')
+        print(_('loading') + '...')
         vocab = Vocab(vocab_file)
     except Exception as e:
-        print(f'{vocab_file}が読み込みに失敗した。, ☹ {e}')
+        print(_('{vocab_file}-failed-to-read-{e}').format(vocab_file=vocab_file, e=e))
         sys.exit(1)
 
     command_stack = CommandStack()
+    print(format_help())
 
-    print('hを押してヘルプを表示する。')
     search: Optional[str] = ''
     kanji_found: List[str] = []
     while True:
@@ -30,10 +32,11 @@ def main() -> None:
         if search is None:
             break
     try:
-        print('書き込み中...')
+        print(_('saving') + '...')
         vocab.save()
     except Exception as e:
-        print(f'{vocab_file}が書き込みに失敗した。☹ {e}')
+        print(
+            _('{vocab_file}-failed-to-write-{e}').format(vocab_file=vocab_file, e=e))
         sys.exit(1)
 
 
@@ -43,7 +46,8 @@ def main_stuff(vocab: Vocab,
                previous_search: Optional[str],
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
                                                          List[str]]:
-    search = ''.join([c if c.isalnum() else ' ' for c in input('検索: ') if c.isalnum() or c.isspace()]).strip()
+    search = ''.join([c if c.isalnum() else ' ' for c in input(
+        _('search') + ': ') if c.isalnum() or c.isspace()]).strip()
     params = [param for param in search.split(' ') if len(param) > 0]
     exact = False
     if len(params) == 0:
@@ -75,6 +79,7 @@ def main_stuff(vocab: Vocab,
                         vocab,
                         params
                     )
+
                     if message is not None:
                         print(message)
                     if invalidate_previous_search:
@@ -88,8 +93,9 @@ def main_stuff(vocab: Vocab,
                         exact = True
                 else:
                     print(error_message)
+                    search = ''
             elif len(params) > 0:
-                print('使い方: h 使い方を表示する。')
+                print(_('usage-h-to-show-usage'))
                 return previous_search, previous_kanji_found
 
     if search == '':
@@ -97,7 +103,7 @@ def main_stuff(vocab: Vocab,
 
     kanji_found = vocab.search(search, exact)
     if len(kanji_found) > 0:
-        print(f'見つかった: ({len(kanji_found)})')
+        print(_('found') + f': ({len(kanji_found)})')
         for kanji_index, kanji in enumerate(kanji_found):
             out = [
                 color(f'{kanji_index + 1:4d}', fg='grey') + ' ' +
@@ -117,7 +123,7 @@ def main_stuff(vocab: Vocab,
                 out.append(green_tick)
             print('  ' + ' '.join(out))
     else:
-        print('何も見つからない。')
+        print(_('nothing-found'))
     return search, kanji_found
 
 
@@ -139,8 +145,9 @@ def replace_indices(
             kanji = params[1]
         else:
             kanji_index = int(params[1]) - 1
-            if kanji_index == -1 \
-                    and previous_search is not None and len(previous_search) > 0:
+            if (kanji_index == -1
+                    and previous_search is not None
+                    and len(previous_search) > 0):
                 params[1] = previous_search
             elif kanji_index >= 0 and kanji_index < len(kanji_found):
                 kanji = kanji_found[kanji_index]

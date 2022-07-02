@@ -5,8 +5,10 @@ import sys
 from colors import color  # type: ignore
 from commands import CommandStack
 from io import StringIO
+from localisation import _, set_locale, unset_locale
 from nevsjapanesevocab import main_stuff, replace_indices
-from typing import List, Tuple
+from test_helpers import strip_ansi_terminal_escapes
+from typing import List, Optional, Tuple
 from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
@@ -23,7 +25,7 @@ def vocab() -> Vocab:
     return vocab
 
 
-@pytest.mark.parametrize("search, params, expected_result",
+@pytest.mark.parametrize('search, params, expected_result',
                          [
                              ('new', ['n', '-50'], ['n', '-50']),
                              ('new', ['n', '-1'], ['n', '-1']),
@@ -61,101 +63,184 @@ def test_replace_indices(
     found_kanji = vocab.search(search)
     assert replace_indices(vocab, '', found_kanji, params) == expected_result
 
-
-__io = [
-    # Search found and not found.
-    ('研究', '見つかった: \\(1\\)\n     1 0100 研究 1 けんきゅう'),
-    ('notfound', '何も見つからない。'),
-    # Each command's usage when used with incorrect
-    # parameters or at the wrong time.
-    ('l', '使い方: l <漢字|仮名>'),
-    ('a', '使い方: a <漢字>\n何も見つからない。'),
-    ('d', '使い方: d <漢字>\n何も見つからない。'),
-    ('ak', '使い方: a <漢字> <仮名>\n何も見つからない。'),
-    ('ak new', '使い方: a <漢字> <仮名>\n何も見つからない。'),
-    ('dk', '使い方: d <漢字> <仮名>\n何も見つからない。'),
-    ('dk new', '使い方: d <漢字> <仮名>\n何も見つからない。'),
-    ('t', '使い方: t <漢字>\n何も見つからない。'),
-    ('u', '元に戻すものがない。'),
-    ('r', '遣り直しものがない。'),
-    # Each command and undo/redo.
-    ('h', '使い方:.*終了'),
-    ('l 研究', 'けんきゅう \\(研究\\) : study/research/investigation'),
-    ('new', '何も見つからない。'),
-    ('a new', '見つかった: \\(1\\)\n     1 0100 new'),
-    ('new', '見つかった.*1 0100 new'),
-    ('c new NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
-    ('NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
-    ('u', 'NEWをnewに戻した。'),
-    ('u', 'newはリスト0100から削除した。'),
-    ('r', 'newはリスト0100に追加した。'),
-    ('d new', 'newは削除した。'),
-    ('u', 'newはリスト0100に追加した。'),
-    ('r', 'newはリスト0100から削除した。'),
-    ('u', 'newはリスト0100に追加した。'),
-    ('ak new kana', '見つかった: \\(1\\).*1 0100 new 1 kana'),
-    ('u', 'kanaはnewから削除した。'),
-    ('r', 'kanaはnewに追加した。'),
-    ('dk new kana', 'newはkanaが削除した。'),
-    ('u', 'kanaはnewに追加した。'),
-    ('r', 'kanaはnewから削除した。'),
-    ('u', 'kanaはnewに追加した。'),
-    ('k', 'データ:\n  分かった: 0\n  学んでいる 6\n  合計: 6'),
-    ('t new', '見つかった: \\(1\\)\n     1 0100 new 1 kana ✓'),
-    ('k', 'データ:\n  分かった: 1\n  学んでいる 5\n  合計: 6'),
-    ('t new', '見つかった: \\(1\\)\n     1 0100 new 1 kana[^✓]+$'),
-    ('k', 'データ:\n  分かった: 0\n  学んでいる 6\n  合計: 6'),
-    ('d new', 'newは削除した。'),
-    # Indexes.
-    ('new', '何も見つからない。'),
-    ('a new', '1 0100 new'),
-    ('ak 1 kana', '1 0100 new 1 kana'),
-    ('ak 1 kana2', '1 0100 new 1 kana 2 kana2'),
-    ('ak 1 kana3', '1 0100 new 1 kana 2 kana2 3 kana3'),
-    ('ck 1 kana2 kana4', '1 0100 new 1 kana 2 kana4 3 kana3'),
-    ('u', 'newはkana4をkana2に戻した。'),
-    ('new', '1 0100 new 1 kana 2 kana2 3 kana3'),
-    ('t 1', '1 0100 new 1 kana 2 kana2 3 kana3 ✓'),
-    ('t 1', '1 0100 new 1 kana 2 kana2 3 kana3[^✓]+$'),
-    ('dk 1 2', 'newはkana2が削除した。'),
-    ('new', '1 0100 new 1 kana 2 kana3'),
-    ('dk 1 2', 'newはkana3が削除した。'),
-    ('new', '1 0100 new 1 kana'),
-    ('dk 1 1', 'newはkanaが削除した。'),
-    ('new', '1 0100 new'),
-    ('c 1 NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
-    ('NEW', '見つかった: \\(1\\)\n     1 0100 NEW'),
-    ('u', 'NEWをnewに戻した。'),
-    ('new', '見つかった: \\(1\\)\n     1 0100 new'),
-    ('d 1', 'newは削除した。'),
-    ('new', '何も見つからない。'),
-    ('u', 'newはリスト0100に追加した。'),
-    ('u', 'kanaはnewに追加した。'),
-    ('u', 'kana3はnewに追加した。'),
-    ('u', 'kana2はnewに追加した。'),
-    ('u', 'newのステータスが既知\\(✓\\)に変更された。'),
-    ('u', 'newのステータスが未知に変更された。'),
-    ('u', 'kana3はnewから削除した。'),
-    ('u', 'kana2はnewから削除した。'),
-    ('u', 'kanaはnewから削除した。'),
-    ('u', 'newはリスト0100から削除した。'),
-    ('new', '何も見つからない。'),
-    # Each aommand's error messages.
-    ('a new', '見つかった: \\(1\\)\n     1 0100 new'),
-    ('a new', 'newは既に有る。'),
-    ('c new2 new', 'new2は見つからない。'),
-    ('c new new', 'newは既に有る。'),
-    ('d new2', 'new2は見つからない。'),
-    ('ak new kana', '見つかった: \\(1\\)\n     1 0100 new 1 kana'),
-    ('ak new kana', 'newはkanaが既に有る。'),
-    ('ck new kana2 kana3', 'newはkana2が見つからない。'),
-    ('ck new kana kana', 'newはkanaが既に有る。'),
-    ('dk new kana2', 'newはkana2が見つからない。'),
-    ('t new2', 'new2は見つからない。'),
-]
+# This has examples of all translations to ensure that the
+# translations themselves are syntactically correct in
+# regards to interpolation. E.g. {new_kanji}, not
+# {new-kanji}.
 
 
-def test_usage() -> None:
+def __io() -> List[Tuple[str, str]]:
+    return [
+        ('\n', _('search')),
+        # Bad command.
+        ('w w w', _('usage-h-to-show-usage')),
+        # Bad usage.
+        ('t', f'{_("usage")}: t {_("kanji")}'),
+        # Search found and not found.
+        ('研究', f'{_("found")}: \\(1\\)\n     1 0100 研究 1 けんきゅう'),
+        ('notfound', _('nothing-found')),
+        # Each command's usage when used with incorrect
+        # parameters or at the wrong time.
+        ('l', f'{_("usage")}: l {_("kanji")}|{_("kana")}'),
+        ('a', f'{_("usage")}: a {_("kanji")}'),
+        ('d', f'{_("usage")}: d {_("kanji")}'),
+        ('ak', f'{_("usage")}: a {_("kanji")}{_("space")}{_("kana")}\n'),
+        ('ak new', f'{_("usage")}: a {_("kanji")}{_("space")}{_("kana")}'),
+        ('dk', f'{_("usage")}: d {_("kanji")}{_("space")}{_("kana")}'),
+        ('dk new', f'{_("usage")}: d {_("kanji")}{_("space")}{_("kana")}'),
+        ('u', _('there-is-nothing-to-undo')),
+        ('r', _('there-is-nothing-to-redo')),
+        # Toggle status.
+        ('t 研究', f'{_("found")}: \\(1\\)\n     1 0100 研究 1 けんきゅう ' + '✓'),
+        ('u',
+         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
+                                                           known_status=_('unknown'))),
+        ('r',
+         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
+                                                           known_status=_('already-known') + '\\(✓\\)')),
+        ('u',
+         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
+                                                           known_status=_('unknown'))),
+        # Each command and undo/redo.
+        ('h', f'{_("usage")}:.*{_("help-quit")}'),
+        ('l 研究', 'けんきゅう \\(研究\\) : study/research/investigation'),
+        ('l asdasd', _('nothing-found')),
+        ('new', _('nothing-found')),
+        ('a new', f'{_("found")}: \\(1\\)\n     1 0100 new'),
+        ('new', f'{_("found")}:.*1 0100 new'),
+        ('c new NEW', f'{_("found")}: \\(1\\)\n     1 0100 NEW'),
+        ('NEW', f'{_("found")}: \\(1\\)\n     1 0100 NEW'),
+        ('u',
+         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='new',
+                                                         new_kanji='NEW')),
+        ('r', _('{kanji}-changed-to-{new_kanji}').format(kanji='new', new_kanji='NEW')),
+        ('u',
+         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='new',
+                                                         new_kanji='NEW')),
+        ('u',
+         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='new',
+                                                                    list_name='0100')),
+        ('r',
+         _('{kanji}-added-to-list-{list_name}').format(kanji='new',
+                                                       list_name='0100')),
+        ('d new', _('{kanji}-deleted').format(kanji='new')),
+        ('u',
+         _('{kanji}-added-to-list-{list_name}').format(kanji='new',
+                                                       list_name='0100')),
+        ('r',
+         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='new',
+                                                                    list_name='0100')),
+        ('u',
+         _('{kanji}-added-to-list-{list_name}').format(kanji='new',
+                                                       list_name='0100')),
+        ('ak new kana', f'{_("found")}: \\(1\\).*1 0100 new 1 kana'),
+        ('u', _('{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana')),
+        ('r', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana')),
+        ('dk new kana', _(
+            '{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana')),
+        ('u', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana')),
+        ('r', _('{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana')),
+        ('u', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana')),
+        ('i', f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6'),
+        ('t new', f'{_("found")}: \\(1\\)\n     1 0100 new 1 kana ✓'),
+        ('i', f'{_("info")}:\n  {_("known")}: 1\n  {_("learning")}: 5\n  {_("total")}: 6'),
+        ('t new', f'{_("found")}: \\(1\\)\n     1 0100 new 1 kana[^✓]+$'),
+        ('i', f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6'),
+        ('d new', _('{kanji}-deleted').format(kanji='new')),
+        # Indexes.
+        ('new', _('nothing-found')),
+        ('a new', '1 0100 new'),
+        ('ak 1 kana', '1 0100 new 1 kana'),
+        ('ak 1 kana2', '1 0100 new 1 kana 2 kana2'),
+        ('ak 1 kana3', '1 0100 new 1 kana 2 kana2 3 kana3'),
+        ('ck 1 kana2 kana4', '1 0100 new 1 kana 2 kana4 3 kana3'),
+        ('u',
+         _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(kanji='new',
+                                                                   kana='kana2',
+                                                                   new_kana='kana4')),
+        ('r',
+         _('{kana}-changed-to-{new_kana}-for-{kanji}').format(kanji='new',
+                                                              kana='kana2',
+                                                              new_kana='kana4')),
+        ('u',
+         _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(kanji='new',
+                                                                   kana='kana2',
+                                                                   new_kana='kana4')),
+        ('new', '1 0100 new 1 kana 2 kana2 3 kana3'),
+        ('t 1', '1 0100 new 1 kana 2 kana2 3 kana3 ✓'),
+        ('t 1', '1 0100 new 1 kana 2 kana2 3 kana3[^✓]+$'),
+        ('dk 1 2',
+         _('{kana}-deleted-from-{kanji}').format(kanji='new',
+                                                 kana='kana2')),
+        ('new', '1 0100 new 1 kana 2 kana3'),
+        ('dk 1 2',
+         _('{kana}-deleted-from-{kanji}').format(kanji='new',
+                                                 kana='kana3')),
+        ('new', '1 0100 new 1 kana'),
+        ('dk 1 1', _(
+            '{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana')),
+        ('new', '1 0100 new'),
+        ('c 1 NEW', f'{_("found")}: \\(1\\)\n     1 0100 NEW'),
+        ('NEW', f'{_("found")}: \\(1\\)\n     1 0100 NEW'),
+        ('u',
+         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='new',
+                                                         new_kanji='NEW')),
+        ('new', f'{_("found")}: \\(1\\)\n     1 0100 new'),
+        ('d 1', _('{kanji}-deleted').format(kanji='new')),
+        ('new', _('nothing-found')),
+        ('u',
+         _('{kanji}-added-to-list-{list_name}').format(kanji='new',
+                                                       list_name='0100')),
+        ('u', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana')),
+        ('u', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana3')),
+        ('u', _('{kana}-added-to-{kanji}').format(kanji='new', kana='kana2')),
+        ('u',
+         _('toggled-the-{known_status}-of-{kanji}').format(kanji='new',
+                                                           known_status=_('already-known') + '\\(✓\\)')),
+        ('u',
+         _('toggled-the-{known_status}-of-{kanji}').format(kanji='new',
+                                                           known_status=_('unknown'))),
+        ('u', _('{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana3')),
+        ('u', _('{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana2')),
+        ('u', _('{kana}-deleted-from-{kanji}').format(kanji='new', kana='kana')),
+        ('u',
+         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='new',
+                                                                    list_name='0100')),
+        ('new', _('nothing-found')),
+        # Each command's error messages.
+        ('a new', f'{_("found")}: \\(1\\)\n     1 0100 new'),
+        ('a new', _('{kanji}-already-exists').format(kanji='new')),
+        ('c new2 new', _('{kanji}-not-found').format(kanji='new2')),
+        ('c new new', _('{kanji}-already-exists').format(kanji='new')),
+        ('d new2', _('{kanji}-not-found').format(kanji='new2')),
+        ('ak new kana', f'{_("found")}: \\(1\\)\n     1 0100 new 1 kana'),
+        ('ak new kana', _(
+            '{kana}-already-exists-for-{kanji}').format(kanji='new', kana='kana')),
+        ('ck new kana2 kana3', _(
+            '{kana}-not-found-for-{kanji}').format(kanji='new', kana='kana2')),
+        ('ck new kana kana', _(
+            '{kana}-already-exists-for-{kanji}').format(kanji='new', kana='kana')),
+        ('dk new kana2', _(
+            '{kana}-not-found-for-{kanji}').format(kanji='new', kana='kana2')),
+        ('t new2', _('{kanji}-not-found').format(kanji='new2')),
+    ]
+
+
+@pytest.mark.parametrize('locale',
+                         [
+                             None,
+                             ('ja'),
+                             ('en'),
+                             ('es'),
+                             ('fr'),
+                         ]
+                         )
+def test_usage(locale: Optional[str]) -> None:
+    if locale is None:
+        unset_locale()
+    else:
+        assert isinstance(locale, str)  # for mypy
+        set_locale(locale)
     stdin = sys.stdin
     stdout = sys.stdout
     sys.stdin = StringIO()
@@ -164,7 +249,7 @@ def test_usage() -> None:
         vocab = Vocab('tests/test_data/vocab_good.csv')
         command_stack = CommandStack()
         kanji_found: List[str] = []
-        for test_input, expected_regex in __io:
+        for test_input, expected_regex in __io():
             sys.stdin.seek(0)
             sys.stdout.seek(0)
             sys.stdin.truncate(0)
@@ -175,7 +260,7 @@ def test_usage() -> None:
                 vocab, command_stack, '', kanji_found
             )
             sys.stdout.seek(0)
-            actual_output = __stripEscapes(sys.stdout.read())
+            actual_output = strip_ansi_terminal_escapes(sys.stdout.read())
             if not re.search(expected_regex, actual_output, re.S):
                 print('Expected: ' + expected_regex, file=sys.stderr)
                 print('Actual: ' + actual_output, file=sys.stderr)
@@ -185,5 +270,23 @@ def test_usage() -> None:
         sys.stdout = stdout
 
 
-def __stripEscapes(s: str) -> str:
-    return re.sub('\x1b\\[[\\d;]+m', '', s)
+@pytest.mark.parametrize('locale',
+                         [
+                             None,
+                             ('ja'),
+                             ('en'),
+                             ('es'),
+                             ('fr'),
+                         ]
+                         )
+def test_remaining_translations_with_interpolations(
+        locale: Optional[str]) -> None:
+    if locale is None:
+        unset_locale()
+    else:
+        assert isinstance(locale, str)  # for mypy
+        set_locale(locale)
+    # This will explode if they have a typo in the
+    # interpolated variables in the translation.
+    _('{vocab_file}-failed-to-read-{e}').format(vocab_file='bogus.csv', e=Exception())
+    _('{vocab_file}-failed-to-write-{e}').format(vocab_file='bogus.csv', e=Exception())

@@ -104,7 +104,7 @@ def test_change_kana(vocab: Vocab) -> None:
     assert ['kana3', 'kana2'] == vocab.get_kana('new')
 
 
-@pytest.mark.parametrize("filename, expected_error",
+@pytest.mark.parametrize('filename, expected_error',
                          [('vocab_bad_kana.csv',
                            "line 3: bad kana list ',,'"),
                           ('vocab_bad_kanji.csv',
@@ -120,18 +120,18 @@ def test_bad_files(filename: str, expected_error: str) -> None:
 
 
 def test_save(tmp_path: pathlib.Path, vocab: Vocab) -> None:
-    newfile = str(tmp_path / 'new.csv')
+    tmp_filename = str(tmp_path / 'new.csv')
     vocab.add('new')
     vocab.add_kana('new', 'kana')
     vocab.add_kana('new', 'new')
     vocab.add_kana('new', 'kana2')
     vocab.add('new2')
     vocab.toggle_known('new2')
-    vocab.save(newfile)
-    vocab2 = Vocab(newfile)
-    assert 'new' in vocab
+    vocab.save(tmp_filename)
+    vocab2 = Vocab(tmp_filename)
+    assert 'new' in vocab2
     # expressly not kana 'new' that duplicates the kanji 'new'.
-    assert vocab.get_kana('new') == ['kana', 'kana2']
-    assert not vocab.is_known('new')
-    assert 'new2' in vocab
-    assert vocab.is_known('new2')
+    assert vocab2.get_kana('new') == ['kana', 'kana2']
+    assert not vocab2.is_known('new')
+    assert 'new2' in vocab2
+    assert vocab2.is_known('new2')

@@ -2,11 +2,13 @@
 
 ## What Is This?
 
-This is a Python terminal application that I use on my phone and tablet to manage Japanese vocabulary that I am learning. I've used various Android apps but I wanted something that does exactly what I require, and I have zero interest in App development. ;)
+This is a Python terminal application that I use on my phone and tablet to manage Japanese vocabulary that I am learning. I've used various Android apps but I wanted something that does exactly what I require, and I have zero interest in App development. 😉
 
-It is Python 3 with typing, tests, full undo/redo, and uses [Pykakasi](https://github.com/miurahr/pykakasi) for kanji to kana conversion, and [Jamdict](https://github.com/neocl/jamdict) for dictionary lookups. Its feature set is just exactly what I personally need, I need even fewer Android apps.
+It is Python 3 with strict typing, full tests, full undo/redo, is localised in Japanese, English, French, and Spanish, it uses [Pykakasi](https://github.com/miurahr/pykakasi) for kanji to kana conversion, and [Jamdict](https://github.com/neocl/jamdict) for English dictionary lookups. Its feature set is just exactly what I personally need, I need even fewer Android apps.
 
 **NOTE: I don't expect anyone to use this, you have to be a terminal nut for a start. This repo and these instructions are for my own use.**
+
+So why is it localised in four different languages? They are just the languages I speak, and in the case of Japanese am learning.
 
 ## Vocabulary
 
@@ -16,9 +18,10 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 
 ## Setup on Linux
 
-1. Standard old dev environment, VS Code, all my extensions, Python 3, `entr`, on Arch.
+1. Standard dev environment, VS Code, all my extensions, Python 3, `entr`, `gettext`, and `sed`.
 1. The Python packages and tools listed below.
 1. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
+
 ## Setup On Android
 
 1. Install [Termux](https://f-droid.org/en/packages/com.termux/) from F-Droid.
@@ -41,11 +44,13 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 
 ## Usage
 
-You need to know how to use a Japanese keyboard, on a phone, tablet or computer, or use an IME for a computer, otherwise the usage is there, in Japanese.
+You need to know how to use a Japanese keyboard, on a phone, tablet or computer, or use an IME for a computer, otherwise the usage is there, in Japanese, English, French, and Spanish. Use 'h' to read it.
 
-If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. :)
+If anyone want's to tell me better translations than I have in the program's UI, I'd sure appreciate it. 🙂
 
-The usage doesn't describe some features of indexing the search results and referring to the last search as 0, because describing it is beyond my Japanese. They are for driving it fast on the Android device where you don't have a full keyboard. :P
+The usage doesn't describe some features of indexing the search results and referring to the last search, because describing it is beyond my Japanese. They are for driving it fast on the Android device where you don't have a full keyboard. I'll add descriptions of it in the other languages sometime.
+
+The screenshots at the moment are from before it's been localised.
 
 <img src="screenshots/screenshot.jpg" width="480">
 <img src="screenshots/screenshot2.jpg" width="480">

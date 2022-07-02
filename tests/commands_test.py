@@ -1,5 +1,7 @@
 import pytest
+import re
 from commands import *
+from test_helpers import strip_ansi_terminal_escapes
 from vocab import Vocab
 
 
@@ -19,11 +21,11 @@ def test_NewCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert vocab.contains('new')
     message = command_stack.undo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
+    assert message == f'new-has-been-deleted-from-list-{vocab.new_kanji_list_name()}'
     assert command_stack.current() == -1
     assert not vocab.contains('new')
     message = command_stack.redo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}に追加した。'
+    assert message == f'new-added-to-list-{vocab.new_kanji_list_name()}'
     assert command_stack.current() == 0
     assert vocab.contains('new')
     command_stack.undo()
@@ -36,17 +38,23 @@ def test_ChangeCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     command_stack.do(AddCommand(vocab, 'new'))
     assert command_stack.current() == 0
     assert vocab.contains('new')
+    command_stack.do(ChangeCommand(vocab, 'new', 'NEW'))
+    assert command_stack.current() == 1
+    assert vocab.contains('NEW')
     message = command_stack.undo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
-    assert command_stack.current() == -1
-    assert not vocab.contains('new')
-    message = command_stack.redo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}に追加した。'
+    assert message == 'NEW-changed-back-to-new'
     assert command_stack.current() == 0
     assert vocab.contains('new')
-    command_stack.undo()
-    assert command_stack.current() == -1
+    assert not vocab.contains('NEW')
+    message = command_stack.redo()
+    assert message == 'new-changed-to-NEW'
+    assert command_stack.current() == 1
     assert not vocab.contains('new')
+    assert vocab.contains('NEW')
+    command_stack.undo()
+    assert command_stack.current() == 0
+    assert vocab.contains('new')
+    assert not vocab.contains('NEW')
 
 
 def test_DeleteCommand(vocab: Vocab, command_stack: CommandStack) -> None:
@@ -60,14 +68,14 @@ def test_DeleteCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert not vocab.contains('送る')
     message = command_stack.undo()
-    assert message == '送るはリスト0100に追加した。'
+    assert message == '送る-added-to-list-0100'
     assert command_stack.current() == -1
     assert vocab.contains('送る')
     assert vocab.get_list_name('送る') == list_name
     assert vocab.is_known('送る') == known
     assert vocab.get_kana('送る') == kana
     message = command_stack.redo()
-    assert message == '送るはリスト0100から削除した。'
+    assert message == '送る-has-been-deleted-from-list-0100'
     assert command_stack.current() == 0
     assert not vocab.contains('送る')
     command_stack.undo()
@@ -108,11 +116,11 @@ def test_NewKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.contains('送る', 'new')
     assert vocab.get_kana('送る') == ['おくる', 'new']
     message = command_stack.undo()
-    assert message == 'newは送るから削除した。'
+    assert message == 'new-deleted-from-送る'
     assert not vocab.contains('送る', 'new')
     assert vocab.get_kana('送る') == ['おくる']
     message = command_stack.redo()
-    assert message == 'newは送るに追加した。'
+    assert message == 'new-added-to-送る'
     assert vocab.contains('送る', 'new')
     assert vocab.get_kana('送る') == ['おくる', 'new']
     command_stack.undo()
@@ -137,17 +145,23 @@ def test_ChangeKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.contains('new', 'kana3')
     assert ['kana3', 'kana2'] == vocab.get_kana('new')
     message = command_stack.undo()
-    assert message == 'newはkana3をkanaに戻した。'
+    assert message == 'kana3-changed-back-to-kana-for-new'
     assert command_stack.current() == 2
     assert vocab.contains('new', 'kana')
     assert vocab.contains('new', 'kana2')
     assert not vocab.contains('new', 'kana3')
     message = command_stack.redo()
-    assert message == 'newはkanaをkana3に変更した。'
+    assert message == 'kana-changed-to-kana3-for-new'
     assert command_stack.current() == 3
     assert not vocab.contains('new', 'kana')
     assert vocab.contains('new', 'kana2')
     assert vocab.contains('new', 'kana3')
+    message = command_stack.undo()
+    assert message == 'kana3-changed-back-to-kana-for-new'
+    assert command_stack.current() == 2
+    assert vocab.contains('new', 'kana')
+    assert vocab.contains('new', 'kana2')
+    assert not vocab.contains('new', 'kana3')
 
 
 def test_DeleteKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
@@ -164,7 +178,7 @@ def test_DeleteKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert not vocab.contains('送る', 'new')
     assert vocab.get_kana('送る') == ['new2']
     message = command_stack.undo()
-    assert message == 'newは送るに追加した。'
+    assert message == 'new-added-to-送る'
     assert vocab.get_kana('送る') == ['new', 'new2']
     command_stack.undo()
     assert vocab.get_kana('送る') == ['new']
@@ -173,7 +187,7 @@ def test_DeleteKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     command_stack.undo()
     assert not command_stack.undoable()
     message = command_stack.redo()
-    assert message == 'newは送るに追加した。'
+    assert message == 'new-added-to-送る'
     assert vocab.get_kana('送る') == ['おくる', 'new']
     command_stack.redo()
     assert vocab.get_kana('送る') == ['new']
@@ -196,10 +210,11 @@ def test_ToggleStatusCommand(vocab: Vocab,
     command_stack.do(ToggleKnownCommand(vocab, '送る'))
     assert vocab.is_known('送る') == (not known)
     message = command_stack.undo()
-    assert message == '送るのステータスが未知に変更された。'
+    assert message == 'toggled-the-unknown-of-送る'
     assert vocab.is_known('送る') == known
     message = command_stack.redo()
-    assert message == '送るのステータスが既知(\x1b[32m✓\x1b[0m)に変更された。'
+    assert strip_ansi_terminal_escapes(
+        message) == 'toggled-the-already-known(✓)-of-送る'
     assert vocab.is_known('送る') == (not known)
     command_stack.undo()
     assert vocab.is_known('送る') == known

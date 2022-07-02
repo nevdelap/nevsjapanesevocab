@@ -86,7 +86,7 @@ class Vocab:
     def filename(self) -> str:
         return self.__filename
 
-    def get_stats(self) -> Tuple[int, int]:
+    def get_info(self) -> Tuple[int, int]:
         """Returns a tuple of (known, learning) counts."""
         known_count = 0
         learning = 0
@@ -100,7 +100,7 @@ class Vocab:
         return (known_count, learning)
 
     def get_list_name(self, kanji: str) -> str:
-        "A numeric name of the list that the kanji is in."
+        """A numeric name of the list that the kanji is in."""
         assert Vocab.valid_string(kanji), kanji
         assert kanji in self, kanji
         return self.__kanji_to_list[kanji]
@@ -169,7 +169,7 @@ class Vocab:
 
     # Public for tests.
     def new_kanji_list_name(self) -> str:
-        "Public for tests."
+        """Public for tests."""
         list_name = max(self.__list_to_kanji.keys())
         if len(self.__list_to_kanji[list_name]) >= Vocab.ITEMS_PER_LIST:
             list_name = f'{int(list_name) + Vocab.ITEMS_PER_LIST:04d}'

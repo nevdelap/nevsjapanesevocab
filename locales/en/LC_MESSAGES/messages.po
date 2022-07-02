@@ -1,0 +1,254 @@
+# Nev's Japanese Vocabulary.
+# Copyright (C) 2022 Nev Delap
+# This file is distributed under the same license as the nevsjapanesevocab package.
+# Nev Delap <nevdelap at gmail>
+#
+msgid   ""
+msgstr  "Project-Id-Version: Nev's Vocab\n"
+        "Report-Msgid-Bugs-To: Nev Delap <nevdelap at gmail>\n"
+        "Last-Translator: Nev Delap <nevdelap at gmail>\n"
+        "Language: English\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
+
+#: nevsjapanesevocab.py:14
+msgid   "nevs-japanese-vocab-list"
+msgstr  "Nev's Japanese Vocab List"
+
+#: nevsjapanesevocab.py:18
+msgid   "loading"
+msgstr  "Loading"
+
+#: nevsjapanesevocab.py:21
+#, python-brace-format
+msgid   "{vocab_file}-failed-to-read-{e}"
+msgstr  "Failed to load {vocab_file} - {e}"
+
+#: nevsjapanesevocab.py:35 src/operations.py:185
+msgid   "saving"
+msgstr  "Saving"
+
+#: nevsjapanesevocab.py:39 src/operations.py:189
+#, python-brace-format
+msgid   "{vocab_file}-failed-to-write-{e}"
+msgstr  "Failed to save {vocab_file} - {e}"
+
+#: nevsjapanesevocab.py:50
+msgid   "search"
+msgstr  "Search"
+
+#: nevsjapanesevocab.py:98
+msgid   "usage-h-to-show-usage"
+msgstr  "Use h to show help."
+
+#: nevsjapanesevocab.py:106
+msgid   "found"
+msgstr  "Found"
+
+#: nevsjapanesevocab.py:126 src/operations.py:61
+msgid   "nothing-found"
+msgstr  "Nothing found."
+
+#: src/commands.py:100 src/commands.py:135
+#, python-brace-format
+msgid   "{kanji}-has-been-deleted-from-list-{list_name}"
+msgstr  "{kanji} has been deleted from list {list_name}."
+
+#: src/commands.py:104 src/commands.py:131
+#, python-brace-format
+msgid   "{kanji}-added-to-list-{list_name}"
+msgstr  "{kanji} has been added to list {list_name}."
+
+#: src/commands.py:158
+#, python-brace-format
+msgid   "{new_kanji}-changed-back-to-{kanji}"
+msgstr  "{new_kanji} has been changed back to {kanji}."
+
+#: src/commands.py:162
+#, python-brace-format
+msgid   "{kanji}-changed-to-{new_kanji}"
+msgstr  "{kanji} has been changed to {new_kanji}."
+
+#: src/commands.py:187 src/commands.py:253 src/operations.py:147
+#, python-brace-format
+msgid   "{kana}-deleted-from-{kanji}"
+msgstr  "{kana} has been deleted from {kanji}."
+
+#: src/commands.py:191 src/commands.py:248
+#, python-brace-format
+msgid   "{kana}-added-to-{kanji}"
+msgstr  "{kana} has been added to {kanji}."
+
+#: src/commands.py:220
+#, python-brace-format
+msgid   "{new_kana}-changed-back-to-{kana}-for-{kanji}"
+msgstr  "{new_kana} has been changed back to {kana} for {kanji}."
+
+#: src/commands.py:224
+#, python-brace-format
+msgid   "{kana}-changed-to-{new_kana}-for-{kanji}"
+msgstr  "{kana} has been changed to {new_kana} for {kanji}."
+
+#: src/commands.py:283
+msgid   "already-known"
+msgstr  "already known"
+
+#: src/commands.py:284
+msgid   "unknown"
+msgstr  "unknown"
+
+#: src/commands.py:285
+#, python-brace-format
+msgid   "toggled-the-{known_status}-of-{kanji}"
+msgstr  "Toggled the status of {kanji} to {known_status}."
+
+#: src/operations.py:70 src/operations.py:85
+#, python-brace-format
+msgid   "{kanji}-already-exists"
+msgstr  "{kanji} already exists."
+
+#: src/operations.py:83 src/operations.py:100 src/operations.py:125
+#: src/operations.py:160
+#, python-brace-format
+msgid   "{kanji}-not-found"
+msgstr  "{kanji} not found."
+
+#: src/operations.py:103
+#, python-brace-format
+msgid   "{kanji}-deleted"
+msgstr  "{kanji} deleted."
+
+#: src/operations.py:113 src/operations.py:132
+#, python-brace-format
+msgid   "{kana}-already-exists-for-{kanji}"
+msgstr  "{kana} already exists for {kanji}."
+
+#: src/operations.py:127 src/operations.py:144
+#, python-brace-format
+msgid   "{kana}-not-found-for-{kanji}"
+msgstr  "{kana} not found for {kanji}."
+
+#: src/operations.py:199
+msgid   "info"
+msgstr  "Info"
+
+#: src/operations.py:200
+msgid   "known"
+msgstr  "Known"
+
+#: src/operations.py:201
+msgid   "learning"
+msgstr  "Learning"
+
+#: src/operations.py:202
+msgid   "total"
+msgstr  "Total"
+
+#: src/operations.py:239 src/operations.py:240 src/operations.py:241
+#: src/operations.py:242 src/operations.py:243 src/operations.py:244
+#: src/operations.py:245 src/operations.py:246 src/operations.py:247
+#: src/operations.py:295 src/operations.py:300 src/operations.py:305
+#: src/operations.py:310 src/operations.py:315 src/operations.py:320
+#: src/operations.py:325 src/operations.py:330
+msgid   "kanji"
+msgstr  "kanji"
+
+#: src/operations.py:239 src/operations.py:240 src/operations.py:295
+msgid   "bar"
+msgstr  "|"
+
+#: src/operations.py:239 src/operations.py:240 src/operations.py:244
+#: src/operations.py:245 src/operations.py:246 src/operations.py:295
+#: src/operations.py:315 src/operations.py:320 src/operations.py:325
+msgid   "kana"
+msgstr  "kana"
+
+#: src/operations.py:239
+msgid   "help-search"
+msgstr  "Search."
+
+#: src/operations.py:240
+msgid   "help-dictionary-search"
+msgstr  "Lookup dictionary."
+
+#: src/operations.py:241
+msgid   "help-new-kanji"
+msgstr  "Add a new kanji."
+
+#: src/operations.py:242
+msgid   "help-delete-kanji"
+msgstr  "Delete a kanji."
+
+#: src/operations.py:243 src/operations.py:244 src/operations.py:245
+#: src/operations.py:246 src/operations.py:310 src/operations.py:315
+#: src/operations.py:320 src/operations.py:325
+msgid   "space"
+msgstr  " "
+
+#: src/operations.py:243 src/operations.py:310
+msgid   "new-kanji"
+msgstr  "new-kanji"
+
+#: src/operations.py:243
+msgid   "help-change-kanji"
+msgstr  "Change a kanji."
+
+#: src/operations.py:244
+msgid   "help-new-kana"
+msgstr  "Add a new kana to a kanji."
+
+#: src/operations.py:245
+msgid   "help-delete-kana"
+msgstr  "Delete a kana from a kanji."
+
+#: src/operations.py:246 src/operations.py:325
+msgid   "new-kana"
+msgstr  "new-kana"
+
+#: src/operations.py:246
+msgid   "help-change-kana"
+msgstr  "Change a kana for a kanji."
+
+#: src/operations.py:247
+#, python-brace-format
+msgid   "help-known-or-not?{green_tick}"
+msgstr  "Toggle known {green_tick} status."
+
+#: src/operations.py:248
+msgid   "help-undo"
+msgstr  "Undo."
+
+#: src/operations.py:249
+msgid   "help-redo"
+msgstr  "Redo."
+
+#: src/operations.py:250
+msgid   "help-save"
+msgstr  "Save."
+
+#: src/operations.py:251
+msgid   "help-info"
+msgstr  "Show info, known & learning."
+
+#: src/operations.py:256
+msgid   "help-show-this-help"
+msgstr  "Show this help."
+
+#: src/operations.py:257
+msgid   "help-quit"
+msgstr  "Quit."
+
+#: src/operations.py:269 src/operations.py:295 src/operations.py:300
+#: src/operations.py:305 src/operations.py:310 src/operations.py:315
+#: src/operations.py:320 src/operations.py:325 src/operations.py:330
+msgid   "usage"
+msgstr  "Help"
+
+#: src/operations.py:335
+msgid   "there-is-nothing-to-undo"
+msgstr  "There is nothing to undo."
+
+#: src/operations.py:340
+msgid   "there-is-nothing-to-redo"
+msgstr  "There is nothing to redo."

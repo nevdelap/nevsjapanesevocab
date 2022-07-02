@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-if ps -ef | grep nevsjapanesevocab.py | grep -qv grep; then
-    echo 'Already running.'
+if ps -ef | grep 'python nevsjapanesevocab.py' | grep -qv grep; then
+    echo 'Already running on termux.'
     sleep 2
     exit 0
 fi

@@ -1,0 +1,21 @@
+#!/bin/bash
+# About sed date deletions: since these will never be
+# updated by other translators the dates are not useful
+# enough to warrant the changes that they cause in source
+# control when nothing else has changed.
+set -e
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+cd "$SCRIPT_DIR/.."
+# shellcheck disable=SC2016
+find . \( -name '*.py' -o -name '*.pot' -o -name '*.po' \) -print | \
+    entr bash -c '
+        reset;
+        xgettext --indent --msgid-bugs-address="Nev Delap <nevdelap at gmail>" \
+            nevsjapanesevocab.py src/*.py -o locales/messages.pot;
+        sed -i '/-Date/d' locales/messages.pot
+        for locale in locales/??; do
+            msgmerge --indent --update $locale/LC_MESSAGES/messages.po locales/messages.pot;
+            sed -i '/-Date/d' $locale/LC_MESSAGES/messages.po
+            msgfmt $locale/LC_MESSAGES/messages.po -o $locale/LC_MESSAGES/messages.mo
+        done
+    '
