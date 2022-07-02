@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from colors import color  # type: ignore
+from localisation import _
 from typing import List, Optional
 from vocab import Vocab
 
@@ -96,7 +97,8 @@ class AddCommand(Command):
         return self._redone_message()
 
     def _undone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
+        return _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
     def _redone_message(self) -> str:
         return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
@@ -128,7 +130,8 @@ class DeleteCommand(Command):
         return f'{self.__kanji}はリスト{self.__list_name}に追加した。'
 
     def _redone_message(self) -> str:
-        return f'{self.__kanji}はリスト{self.__list_name}から削除した。'
+        return _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+            kanji=self.__kanji, list_name=self.__list_name)
 
 
 class ChangeCommand(Command):

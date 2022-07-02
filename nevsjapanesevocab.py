@@ -4,25 +4,27 @@ import shlex
 import sys
 from colors import color  # type: ignore
 from commands import CommandStack
-from operations import get_operations
+from localisation import _, set_locale
+from operations import get_operations, show_help
 from vocab import Vocab
 from typing import Final, List, Optional, Tuple
 
 
 def main() -> None:
-    print(color('ネフの日本語語彙リスト', style='bold'))
+    set_locale('ja')
+    print(color(_('nevs-japanese-vocab-list'), style='bold'))
 
     vocab_file: Final = 'vocab.csv'
     try:
-        print('読み込み中...')
+        print(_('loading') + '...')
         vocab = Vocab(vocab_file)
     except Exception as e:
-        print(f'{vocab_file}が読み込みに失敗した。, ☹ {e}')
+        print(_('{vocab_file}-failed-to-read-{e}').format(vocab_file=vocab_file, e=e))
         sys.exit(1)
 
     command_stack = CommandStack()
+    show_help()
 
-    print('hを押してヘルプを表示する。')
     search: Optional[str] = ''
     kanji_found: List[str] = []
     while True:
@@ -31,10 +33,10 @@ def main() -> None:
         if search is None:
             break
     try:
-        print('書き込み中...')
+        print(_('saving') + '...')
         vocab.save()
     except Exception as e:
-        print(f'{vocab_file}が書き込みに失敗した。☹ {e}')
+        print(_('{vocab_file}-failed-to-write-{e}').format(vocab_file=vocab_file, e=e))
         sys.exit(1)
 
 
@@ -44,7 +46,7 @@ def main_stuff(vocab: Vocab,
                previous_search: Optional[str],
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
                                                          List[str]]:
-    search = input('検索: ').strip()
+    search = input(_('search') + ': ').strip()
     params = shlex.split(search)
     exact = False
     if len(params) == 0:
@@ -90,7 +92,7 @@ def main_stuff(vocab: Vocab,
                 else:
                     print(error_message)
             elif len(params) > 0:
-                print('使い方: h 使い方を表示する。')
+                print(_('usage-press-h-to-show-usage'))
                 return previous_search, previous_kanji_found
 
     if search == '':
@@ -98,7 +100,7 @@ def main_stuff(vocab: Vocab,
 
     kanji_found = vocab.search(search, exact)
     if len(kanji_found) > 0:
-        print(f'見つかった: ({len(kanji_found)})')
+        print(_('found: ({count})').format(count=len(kanji_found)))
         for kanji_index, kanji in enumerate(kanji_found):
             out = [
                 color(f'{kanji_index + 1:4d}', fg='grey') + ' ' +
@@ -118,7 +120,7 @@ def main_stuff(vocab: Vocab,
                 out.append(green_tick)
             print('  ' + ' '.join(out))
     else:
-        print('何も見つからない。')
+        print(_('nothing-found'))
     return search, kanji_found
 
 

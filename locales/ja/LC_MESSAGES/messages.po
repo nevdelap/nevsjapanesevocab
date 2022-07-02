@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: nevsjapanesevocab.py:15
+msgid "nevs-japanese-vocab-list"
+msgstr "ネフの日本語語彙リスト"
+
+#: nevsjapanesevocab.py:19
+msgid "loading"
+msgstr "読み込み中"
+
+#: nevsjapanesevocab.py:22
+#, python-brace-format
+msgid "{vocab_file}-failed-to-read-{e}"
+msgstr "{vocab_file}が読み込みに失敗した。, ☹ {e}"
+
+#: nevsjapanesevocab.py:36 src/operations.py:168
+msgid "saving"
+msgstr "読み込み中"
+
+#: nevsjapanesevocab.py:39 src/operations.py:171
+#, python-brace-format
+msgid "{vocab_file}-failed-to-write-{e}"
+msgstr "{vocab_file}が書き込みに失敗した。☹ {e}"
+
+#: nevsjapanesevocab.py:49
+msgid "search"
+msgstr "検索"
+
+#: nevsjapanesevocab.py:95
+msgid "usage-press-h-to-show-usage"
+msgstr "使い方: h 使い方を表示する。"
+
+#: nevsjapanesevocab.py:103
+#, python-brace-format
+msgid "found: ({count})"
+msgstr "見つかった: ({count})"
+
+#: nevsjapanesevocab.py:123
+msgid "nothing-found"
+msgstr "何も見つからない。"
+
+#: src/commands.py:100 src/commands.py:133
+#, python-brace-format
+msgid "{kanji}-has-been-deleted-from-list-{list_name}"
+msgstr "{kanji}はリスト{list_name}から削除した。"

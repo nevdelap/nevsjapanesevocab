@@ -16,9 +16,10 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 
 ## Setup on Linux
 
-1. Standard old dev environment, VS Code, all my extensions, Python 3, `entr`, on Arch.
+1. Standard dev environment, VS Code, all my extensions, Python 3, `entr`, `gettext`, and `sed`.
 1. The Python packages and tools listed below.
 1. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
+
 ## Setup On Android
 
 1. Install [Termux](https://f-droid.org/en/packages/com.termux/) from F-Droid.

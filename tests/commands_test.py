@@ -19,7 +19,7 @@ def test_NewCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert vocab.contains('new')
     message = command_stack.undo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
+    assert message == f'new-has-been-deleted-from-list-{vocab.new_kanji_list_name()}'
     assert command_stack.current() == -1
     assert not vocab.contains('new')
     message = command_stack.redo()
@@ -37,7 +37,7 @@ def test_ChangeCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert vocab.contains('new')
     message = command_stack.undo()
-    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
+    assert message == f'new-has-been-deleted-from-list-{vocab.new_kanji_list_name()}'
     assert command_stack.current() == -1
     assert not vocab.contains('new')
     message = command_stack.redo()
@@ -67,7 +67,7 @@ def test_DeleteCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.is_known('送る') == known
     assert vocab.get_kana('送る') == kana
     message = command_stack.redo()
-    assert message == '送るはリスト0100から削除した。'
+    assert message == '送る-has-been-deleted-from-list-0100'
     assert command_stack.current() == 0
     assert not vocab.contains('送る')
     command_stack.undo()
