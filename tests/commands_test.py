@@ -19,11 +19,11 @@ def test_NewCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert vocab.contains('new')
     message = command_stack.undo()
-    assert message == 'newはリスト%sから削除した。' % vocab.new_kanji_list_name()
+    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
     assert command_stack.current() == -1
     assert not vocab.contains('new')
     message = command_stack.redo()
-    assert message == 'newはリスト%sに追加した。' % vocab.new_kanji_list_name()
+    assert message == f'newはリスト{vocab.new_kanji_list_name()}に追加した。'
     assert command_stack.current() == 0
     assert vocab.contains('new')
     command_stack.undo()
@@ -37,11 +37,11 @@ def test_ChangeCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == 0
     assert vocab.contains('new')
     message = command_stack.undo()
-    assert message == 'newはリスト%sから削除した。' % vocab.new_kanji_list_name()
+    assert message == f'newはリスト{vocab.new_kanji_list_name()}から削除した。'
     assert command_stack.current() == -1
     assert not vocab.contains('new')
     message = command_stack.redo()
-    assert message == 'newはリスト%sに追加した。' % vocab.new_kanji_list_name()
+    assert message == f'newはリスト{vocab.new_kanji_list_name()}に追加した。'
     assert command_stack.current() == 0
     assert vocab.contains('new')
     command_stack.undo()

@@ -21,7 +21,7 @@ class Vocab:
     purposes.
     """
 
-    __itemsPerList: Final = 100
+    __ITEMS_PER_LIST: Final = 100
 
     def __init__(self, filename: str) -> None:
         """Loads vocabulary from a file, and raises
@@ -76,23 +76,15 @@ class Vocab:
                     (known, kana_list) = self.__kanji_to_info[kanji]
                     f.write(
                         normalize(
-                            'NFC', '%s,%s,%s,%s\n' %
-                            (
-                                list_name,
-                                kanji,
-                                1 if known else 0,
-                                ','.join(kana_list)
-                            )
-                        )
-                    )
+                            'NFC',
+                            f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n'))
 
     @property
     def filename(self) -> str:
         return self.__filename
 
-    def get_stats(self) -> Tuple[int, int, int]:
-        """Returns a tuple of (known, learning, total)
-        counts."""
+    def get_stats(self) -> Tuple[int, int]:
+        """Returns a tuple of (known, learning) counts."""
         known_count = 0
         learning = 0
         for list_name in self.__list_to_kanji:
@@ -102,7 +94,7 @@ class Vocab:
                     known_count += 1
                 else:
                     learning += 1
-        return (known_count, learning, known_count + learning)
+        return (known_count, learning)
 
     def get_list_name(self, kanji: str) -> str:
         "A numeric name of the list that the kanji is in."
@@ -176,8 +168,8 @@ class Vocab:
     def new_kanji_list_name(self) -> str:
         "Public for tests."
         list_name = max(self.__list_to_kanji.keys())
-        if len(self.__list_to_kanji) >= Vocab.__itemsPerList:
-            list_name = '%04d' % (int(list_name) + Vocab.__itemsPerList)
+        if len(self.__list_to_kanji) >= Vocab.__ITEMS_PER_LIST:
+            list_name = f'{int(list_name) + Vocab.__ITEMS_PER_LIST:04d}'
         Vocab.valid_list_name(list_name), list_name
         return list_name
 

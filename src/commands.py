@@ -264,5 +264,6 @@ class ToggleKnownCommand(Command):
         return self.__message(False)
 
     def __message(self, redo: bool) -> str:
-        return f'{self.__kanji}のステータスが%sに変更された。' % ('既知(%s)' % color(
-            '✓', fg='green') if redo == self.__known else '未知')
+        green_tick = color('✓', fg='green')
+        known_status = f'既知({green_tick})' if redo == self.__known else '未知'
+        return f'{self.__kanji}のステータスが{known_status}に変更された。'

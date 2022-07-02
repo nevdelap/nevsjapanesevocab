@@ -175,7 +175,9 @@ def save(command_stack: CommandStack, vocab: Vocab,
 def stats(command_stack: CommandStack, vocab: Vocab,
           params: List[str]) -> OperationResult:
     assert len(params) == 0
-    print('データ:\n  分かった: %d\n  学んでいる %d\n  合計: %d\n' % vocab.get_stats())
+    (known, learning) = vocab.get_stats()
+    print(
+        f'データ:\n  分かった: {known}\n  学んでいる {learning}\n  合計: {known + learning}\n')
     return (None, None, False, False)
 
 
@@ -188,6 +190,8 @@ OperationHelp = List[
     ]
 ]
 
+__green_tick = color('✓', fg='green')
+
 __operation_help: OperationHelp = [
     (None, '<漢字|仮名>', '検索', 2, 2),
     ('l', '<漢字|仮名>', '辞書検索', 2, 2),
@@ -197,7 +201,7 @@ __operation_help: OperationHelp = [
     ('ak', '<漢字> <仮名>', '新仮名', 2, 2),
     ('dk', '<漢字> <仮名>', '仮名削除', 2, 2),
     ('ck', '<漢字> <現在の仮名> <仮名>', '仮名変更', 0, 0),
-    ('t', '<漢字>', '分かったか(%s)\n\t\t\t\t  否かを\n\t\t\t\t  切り換える。' % color('✓', fg='green'), 3, 2),
+    ('t', f'<漢字>', '分かったか({green_tick})\n\t\t\t\t  否かを\n\t\t\t\t  切り換える。', 3, 2),
     ('u', None, '元に戻す。', 4, 2),
     ('r', None, '遣り直す。', 4, 2),
     ('s', None, '書き込む。', 4, 2),

@@ -11,6 +11,10 @@ def vocab() -> Vocab:
     return Vocab('tests/test_data/vocab_good.csv')
 
 
+def test_new_kanji_list_name(vocab: Vocab) -> None:
+    assert vocab.new_kanji_list_name() == '0100'
+
+
 def test_contains(vocab: Vocab) -> None:
     assert '送る' in vocab
     assert 'junk' not in vocab
@@ -88,7 +92,7 @@ def test_change_kana(vocab: Vocab) -> None:
     assert ['kana3', 'kana2'] == vocab.get_kana('new')
 
 
-@pytest.mark.parametrize("filename, expectedError",
+@pytest.mark.parametrize("filename, expected_error",
                          [('vocab_bad_kana.csv',
                            "line 3: bad kana list ',,'"),
                           ('vocab_bad_kanji.csv',
@@ -97,7 +101,7 @@ def test_change_kana(vocab: Vocab) -> None:
                            "line 3: bad line '0100,送る', 2 fields, expected at least 4."),
                           ('vocab_bad_list_name.csv',
                            "line 3: bad list name 'asdd', expected numeric.")])
-def test_bad_files(filename: str, expectedError: str) -> None:
+def test_bad_files(filename: str, expected_error: str) -> None:
     with pytest.raises(Exception) as e_info:
         Vocab(f'tests/test_data/{filename}')
-    assert expectedError in str(e_info)
+    assert expected_error in str(e_info)

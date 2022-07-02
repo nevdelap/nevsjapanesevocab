@@ -98,13 +98,11 @@ def main_stuff(vocab: Vocab,
 
     kanji_found = vocab.search(search, exact)
     if len(kanji_found) > 0:
-        print('見つかった: (%d)' % len(kanji_found))
+        print(f'見つかった: ({len(kanji_found)})')
         for kanji_index, kanji in enumerate(kanji_found):
             out = [
-                '%s %s %s' % (
-                    color('%4d' % (kanji_index + 1), fg='grey'),
-                    color(vocab.get_list_name(kanji), fg='grey'),
-                    kanji)
+                color(f'{kanji_index + 1:4d}', fg='grey') + ' ' +
+                color(vocab.get_list_name(kanji), fg='grey') + ' ' + kanji
             ]
             kana_list = vocab.get_kana(kanji)
             if len(kana_list) > 0:
@@ -116,7 +114,8 @@ def main_stuff(vocab: Vocab,
                                 kana in enumerate(kana_list)]),
                         fg='grey'))
             if vocab.is_known(kanji):
-                out.append(color('✓', fg='green'))
+                green_tick = color('✓', fg='green')
+                out.append(green_tick)
             print('  ' + ' '.join(out))
     else:
         print('何も見つからない。')
