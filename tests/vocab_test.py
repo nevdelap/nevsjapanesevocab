@@ -13,6 +13,14 @@ def vocab() -> Vocab:
 
 def test_new_kanji_list_name(vocab: Vocab) -> None:
     assert vocab.new_kanji_list_name() == '0100'
+    assert vocab.count_in_current_list() == len(open(vocab.filename).readlines())
+    for i in range(0, vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
+        vocab.add(f'new{i}')
+    assert vocab.count_in_current_list() == vocab.ITEMS_PER_LIST - 1
+    assert vocab.new_kanji_list_name() == '0100'
+    vocab.add(f'tipitover')
+    vocab.count_in_current_list() == 1
+    assert vocab.new_kanji_list_name() == '0200'
 
 
 def test_contains(vocab: Vocab) -> None:

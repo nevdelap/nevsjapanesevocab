@@ -21,7 +21,8 @@ class Vocab:
     purposes.
     """
 
-    __ITEMS_PER_LIST: Final = 100
+    # Public for tests.
+    ITEMS_PER_LIST: Final = 100
 
     def __init__(self, filename: str) -> None:
         """Loads vocabulary from a file, and raises
@@ -168,10 +169,15 @@ class Vocab:
     def new_kanji_list_name(self) -> str:
         "Public for tests."
         list_name = max(self.__list_to_kanji.keys())
-        if len(self.__list_to_kanji) >= Vocab.__ITEMS_PER_LIST:
-            list_name = f'{int(list_name) + Vocab.__ITEMS_PER_LIST:04d}'
+        if len(self.__list_to_kanji[list_name]) >= Vocab.ITEMS_PER_LIST:
+            list_name = f'{int(list_name) + Vocab.ITEMS_PER_LIST:04d}'
         Vocab.valid_list_name(list_name), list_name
         return list_name
+
+    # Public for tests.
+    def count_in_current_list(self) -> int:
+        list_name = max(self.__list_to_kanji.keys())
+        return len(self.__list_to_kanji[list_name])
 
     def delete(self, kanji: str) -> str:
         assert Vocab.valid_string(kanji), kanji
