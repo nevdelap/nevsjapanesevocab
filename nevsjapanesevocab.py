@@ -1,6 +1,5 @@
 #!/usr/bin/python
 import readline
-import shlex
 import sys
 from colors import color  # type: ignore
 from commands import CommandStack
@@ -45,7 +44,7 @@ def main_stuff(vocab: Vocab,
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
                                                          List[str]]:
     search = input('検索: ').strip()
-    params = shlex.split(search)
+    params = [param for param in search.split(' ') if len(param) > 0]
     exact = False
     if len(params) == 0:
         search = '' if previous_search is None else previous_search
