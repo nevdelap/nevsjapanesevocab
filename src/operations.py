@@ -128,7 +128,7 @@ def delete_kana(command_stack: CommandStack, vocab: Vocab,
         command_stack.do(DeleteKanaCommand(vocab, kanji, kana))
         print(f'{kanji}は{kana}が削除した。')
         invalidate_previous_search_results = True
-    return (None, None, False, invalidate_previous_search_results)
+    return (None, kanji, False, invalidate_previous_search_results)
 
 
 def toggle_known_status(
