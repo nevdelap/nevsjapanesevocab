@@ -43,7 +43,7 @@ def main_stuff(vocab: Vocab,
                previous_search: Optional[str],
                previous_kanji_found: List[str]) -> Tuple[Optional[str],
                                                          List[str]]:
-    search = input('検索: ').strip()
+    search = ''.join([c if c.isalnum() else ' ' for c in input('検索: ') if c.isalnum() or c.isspace()]).strip()
     params = [param for param in search.split(' ') if len(param) > 0]
     exact = False
     if len(params) == 0:
