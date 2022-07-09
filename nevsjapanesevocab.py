@@ -133,19 +133,25 @@ def replace_indices(
     assert all(Vocab.valid_string(kanji) for kanji in kanji_found)
     assert all(kanji in vocab for kanji in kanji_found)
     assert all(len(p) > 0 for p in params)
-    if len(params) > 1 and params[1].isnumeric():
-        kanji_index = int(params[1]) - 1
-        if kanji_index == -1 \
-                and previous_search is not None and len(previous_search) > 0:
-            params[1] = previous_search
-        elif kanji_index >= 0 and kanji_index < len(kanji_found):
-            kanji = kanji_found[kanji_index]
-            params[1] = kanji
-            if len(params) > 2 and params[2].isnumeric():
-                kana = vocab.get_kana(kanji)
-                kana_index = int(params[2]) - 1
-                if kana_index >= 0 and kana_index < len(kana):
-                    params[2] = kana[kana_index]
+    kanji = None
+    if len(params) > 1:
+        if not params[1].isnumeric():
+            kanji = params[1]
+        else:
+            kanji_index = int(params[1]) - 1
+            if kanji_index == -1 \
+                    and previous_search is not None and len(previous_search) > 0:
+                params[1] = previous_search
+            elif kanji_index >= 0 and kanji_index < len(kanji_found):
+                kanji = kanji_found[kanji_index]
+                params[1] = kanji
+    if (kanji is not None
+            and len(params) > 2
+            and params[2].isnumeric()):
+        kana = vocab.get_kana(kanji)
+        kana_index = int(params[2]) - 1
+        if kana_index >= 0 and kana_index < len(kana):
+            params[2] = kana[kana_index]
     return params
 
 
