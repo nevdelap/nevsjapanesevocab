@@ -131,8 +131,8 @@ def main_stuff(vocab: Vocab,
 def replace_indices(
         vocab: Vocab,
         previous_search: Optional[str],
-        kanji_found: list[str],
-        params: list[str]) -> list[str]:
+        kanji_found: List[str],
+        params: List[str]) -> List[str]:
     """ Given a set of search results, and command
     parameters that reference kanji and kana by index in
     those results, replace the indices with the kanji and

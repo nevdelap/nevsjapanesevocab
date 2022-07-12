@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-if ps -ef | grep 'python nevsjapanesevocab.py' | grep -qv grep; then
-    echo 'Already running on termux.'
+if ps -ef | grep 'py.* nevsjapanesevocab.py' | grep -qv grep; then
+    echo 'Already running.'
     sleep 2
     exit 0
 fi
@@ -15,5 +15,9 @@ else
     cd "$SCRIPT_DIR/.."
     export PYTHONPATH="$SCRIPT_DIR/../src"
 fi
+python=python
 # This runs on Android where it cannot be +x'ed.
-python nevsjapanesevocab.py || read -rp "Press enter to quit."
+if [ "$1" == 'pypy' ]; then
+    python=pypy3
+fi
+$python nevsjapanesevocab.py || read -rp "Press enter to quit."

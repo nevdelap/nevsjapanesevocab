@@ -14,7 +14,8 @@ def vocab() -> Vocab:
 
 def test_new_kanji_list_name(vocab: Vocab) -> None:
     assert vocab.new_kanji_list_name() == '0100'
-    assert vocab.count_in_current_list() == len(open(vocab.filename).readlines())
+    with open(vocab.filename) as f:
+        assert vocab.count_in_current_list() == len(f.readlines())
     for i in range(
             0,
             vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
