@@ -4,7 +4,6 @@ import os
 import pathlib
 import pytest
 from typing import List, Tuple
-from unittest_data_provider import data_provider  # type: ignore
 from vocab import Vocab
 
 
