@@ -124,6 +124,7 @@ def main_stuff(vocab: Vocab,
             print('  ' + ' '.join(out))
     else:
         print(_('nothing-found'))
+        return previous_search, previous_kanji_found
     return search, kanji_found
 
 
