@@ -4,4 +4,4 @@ SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 export PYTHONPATH="$SCRIPT_DIR/..:$SCRIPT_DIR/../src:$SCRIPT_DIR/../tests"
 find . -name "*.py" -print | \
-    entr bash -c "reset; python -X dev $(which pytest) -q"
+    entr bash -c "reset; python -X dev $(which pytest) -rP -q"

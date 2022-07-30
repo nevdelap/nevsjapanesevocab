@@ -24,42 +24,42 @@ def vocab() -> Vocab:
     return vocab
 
 
-@pytest.mark.parametrize('search, params, expected_result',
+@pytest.mark.parametrize('previous_search, params, expected_result',
                          [
-                             ('new', ['n', '-50'], ['n', '-50']),
-                             ('new', ['n', '-1'], ['n', '-1']),
-                             ('new', ['n', '0'], ['n', '0']),
+                             ('new', ['n', '-50'], ['n']),
+                             ('new', ['n', '-1'], ['n']),
+                             ('new', ['n', '0'], ['n']),
                              ('new', ['n', '1'], ['n', 'new']),
                              ('new', ['n', '2'], ['n', 'new2']),
                              ('new', ['n', '3'], ['n', 'new3']),
-                             ('new', ['n', '4'], ['n', '4']),
-                             ('new', ['n', '999'], ['n', '999']),
-                             ('new', ['n', '1', '1'], ['n', 'new', '1']),
-                             ('new', ['n', 'new', '1'], ['n', 'new', '1']),
-                             ('new', ['n', '2', '-50'], ['n', 'new2', '-50']),
-                             ('new', ['n', '2', '-1'], ['n', 'new2', '-1']),
-                             ('new', ['n', '2', '0'], ['n', 'new2', '0']),
+                             ('new', ['n', '4'], ['n']),
+                             ('new', ['n', '999'], ['n']),
+                             ('new', ['n', '1', '1'], ['n', 'new']),
+                             ('new', ['n', 'new', '1'], ['n', 'new']),
+                             ('new', ['n', '2', '-50'], ['n', 'new2']),
+                             ('new', ['n', '2', '-1'], ['n', 'new2']),
+                             ('new', ['n', '2', '0'], ['n', 'new2']),
                              ('new', ['n', '2', '1'], ['n', 'new2', 'kana1']),
                              ('new', ['n', '2', '2'], ['n', 'new2', 'kana2']),
                              ('new', ['n', '2', '3'], ['n', 'new2', 'kana3']),
-                             ('new', ['n', '2', '4'], ['n', 'new2', '4']),
-                             ('new', ['n', '2', '999'], ['n', 'new2', '999']),
-                             ('new', ['n', 'new2', '-50'], ['n', 'new2', '-50']),
-                             ('new', ['n', 'new2', '-1'], ['n', 'new2', '-1']),
-                             ('new', ['n', 'new2', '0'], ['n', 'new2', '0']),
+                             ('new', ['n', '2', '4'], ['n', 'new2']),
+                             ('new', ['n', '2', '999'], ['n', 'new2']),
+                             ('new', ['n', 'new2', '-50'], ['n', 'new2']),
+                             ('new', ['n', 'new2', '-1'], ['n', 'new2']),
+                             ('new', ['n', 'new2', '0'], ['n', 'new2']),
                              ('new', ['n', 'new2', '1'], ['n', 'new2', 'kana1']),
                              ('new', ['n', 'new2', '2'], ['n', 'new2', 'kana2']),
                              ('new', ['n', 'new2', '3'], ['n', 'new2', 'kana3']),
-                             ('new', ['n', 'new2', '4'], ['n', 'new2', '4']),
-                             ('new', ['n', 'new2', '999'], ['n', 'new2', '999']),
+                             ('new', ['n', 'new2', '4'], ['n', 'new2']),
+                             ('new', ['n', 'new2', '999'], ['n', 'new2']),
                          ]
                          )
 def test_replace_indices(
         vocab: Vocab,
-        search: str,
+        previous_search: str,
         params: List[str],
         expected_result: List[str]) -> None:
-    found_kanji = vocab.search(search)
+    found_kanji = vocab.search(previous_search)
     assert replace_indices(vocab, '', found_kanji, params) == expected_result
 
 # This has examples of all translations to ensure that the

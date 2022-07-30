@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 import readline
 import sys
 from colors import color  # type: ignore
@@ -142,7 +143,7 @@ def replace_indices(
     assert all(len(p) > 0 for p in params)
     kanji = None
     if len(params) > 1:
-        if not params[1].isnumeric():
+        if not __is_index(params[1]):
             kanji = params[1]
         else:
             kanji_index = int(params[1]) - 1
@@ -155,12 +156,18 @@ def replace_indices(
                 params[1] = kanji
     if (kanji is not None
             and len(params) > 2
-            and params[2].isnumeric()):
+            and __is_index(params[2])):
         kana = vocab.get_kana(kanji)
         kana_index = int(params[2]) - 1
         if kana_index >= 0 and kana_index < len(kana):
             params[2] = kana[kana_index]
+    params = [param for param in params if not __is_index(param)]
     return params
+
+
+def __is_index(s: str) -> bool:
+    # Because isnumeric doesn't know about negative numbers.
+    return re.match('^[-+]?[0-9]+$', s) is not None
 
 
 if __name__ == '__main__':
