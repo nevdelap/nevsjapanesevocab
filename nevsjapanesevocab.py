@@ -54,11 +54,6 @@ def main_stuff(vocab: Vocab,
     if len(params) == 0:
         search = '' if previous_search is None else previous_search
     else:
-        params = replace_indices(
-            vocab,
-            previous_search,
-            previous_kanji_found,
-            params)
         command = params[0] if len(params) > 0 else ''
         params = params[1:] if len(params) > 1 else []
         if command == 'q' and len(params) == 0:
@@ -66,8 +61,13 @@ def main_stuff(vocab: Vocab,
         else:
             operations = get_operations()
             if command in operations:
-                (expected_params, validation, error_message,
-                    operation) = operations[command]
+                (expected_params, accepts_english_params, validation, error_message, operation) = operations[command]
+                params = replace_indices(
+                    vocab,
+                    previous_search,
+                    previous_kanji_found,
+                    params,
+                    accepts_english_params)
                 if len(params) == expected_params and (
                         validation is None or validation(command_stack)):
                     (
@@ -133,7 +133,8 @@ def replace_indices(
         vocab: Vocab,
         previous_search: Optional[str],
         kanji_found: List[str],
-        params: List[str]) -> List[str]:
+        params: List[str],
+        accepts_english_params: bool) -> List[str]:
     """ Given a set of search results, and command
     parameters that reference kanji and kana by index in
     those results, replace the indices with the kanji and
@@ -142,32 +143,36 @@ def replace_indices(
     assert all(kanji in vocab for kanji in kanji_found)
     assert all(len(p) > 0 for p in params)
     kanji = None
-    if len(params) > 1:
-        if not __is_index(params[1]):
-            kanji = params[1]
+    if len(params) > 0:
+        if not __is_index(params[0]):
+            kanji = params[0]
         else:
-            kanji_index = int(params[1]) - 1
+            kanji_index = int(params[0]) - 1
             if (kanji_index == -1
                     and previous_search is not None
                     and len(previous_search) > 0):
-                params[1] = previous_search
+                params[0] = previous_search
             elif kanji_index >= 0 and kanji_index < len(kanji_found):
                 kanji = kanji_found[kanji_index]
-                params[1] = kanji
+                params[0] = kanji
     if (kanji is not None
-            and len(params) > 2
-            and __is_index(params[2])):
+            and len(params) > 1
+            and __is_index(params[1])):
         kana = vocab.get_kana(kanji)
-        kana_index = int(params[2]) - 1
+        kana_index = int(params[1]) - 1
         if kana_index >= 0 and kana_index < len(kana):
-            params[2] = kana[kana_index]
-    params = [param for param in params if not __is_index(param)]
+            params[1] = kana[kana_index]
+    params = [param for param in params if accepts_english_params and not __is_index(param) or __is_kanji_or_kana(param)]
     return params
 
 
 def __is_index(s: str) -> bool:
     # Because isnumeric doesn't know about negative numbers.
     return re.match('^[-+]?[0-9]+$', s) is not None
+
+
+def __is_kanji_or_kana(s: str) -> bool:
+    return re.match('^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$', s) is not None
 
 
 if __name__ == '__main__':

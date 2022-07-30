@@ -35,6 +35,7 @@ Operation = Callable[
 # Definition of an operation.
 OperationDescriptor = Tuple[
     int,  # number of params.
+    bool, # accepts English params.
     Optional[OperationPrecheck],
     Optional[str],  # params.
     Operation
@@ -291,86 +292,103 @@ def __operations() -> OperationsDescriptors:
     return {
         'l': (
             1,
+            True,
             None,
             _('usage') + ': l ' + _('kanji') + _('bar') + _('kana'),
             __look_up),
         'a': (
             1,
+            False,
             None,
             _('usage') + ': a ' + _('kanji'),
             __add),
         'd': (
             1,
+            False,
             None,
             _('usage') + ': d ' + _('kanji'),
             __delete),
         'c': (
             2,
+            False,
             None,
             _('usage') + ': c ' + _('kanji') + _('space') + _('new-kanji'),
             __change),
         'ak': (
             2,
+            False,
             None,
             _('usage') + ': a ' + _('kanji') + _('space') + _('kana'),
             __add_kana),
         'dk': (
             2,
+            False,
             None,
             _('usage') + ': d ' + _('kanji') + _('space') + _('kana'),
             __delete_kana),
         'ck': (
             3,
+            False,
             None,
             _('usage') + ': c ' + _('kanji') + _('space') + _('kana') + _('space') + _('new-kana'),
             __change_kana),
         't': (
             1,
+            False,
             None,
             _('usage') + ': t ' + _('kanji'),
             __toggle_known_status),
         'u': (
             0,
+            False,
             lambda command_stack: command_stack.undoable(),
             _('there-is-nothing-to-undo'),
             __undo),
         'r': (
             0,
+            False,
             lambda command_stack: command_stack.redoable(),
             _('there-is-nothing-to-redo'),
             __redo),
         's': (
             0,
+            False,
             None,
             None,
             __save),
         'i': (
             0,
+            False,
             None,
             None,
             __info),
         'en': (
             0,
+            False,
             None,
             'English',
             __english),
         'es': (
             0,
+            False,
             None,
             'español',
             __spanish),
         'fr': (
             0,
+            False,
             None,
             'français',
             __french),
         'ja': (
             0,
+            False,
             None,
             '日本語',
             __japanese),
         'h': (
             0,
+            False,
             None,
             None,
             __show_help),
