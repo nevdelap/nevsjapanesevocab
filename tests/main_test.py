@@ -27,7 +27,7 @@ def vocab() -> Vocab:
                          [
                              ('新しい', ['-50'], []),
                              ('新しい', ['-1'], []),
-                             ('新しい', ['0'], []),
+                             ('新しい', ['0'], ['あああああ']),
                              ('新しい', ['1'], ['新しい']),
                              ('新しい', ['2'], ['新しい二']),
                              ('新しい', ['3'], ['新しい三']),
@@ -61,7 +61,7 @@ def test_replace_indices(
     found_kanji = vocab.search(search)
     assert replace_indices(
         vocab,
-        '',
+        'あああああ',
         found_kanji,
         params,
         False) == expected_result
@@ -79,9 +79,11 @@ def __io() -> List[Tuple[str, str]]:
         ('w 漢字 かな', _('usage-h-to-show-usage')),
         # Bad usage.
         ('t', f'{_("usage")}: t {_("kanji")}'),
+        # Attempt add previous search when there is not previous search.
+        ('a 0', f'{_("usage")}: a {_("kanji")}'),
         # Search found and not found.
         ('研究', f'{_("found")}: \\(1\\)\n     1 0100 研究 1 けんきゅう'),
-        ('notfound', _('nothing-found')),
+        ('あああああ', _('nothing-found')),
         # Each command's usage when used with incorrect
         # parameters or at the wrong time.
         ('l', f'{_("usage")}: l {_("kanji")}|{_("kana")}'),
@@ -225,6 +227,10 @@ def __io() -> List[Tuple[str, str]]:
         ('dk 新しい かなに', _(
             '{kana}-not-found-for-{kanji}').format(kanji='新しい', kana='かなに')),
         ('t 新しい二', _('{kanji}-not-found').format(kanji='新しい二')),
+        ('あああああ', _('nothing-found')),
+        ('a あああああ', f'{_("found")}: \\(1\\)\n     1 0100 あああああ'),
+        ('かかかかか', _('nothing-found')),
+        ('a 0', f'{_("found")}: \\(1\\)\n     1 0100 かかかかか'),
     ]
 
 
@@ -250,6 +256,7 @@ def test_usage(locale: Optional[str]) -> None:
     try:
         vocab = Vocab('tests/test_data/vocab_good.csv')
         command_stack = CommandStack()
+        previous_search: Optional[str] = None
         kanji_found: List[str] = []
         for test_input, expected_regex in __io():
             sys.stdin.seek(0)
@@ -258,8 +265,8 @@ def test_usage(locale: Optional[str]) -> None:
             sys.stdout.truncate(0)
             sys.stdin.write(test_input + '\n')
             sys.stdin.seek(0)
-            search, kanji_found = main_stuff(
-                vocab, command_stack, '', kanji_found
+            previous_search, kanji_found = main_stuff(
+                vocab, command_stack, previous_search, kanji_found
             )
             sys.stdout.seek(0)
             actual_output = strip_ansi_terminal_escapes(sys.stdout.read())
