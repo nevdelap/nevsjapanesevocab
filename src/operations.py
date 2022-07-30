@@ -35,7 +35,7 @@ Operation = Callable[
 # Definition of an operation.
 OperationDescriptor = Tuple[
     int,  # number of params.
-    bool, # accepts English params.
+    bool,  # accepts English params.
     Optional[OperationPrecheck],
     Optional[str],  # params.
     Operation

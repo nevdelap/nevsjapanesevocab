@@ -59,7 +59,12 @@ def test_replace_indices(
         params: List[str],
         expected_result: List[str]) -> None:
     found_kanji = vocab.search(search)
-    assert replace_indices(vocab, '', found_kanji, params, False) == expected_result
+    assert replace_indices(
+        vocab,
+        '',
+        found_kanji,
+        params,
+        False) == expected_result
 
 # This has examples of all translations to ensure that the
 # translations themselves are syntactically correct in
@@ -224,14 +229,14 @@ def __io() -> List[Tuple[str, str]]:
 
 
 @pytest.mark.parametrize('locale',
-                            [
-                                None,
-                                ('ja'),
-                                ('en'),
-                                ('es'),
-                                ('fr'),
-                            ]
-                        )
+                         [
+                             None,
+                             ('ja'),
+                             ('en'),
+                             ('es'),
+                             ('fr'),
+                         ]
+                         )
 def test_usage(locale: Optional[str]) -> None:
     if locale is None:
         unset_locale()
@@ -268,14 +273,14 @@ def test_usage(locale: Optional[str]) -> None:
 
 
 @pytest.mark.parametrize('locale',
-                            [
-                                None,
-                                ('ja'),
-                                ('en'),
-                                ('es'),
-                                ('fr'),
-                            ]
-                        )
+                         [
+                             None,
+                             ('ja'),
+                             ('en'),
+                             ('es'),
+                             ('fr'),
+                         ]
+                         )
 def test_remaining_translations_with_interpolations(
         locale: Optional[str]) -> None:
     if locale is None:

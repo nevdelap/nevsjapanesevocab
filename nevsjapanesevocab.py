@@ -61,7 +61,8 @@ def main_stuff(vocab: Vocab,
         else:
             operations = get_operations()
             if command in operations:
-                (expected_params, accepts_english_params, validation, error_message, operation) = operations[command]
+                (expected_params, accepts_english_params, validation,
+                 error_message, operation) = operations[command]
                 params = replace_indices(
                     vocab,
                     previous_search,
@@ -162,7 +163,11 @@ def replace_indices(
         kana_index = int(params[1]) - 1
         if kana_index >= 0 and kana_index < len(kana):
             params[1] = kana[kana_index]
-    params = [param for param in params if accepts_english_params and not __is_index(param) or __is_kanji_or_kana(param)]
+    params = [
+        param for param in params
+        if accepts_english_params and not __is_index(param) or
+        __is_kanji_or_kana(param)
+    ]
     return params
 
 
@@ -172,7 +177,9 @@ def __is_index(s: str) -> bool:
 
 
 def __is_kanji_or_kana(s: str) -> bool:
-    return re.match('^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$', s) is not None
+    return re.match(
+        '^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$',
+        s) is not None
 
 
 if __name__ == '__main__':
