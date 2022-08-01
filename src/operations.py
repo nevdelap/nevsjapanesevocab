@@ -257,7 +257,7 @@ __green_tick = color('✓', fg='green')
 def __operations_help() -> OperationsHelp:
     return [
         OperationHelp('', _('kanji') + _('bar') + _('kana'), _('help-search')),
-        OperationHelp('l', _('kanji') + _('bar') + _('kana'), _('help-dictionary-search')),
+        OperationHelp('l', _('japanese') + _('bar') + _('english'), _('help-dictionary-search')),
         OperationHelp('a', _('kanji'), _('help-new-kanji')),
         OperationHelp('d', _('kanji'), _('help-delete-kanji')),
         OperationHelp('c', _('kanji') + _('space') + _('new-kanji'), _('help-change-kanji')),

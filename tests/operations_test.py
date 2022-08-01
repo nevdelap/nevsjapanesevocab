@@ -13,7 +13,7 @@ from test_helpers import strip_ansi_terminal_escapes
                              ('ja', '''
 使い方:
      漢字｜仮名　　　　　検索
-  l  漢字｜仮名　　　　　辞書検索
+  l  日本語｜英語　　　　和英辞書で検索する。
   a  漢字　　　　　　　　新漢字
   d  漢字　　　　　　　　漢字削除
   c  漢字　新漢字　　　　漢字変更
@@ -35,7 +35,7 @@ from test_helpers import strip_ansi_terminal_escapes
                              ('en', '''
 Help:
      kanji|kana          Search.
-  l  kanji|kana          Lookup dictionary.
+  l  Japanese|English    Search the Japanese/English dictionary.
   a  kanji               Add a new kanji.
   d  kanji               Delete a kanji.
   c  kanji new-kanji     Change a kanji.
@@ -57,7 +57,7 @@ Help:
                              ('es', '''
 Uso:
      kanji|kana            Buscar.
-  l  kanji|kana            Buscar en el diccionario inglés.
+  l  japonés|inglés        Buscar en el diccionario japonés/inglés.
   a  kanji                 Añadir un kanji.
   d  kanji                 Borrar un kanji.
   c  kanji kanji-nuevo     Cambiar un kanji.
@@ -79,7 +79,7 @@ Uso:
                              ('fr', '''
 L'utilisation:
      kanji|kana              Chercher.
-  l  kanji|kana              Rechercher dans le dictionnaire anglais.
+  l  japonais|anglais        Rechercher dans le dictionnaire japonais/anglais.
   a  kanji                   Ajouter un kanji.
   d  kanji                   Supprimer un kanji.
   c  kanji kanji-nouveau     Changer un kanji.
