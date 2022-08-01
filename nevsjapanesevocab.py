@@ -61,40 +61,31 @@ def main_stuff(vocab: Vocab,
         else:
             operations = get_operations()
             if command in operations:
-                (expected_params, accepts_english_params, validation,
-                 error_message, operation) = operations[command]
+                operation_descriptor = operations[command]
                 params = replace_indices(
                     vocab,
                     previous_search,
                     previous_kanji_found,
                     params,
-                    accepts_english_params)
-                if len(params) == expected_params and (
-                        validation is None or validation(command_stack)):
-                    (
-                        message,
-                        new_search,
-                        repeat_previous_search,
-                        invalidate_previous_search
-                    ) = operation(
-                        command_stack,
-                        vocab,
-                        params
-                    )
+                    operation_descriptor.accepts_english_params)
+                if len(params) == operation_descriptor.expected_params and (
+                        operation_descriptor.validation is None or operation_descriptor.validation(command_stack)):
+                    result = operation_descriptor.operation(
+                        command_stack, vocab, params)
 
-                    if message is not None:
-                        print(message)
-                    if invalidate_previous_search:
+                    if result.message is not None:
+                        print(result.message)
+                    if result.invalidate_previous_results:
                         previous_kanji_found = []
-                    if new_search is None:
+                    if result.new_search is None:
                         search = '' if previous_search is None else previous_search
-                        if not repeat_previous_search:
+                        if not result.repeat_previous_search:
                             return search, previous_kanji_found
                     else:
-                        search = new_search
+                        search = result.new_search
                         exact = True
                 else:
-                    print(error_message)
+                    print(operation_descriptor.error_message)
                     search = ''
             elif len(params) > 0:
                 print(_('usage-h-to-show-usage'))
