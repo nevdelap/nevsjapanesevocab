@@ -1,5 +1,6 @@
 import sys
 from collections import OrderedDict
+from copy import copy
 from pykakasi import kakasi
 from typing import Dict, Final, List, NamedTuple, Optional, Tuple
 from unicodedata import normalize
@@ -21,6 +22,12 @@ class Vocab:
     purposes.
     """
 
+    __list_to_kanji: Dict[str, List[str]]
+
+    __kanji_to_list: Dict[str, str]
+
+    __kanji_to_info: Dict[str, KanjiInfo]
+
     # Public for tests.
     ITEMS_PER_LIST: Final = 100
 
@@ -29,9 +36,9 @@ class Vocab:
         exceptions on format errors."""
         self.__filename: str = filename
         self.__kks: kakasi = kakasi()
-        self.__list_to_kanji: Dict[str, List[str]] = {}
-        self.__kanji_to_list: Dict[str, str] = {}
-        self.__kanji_to_info: Dict[str, KanjiInfo] = {}
+        self.__list_to_kanji = {}
+        self.__kanji_to_list = {}
+        self.__kanji_to_info = {}
         with open(self.__filename) as f:
             lines = f.readlines()
             for line_number, line in enumerate(lines):
@@ -161,7 +168,7 @@ class Vocab:
         self.__list_to_kanji[list_name].remove(kanji)
         self.__kanji_to_list[new_kanji] = list_name
         self.__kanji_to_list.pop(kanji)
-        self.__kanji_to_info[new_kanji] = self.__kanji_to_info[kanji]
+        self.__kanji_to_info[new_kanji] = copy(self.__kanji_to_info[kanji])
         self.__kanji_to_info.pop(kanji)
         assert kanji not in self, kanji
         assert new_kanji in self, kanji

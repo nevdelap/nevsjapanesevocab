@@ -111,7 +111,7 @@ class DeleteCommand(Command):
         Command.__init__(self, vocab)
         self.__kanji: str = kanji
         self.__known: bool = self.vocab.is_known(kanji)
-        self.__kana: List[str] = self.vocab.get_kana(kanji)
+        self.__kana: List[str] = list(self.vocab.get_kana(kanji))
         self.__list_name: Optional[str] = None
 
     def do(self) -> None:
