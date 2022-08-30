@@ -180,6 +180,7 @@ class Vocab:
         list_name = max(self.__list_to_kanji.keys())
         if len(self.__list_to_kanji[list_name]) >= Vocab.ITEMS_PER_LIST:
             list_name = f'{int(list_name) + Vocab.ITEMS_PER_LIST:04d}'
+            self.__list_to_kanji[list_name] = []
         Vocab.valid_list_name(list_name), list_name
         return list_name
 

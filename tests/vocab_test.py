@@ -25,6 +25,7 @@ def test_new_kanji_list_name(vocab: Vocab) -> None:
     vocab.add(f'tipitover')
     vocab.count_in_current_list() == 1
     assert vocab.new_kanji_list_name() == '0200'
+    assert vocab.add('砂糖') == '0200'
 
 
 def test_contains(vocab: Vocab) -> None:
