@@ -50,6 +50,94 @@ If anyone want's to tell me better translations than I have in the program's UI,
 
 The usage doesn't describe some features of indexing the search results and referring to the last search, because describing it is beyond my Japanese. They are for driving it fast on the Android device where you don't have a full keyboard. I'll add descriptions of it in the other languages sometime.
 
+```
+ネフの日本語語彙リスト
+読み込み中...
+
+使い方:
+     漢字｜仮名　　　　　検索
+  l  日本語｜英語　　　　和英辞書で検索する。
+  a  漢字　　　　　　　　新漢字
+  d  漢字　　　　　　　　漢字削除
+  c  漢字　新漢字　　　　漢字変更
+  ak 漢字　仮名　　　　　新仮名
+  dk 漢字　仮名　　　　　仮名削除
+  ck 漢字　仮名　新仮名　仮名変更
+  t  漢字　　　　　　　　分かったか✓否かを切り換える。
+  u  　　　　　　　　　　元に戻す。
+  r  　　　　　　　　　　遣り直す。
+  s  　　　　　　　　　　書き込む。
+  i  　　　　　　　　　　データ
+  en 　　　　　　　　　　English
+  es 　　　　　　　　　　español
+  fr 　　　　　　　　　　français
+  ja 　　　　　　　　　　日本語
+  h  　　　　　　　　　　この使い方を表示する。
+  q  　　　　　　　　　　終了
+
+検索: 一口
+何も見つからない。
+検索: a 一口
+見つかった: (1)
+     1 5300 一口 1 ひとくち
+検索:   そうそう
+何も見つからない。
+検索: a
+使い方: a 漢字
+検索: a         そうそう
+見つかった: (1)
+     1 5300 そうそう
+検索: いや
+見つかった: (7)
+     1 0900 契約 1 けいやく
+     2 1100 嫌 1 いや
+     3 2400 平野 1 へいや
+     4 3000 制約 1 せいやく
+     5 4400 英訳 1 えいやく
+     6 4600 嫌になる 1 いやになる
+     7 5200 災厄 1 さいやく
+検索: l 2
+  いや (嫌) : disagreeable/detestable/unpleasant/reluctant
+検索: お帰りなさい
+何も見つからない。
+検索: a お帰りなさい
+見つかった: (1)
+     1 5300 お帰りなさい 1 おかえりなさい
+検索: l 大学院
+  だいがくいん (大学院) : graduate school
+検索: 申
+見つかった: (7)
+     1 1700 申請 1 しんせい
+     2 2600 申し上げる 1 もうしあげる
+     3 3400 申し込み 1 もうしこみ
+     4 3400 申し込む 1 もうしこむ
+     5 3800 申し訳 1 もうしわけ
+     6 4000 申告 1 しんこく
+     7 4700 申す 1 もうす
+検索: 勤め
+見つかった: (2)
+     1 4200 勤め 1 つとめ
+     2 5300 勤める 1 つとめる
+検索: l 2
+  つとめる (勤める) : 1. to work (for)/to be employed (at)/to serve (in) 2. to serve (as)/to act (as)/to fill (the position of)/to play the role (of) 3. to conduct a religious service
+検索:   社会
+見つかった: (1)
+     1 0200 社会 1 しゃかい ✓
+検索: l 1
+  しゃかい (社会) : 1. society/public/community/the world 2. social studies
+検索: t 1
+見つかった: (1)
+     1 0200 社会 1 しゃかい
+検索: 社会学
+何も見つからない。
+検索: a 社会学
+見つかった: (1)
+     1 5300 社会学 1 しゃかいがく
+検索: s
+読み込み中...
+検索: _
+```
+
 The screenshots at the moment are from before it's been localised.
 
 <img src="screenshots/screenshot.jpg" width="480">
