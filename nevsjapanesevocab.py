@@ -86,7 +86,7 @@ def main_stuff(vocab: Vocab,
                         exact = True
                 else:
                     print(operation_descriptor.error_message)
-                    search = ''
+                    search = '' if previous_search is None else previous_search
             elif len(params) > 0:
                 print(_('usage-h-to-show-usage'))
                 return previous_search, previous_kanji_found
