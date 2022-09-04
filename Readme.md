@@ -19,28 +19,32 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 ## Setup on Linux
 
 1. Standard dev environment, VS Code, all my extensions, Python 3, `entr`, `gettext`, and `sed`.
-1. The Python packages and tools listed below.
-1. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
+2. The Python packages and tools listed below.
+3. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
 
 ## Setup On Android
 
 1. Install [Termux](https://f-droid.org/en/packages/com.termux/) from F-Droid.
-1. Install [Termux Widget](https://f-droid.org/en/packages/com.termux.widget/) from F-Droid.
-1. Install [Code Editor](https://play.google.com/store/apps/details?id=com.rhmsoft.code).
-1. `pkg update`
-1. `pkg install entr git python`
-1. `termux-setup-storage`
-1. `ssh-keygen`
-1. `cat .ssh/id_rsa.pub # Copy it into GitHub.`
-1. `mkdir -p ~/.shortcuts`
-1. `chmod 700 ~/.shortcuts`
-1. `cd ~/storage/shared/`
-1. `git clone git@github.com:nevdelap/nevsjapanesevocab.git`
-1. `cd nevsjapanesevocab`
-1. `bash install_termux`
-1. `pip install --upgrade wheel`
-1. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data mypy pykakasi pytest readline`
-1. Create a Termux Widget to run `~/.shortcuts/vocab`
+2. Install [Termux Widget](https://f-droid.org/en/packages/com.termux.widget/) from F-Droid.
+3. Install [Code Editor](https://play.google.com/store/apps/details?id=com.rhmsoft.code).
+4. `pkg update`
+5. `pkg install entr git python`
+6. `termux-setup-storage`
+7. `ssh-keygen`
+8. `cat .ssh/id_rsa.pub # Copy it into GitHub.`
+9. `mkdir -p ~/.shortcuts`
+10. `chmod 700 ~/.shortcuts`
+11. `cd ~/storage/shared/`
+12. `git clone git@github.com:nevdelap/nevsjapanesevocab.git`
+13. `cd nevsjapanesevocab`
+14. `bash install_termux`
+15. `pip install --upgrade wheel`
+16. `pip install --upgrade ansicolors autopep8 jamdict jamdict-data mypy pykakasi pytest readline`
+17. Create a Termux Widget to run `~/.shortcuts/vocab`
+
+## Setup on Flex OS.
+
+1. In addition to the above packages I found I needed, `sudo apt-get install libncurses5-dev`.
 
 ## Usage
 
