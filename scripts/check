@@ -3,5 +3,5 @@ set -e
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 export MYPYPATH=$SCRIPT_DIR/../src:$SCRIPT_DIR/../tests
-mypy --strict nevsjapanesevocab.py src/*.py tests/*.py \
-&& pylint --recursive=y .
+mypy --strict nevsjapanesevocab.py src/*.py tests/*.py
+pylint --recursive=y .
