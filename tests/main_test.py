@@ -1,14 +1,14 @@
-import contextlib
-import pytest
 import re
 import sys
-from colors import color  # type: ignore
-from commands import CommandStack
 from io import StringIO
+from typing import Optional
+
+import pytest
+from test_helpers import strip_ansi_terminal_escapes
+
+from commands import CommandStack
 from localisation import _, set_locale, unset_locale
 from nevsjapanesevocab import main_stuff, replace_indices
-from test_helpers import strip_ansi_terminal_escapes
-from typing import List, Optional, Tuple
 from vocab import Vocab
 
 

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Optional
+
 from colors import color  # type: ignore
+
 from localisation import _
-from typing import List, Optional
 from vocab import Vocab
 
 

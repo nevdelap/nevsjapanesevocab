@@ -1,7 +1,9 @@
 import pytest
-import re
-from commands import *
 from test_helpers import strip_ansi_terminal_escapes
+
+from commands import \
+    AddCommand, AddKanaCommand, ChangeCommand, ChangeKanaCommand, \
+    CommandStack, DeleteCommand, DeleteKanaCommand, ToggleKnownCommand
 from vocab import Vocab
 
 
@@ -15,7 +17,7 @@ def command_stack() -> CommandStack:
     return CommandStack()
 
 
-def test_NewCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_new_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == -1
     command_stack.do(AddCommand(vocab, 'new'))
     assert command_stack.current() == 0
@@ -33,7 +35,7 @@ def test_NewCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert not vocab.contains('new')
 
 
-def test_ChangeCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_change_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == -1
     command_stack.do(AddCommand(vocab, 'new'))
     assert command_stack.current() == 0
@@ -57,7 +59,7 @@ def test_ChangeCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert not vocab.contains('NEW')
 
 
-def test_DeleteCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_delete_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == -1
     vocab.toggle_known('送る')
     vocab.add_kana('送る', 'new')
@@ -110,7 +112,7 @@ def test_undo_redo(vocab: Vocab, command_stack: CommandStack) -> None:
     assert not command_stack.redoable()
 
 
-def test_NewKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_new_kana_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
     command_stack.do(AddKanaCommand(vocab, '送る', 'new'))
     assert vocab.contains('送る', 'new')
@@ -128,7 +130,8 @@ def test_NewKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
 
 
-def test_ChangeKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_change_kana_command(vocab: Vocab,
+                             command_stack: CommandStack) -> None:
     assert command_stack.current() == -1
     command_stack.do(AddCommand(vocab, 'new'))
     command_stack.do(AddKanaCommand(vocab, 'new', 'kana'))
@@ -164,7 +167,8 @@ def test_ChangeKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert not vocab.contains('new', 'kana3')
 
 
-def test_DeleteKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
+def test_delete_kana_command(vocab: Vocab,
+                             command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
     command_stack.do(AddKanaCommand(vocab, '送る', 'new'))
     assert vocab.contains('送る', 'new')
@@ -204,8 +208,8 @@ def test_DeleteKanaCommand(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
 
 
-def test_ToggleStatusCommand(vocab: Vocab,
-                             command_stack: CommandStack) -> None:
+def test_toggle_status_command(vocab: Vocab,
+                               command_stack: CommandStack) -> None:
     known = vocab.is_known('送る')
     command_stack.do(ToggleKnownCommand(vocab, '送る'))
     assert vocab.is_known('送る') == (not known)

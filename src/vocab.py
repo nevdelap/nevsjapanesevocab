@@ -1,9 +1,11 @@
 import sys
-from collections import OrderedDict
 from copy import copy
-from pykakasi import kakasi
-from typing import Dict, Final, List, NamedTuple, Optional, Tuple
+from typing import Final, NamedTuple, Optional
 from unicodedata import normalize
+
+from pykakasi import kakasi
+
+from localisation import _
 
 
 class KanjiInfo(NamedTuple):
@@ -39,7 +41,7 @@ class Vocab:
         self.__list_to_kanji = {}
         self.__kanji_to_list = {}
         self.__kanji_to_info = {}
-        with open(self.__filename) as f:
+        with open(self.__filename, encoding='utf-8') as f:
             lines = f.readlines()
             for line_number, line in enumerate(lines):
                 line = line.strip()
@@ -78,16 +80,22 @@ class Vocab:
 
     def save(self, filename: Optional[str] = None) -> None:
         """Saves the vocab back to its original file."""
-        with open(self.__filename if filename is None else filename, 'w') as f:
-            for list_name in sorted(self.__list_to_kanji):
-                for kanji in sorted(self.__list_to_kanji[list_name]):
-                    (known, kana_list) = self.__kanji_to_info[kanji]
-                    if kanji in kana_list:
-                        kana_list.remove(kanji)
-                    f.write(
-                        normalize(
-                            'NFC',
-                            f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n'))
+        save_filename = self.__filename if filename is None else filename
+        try:
+            with open(save_filename, 'w', encoding='utf-8') as f:
+                for list_name in sorted(self.__list_to_kanji):
+                    for kanji in sorted(self.__list_to_kanji[list_name]):
+                        (known, kana_list) = self.__kanji_to_info[kanji]
+                        if kanji in kana_list:
+                            kana_list.remove(kanji)
+                        f.write(
+                            normalize(
+                                'NFC',
+                                f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n'))
+        except IOError as err:
+            print(
+                _('{vocab_file}-failed-to-write-{err}').format(vocab_file=save_filename, err=err))
+            sys.exit(1)
 
     @property
     def filename(self) -> str:
@@ -97,8 +105,8 @@ class Vocab:
         """Returns a tuple of (known, learning) counts."""
         known_count = 0
         learning = 0
-        for list_name in self.__list_to_kanji:
-            for kanji in self.__list_to_kanji[list_name]:
+        for list_kanji in self.__list_to_kanji.values():
+            for kanji in list_kanji:
                 known = self.__kanji_to_info[kanji][0]
                 if known:
                     known_count += 1
@@ -136,8 +144,9 @@ class Vocab:
         kanji_found = []
         for kanji in self.__kanji_to_list:
             kana_list = self.__kanji_to_info[kanji][1]
-            if not exact and (s in kanji or any(
-                    [s in kana for kana in kana_list])) or exact and s == kanji:
+            if not exact and (
+                s in kanji or any(
+                    s in kana for kana in kana_list)) or exact and s == kanji:
                 kanji_found.append(kanji)
         return kanji_found
 
@@ -181,7 +190,7 @@ class Vocab:
         if len(self.__list_to_kanji[list_name]) >= Vocab.ITEMS_PER_LIST:
             list_name = f'{int(list_name) + Vocab.ITEMS_PER_LIST:04d}'
             self.__list_to_kanji[list_name] = []
-        Vocab.valid_list_name(list_name), list_name
+        assert Vocab.valid_list_name(list_name), list_name
         return list_name
 
     # Public for tests.

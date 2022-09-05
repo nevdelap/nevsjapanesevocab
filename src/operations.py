@@ -1,9 +1,12 @@
-import sys
+from typing import Callable, Final, NamedTuple, Optional
+
 from colors import color  # type: ignore
-from commands import *
 from jamdict import Jamdict  # type: ignore
+
+from commands import \
+    AddCommand, AddKanaCommand, ChangeCommand, ChangeKanaCommand, \
+    CommandStack, DeleteCommand, DeleteKanaCommand, ToggleKnownCommand
 from localisation import _, get_locale, set_locale
-from typing import Callable, Dict, Final, List, NamedTuple, Optional
 from vocab import Vocab
 
 # A function that can be called to check if the operation is
@@ -54,10 +57,11 @@ class HelpColumnWidths(NamedTuple):
     help_text: int
 
 
+# pylint: disable=invalid-name
 jam: Final = Jamdict()
 
 
-def __look_up(command_stack: CommandStack, vocab: Vocab,
+def __look_up(_command_stack: CommandStack, _vocab: Vocab,
               params: list[str]) -> OperationResult:
     assert len(params) == 1
     search = params[0]
@@ -175,43 +179,36 @@ def __toggle_known_status(
         params: list[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
-    search = None
     if kanji not in vocab:
         print(_('{kanji}-not-found').format(kanji=kanji))
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))
-        search = kanji
     return OperationResult(None, kanji, False, False)
 
 
-def __undo(command_stack: CommandStack, vocab: Vocab,
+def __undo(command_stack: CommandStack, _vocab: Vocab,
            params: list[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.undo()
     return OperationResult(message, None, False, True)
 
 
-def __redo(command_stack: CommandStack, vocab: Vocab,
+def __redo(command_stack: CommandStack, _vocab: Vocab,
            params: list[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.redo()
     return OperationResult(message, None, False, True)
 
 
-def __save(command_stack: CommandStack, vocab: Vocab,
+def __save(_command_stack: CommandStack, vocab: Vocab,
            params: list[str]) -> OperationResult:
     assert len(params) == 0
-    try:
-        print(_('saving') + '...')
-        vocab.save()
-    except Exception as e:
-        print(
-            _('{vocab_file}-failed-to-write-{e}').format(vocab_file=vocab.filename, e=e))
-        sys.exit(1)
+    print(_('saving') + '...')
+    vocab.save()
     return OperationResult(None, None, False, False)
 
 
-def __info(command_stack: CommandStack, vocab: Vocab,
+def __info(_command_stack: CommandStack, vocab: Vocab,
            params: list[str]) -> OperationResult:
     assert len(params) == 0
     (known, learning) = vocab.get_info()
@@ -223,28 +220,28 @@ def __info(command_stack: CommandStack, vocab: Vocab,
     return OperationResult(None, None, False, False)
 
 
-def __english(command_stack: CommandStack, vocab: Vocab,
+def __english(_command_stack: CommandStack, _vocab: Vocab,
               params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('en')
     return OperationResult(None, None, False, False)
 
 
-def __french(command_stack: CommandStack, vocab: Vocab,
+def __french(_command_stack: CommandStack, _vocab: Vocab,
              params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('fr')
     return OperationResult(None, None, False, False)
 
 
-def __japanese(command_stack: CommandStack, vocab: Vocab,
+def __japanese(_command_stack: CommandStack, _vocab: Vocab,
                params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('ja')
     return OperationResult(None, None, False, False)
 
 
-def __spanish(command_stack: CommandStack, vocab: Vocab,
+def __spanish(_command_stack: CommandStack, _vocab: Vocab,
               params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('es')
@@ -278,25 +275,25 @@ def __operations_help() -> OperationsHelp:
     ]
 
 
-def __show_help(command_stack: CommandStack, vocab: Vocab,
-                params_unused: list[str]) -> OperationResult:
+def __show_help(_command_stack: CommandStack, _vocab: Vocab,
+                _params_unused: list[str]) -> OperationResult:
     print(format_help())
     return OperationResult(None, None, False, False)
 
 
 def format_help() -> str:
-    (bar, space) = ('\uFF5C', '\u3000') if get_locale() == 'ja' else ('|', ' ')
-    help = '\n' + _('usage') + ':\n'
+    space = '\u3000' if get_locale() == 'ja' else ' '
+    help_text = '\n' + _('usage') + ':\n'
     column_widths = __get_help_column_widths()
     for operation_help in __operations_help():
-        help += ('  ' +
-                 operation_help.command.ljust(column_widths.command) +
-                 ' ' +
-                 operation_help.params.ljust(column_widths.params, space) +
-                 space +
-                 operation_help.help_text +
-                 '\n')
-    return help
+        help_text += ('  ' +
+                      operation_help.command.ljust(column_widths.command) +
+                      ' ' +
+                      operation_help.params.ljust(column_widths.params, space) +
+                      space +
+                      operation_help.help_text +
+                      '\n')
+    return help_text
 
 
 def __get_help_column_widths() -> HelpColumnWidths:

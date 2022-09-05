@@ -1,13 +1,12 @@
 #!/usr/bin/python
 import re
-import readline
 import sys
+from typing import Final, Optional
 from colors import color  # type: ignore
 from commands import CommandStack
 from localisation import _, set_locale
 from operations import format_help, get_operations
 from vocab import Vocab
-from typing import Final, List, Optional, Tuple
 
 
 def main() -> None:
@@ -18,8 +17,9 @@ def main() -> None:
     try:
         print(_('loading') + '...')
         vocab = Vocab(vocab_file)
-    except Exception as e:
-        print(_('{vocab_file}-failed-to-read-{e}').format(vocab_file=vocab_file, e=e))
+    except IOError as err:
+        print(
+            _('{vocab_file}-failed-to-read-{err}').format(vocab_file=vocab_file, e=err))
         sys.exit(1)
 
     command_stack = CommandStack()
@@ -32,13 +32,8 @@ def main() -> None:
             vocab, command_stack, search, kanji_found)
         if search is None:
             break
-    try:
-        print(_('saving') + '...')
-        vocab.save()
-    except Exception as e:
-        print(
-            _('{vocab_file}-failed-to-write-{e}').format(vocab_file=vocab_file, e=e))
-        sys.exit(1)
+    print(_('saving') + '...')
+    vocab.save()
 
 
 # Driven by tests.
@@ -58,38 +53,38 @@ def main_stuff(vocab: Vocab,
         params = params[1:] if len(params) > 1 else []
         if command == 'q' and len(params) == 0:
             return None, []
-        else:
-            operations = get_operations()
-            if command in operations:
-                operation_descriptor = operations[command]
-                params = replace_indices(
-                    vocab,
-                    previous_search,
-                    previous_kanji_found,
-                    params,
-                    operation_descriptor.accepts_english_params)
-                if len(params) == operation_descriptor.expected_params and (
-                        operation_descriptor.validation is None or operation_descriptor.validation(command_stack)):
-                    result = operation_descriptor.operation(
-                        command_stack, vocab, params)
+        operations = get_operations()
+        if command in operations:
+            operation_descriptor = operations[command]
+            params = replace_indices(
+                vocab,
+                previous_search,
+                previous_kanji_found,
+                params,
+                operation_descriptor.accepts_english_params)
+            if len(params) == operation_descriptor.expected_params and (
+                    operation_descriptor.validation is None
+                    or operation_descriptor.validation(command_stack)):
+                result = operation_descriptor.operation(
+                    command_stack, vocab, params)
 
-                    if result.message is not None:
-                        print(result.message)
-                    if result.invalidate_previous_results:
-                        previous_kanji_found = []
-                    if result.new_search is None:
-                        search = '' if previous_search is None else previous_search
-                        if not result.repeat_previous_search:
-                            return search, previous_kanji_found
-                    else:
-                        search = result.new_search
-                        exact = True
-                else:
-                    print(operation_descriptor.error_message)
+                if result.message is not None:
+                    print(result.message)
+                if result.invalidate_previous_results:
+                    previous_kanji_found = []
+                if result.new_search is None:
                     search = '' if previous_search is None else previous_search
-            elif len(params) > 0:
-                print(_('usage-h-to-show-usage'))
-                return previous_search, previous_kanji_found
+                    if not result.repeat_previous_search:
+                        return search, previous_kanji_found
+                else:
+                    search = result.new_search
+                    exact = True
+            else:
+                print(operation_descriptor.error_message)
+                search = '' if previous_search is None else previous_search
+        elif len(params) > 0:
+            print(_('usage-h-to-show-usage'))
+            return previous_search, previous_kanji_found
 
     if search == '':
         return '', previous_kanji_found
@@ -143,7 +138,7 @@ def replace_indices(
                     and previous_search is not None
                     and len(previous_search) > 0):
                 params[0] = previous_search
-            elif kanji_index >= 0 and kanji_index < len(kanji_found):
+            elif 0 <= kanji_index < len(kanji_found):
                 kanji = kanji_found[kanji_index]
                 params[0] = kanji
     if (kanji is not None
@@ -151,7 +146,7 @@ def replace_indices(
             and __is_index(params[1])):
         kana = vocab.get_kana(kanji)
         kana_index = int(params[1]) - 1
-        if kana_index >= 0 and kana_index < len(kana):
+        if 0 <= kana_index < len(kana):
             params[1] = kana[kana_index]
     params = [
         param for param in params

@@ -1,8 +1,8 @@
 import pytest
-import re
+from test_helpers import strip_ansi_terminal_escapes
+
 from localisation import set_locale
 from operations import format_help
-from test_helpers import strip_ansi_terminal_escapes
 
 # Content is simply copied out of the terminal into the test for
 # regression testing and proof reading.

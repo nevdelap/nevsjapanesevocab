@@ -1,0 +1,16 @@
+[MESSAGES CONTROL]
+# redefined-outer-name is turned off because it complains about pytest fixtures.
+disable=missing-docstring,redefined-outer-name
+
+[FORMAT]
+max-line-length=120
+
+[BASIC]
+# do method on undoable commands, i for index, f for file, s for meaningless string.
+good-names=do,i,f,s
+
+[DESIGN]
+# Will review to reduce these to defaults.
+max-branches=18
+max-locals=17
+max-public-methods=25

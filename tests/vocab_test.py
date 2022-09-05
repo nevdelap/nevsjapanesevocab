@@ -1,9 +1,7 @@
-import contextlib
-import io
-import os
 import pathlib
+
 import pytest
-from typing import List, Tuple
+
 from vocab import Vocab
 
 
@@ -14,7 +12,7 @@ def vocab() -> Vocab:
 
 def test_new_kanji_list_name(vocab: Vocab) -> None:
     assert vocab.new_kanji_list_name() == '0100'
-    with open(vocab.filename) as f:
+    with open(vocab.filename, encoding='utf-8') as f:
         assert vocab.count_in_current_list() == len(f.readlines())
     for i in range(
             0,
@@ -22,10 +20,10 @@ def test_new_kanji_list_name(vocab: Vocab) -> None:
         vocab.add(f'new{i}')
     assert vocab.count_in_current_list() == vocab.ITEMS_PER_LIST - 1
     assert vocab.new_kanji_list_name() == '0100'
-    vocab.add(f'tipitover')
-    vocab.count_in_current_list() == 1
+    vocab.add('fillit')
+    assert vocab.count_in_current_list() == 100
     assert vocab.new_kanji_list_name() == '0200'
-    assert vocab.add('砂糖') == '0200'
+    assert vocab.add('tipitover') == '0200'
 
 
 def test_contains(vocab: Vocab) -> None:
@@ -50,7 +48,7 @@ def test_add_delete_kanji(vocab: Vocab) -> None:
 
 def test_change_kanji(vocab: Vocab) -> None:
     assert not vocab.contains('new')
-    list_name = vocab.add('new')
+    vocab.add('new')
     vocab.add_kana('new', 'kana')
     vocab.add_kana('new', 'kana2')
     assert vocab.contains('new')
@@ -89,7 +87,7 @@ def test_add_delete_kana(vocab: Vocab) -> None:
 
 def test_change_kana(vocab: Vocab) -> None:
     assert not vocab.contains('new')
-    list_name = vocab.add('new')
+    vocab.add('new')
     vocab.add_kana('new', 'kana')
     vocab.add_kana('new', 'kana2')
     assert vocab.contains('new')

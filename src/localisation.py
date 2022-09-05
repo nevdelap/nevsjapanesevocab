@@ -1,5 +1,5 @@
 from gettext import NullTranslations, translation
-from typing import Callable, Dict, Optional
+from typing import Callable, Optional
 
 
 GetText = Callable[[str], str]
@@ -16,6 +16,7 @@ def _(s: str) -> str:
     return __(s)
 
 
+# pylint: disable=invalid-name
 __locale = None
 
 __translations: dict[
@@ -29,11 +30,13 @@ def get_locale() -> Optional[str]:
 
 
 def set_locale(locale: str) -> None:
+    # pylint: disable=global-statement
     global __locale
     __locale = locale
     if __locale not in __translations:
         __translations[__locale] = translation(
             'messages', localedir='locales', languages=[__locale])
+    # pylint: disable=global-statement
     global __
     __ = __translations[__locale].gettext
 
