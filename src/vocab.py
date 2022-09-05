@@ -8,7 +8,7 @@ from unicodedata import normalize
 
 class KanjiInfo(NamedTuple):
     known: bool
-    kana_list: List[str]
+    kana_list: list[str]
 
 
 class Vocab:
@@ -22,11 +22,11 @@ class Vocab:
     purposes.
     """
 
-    __list_to_kanji: Dict[str, List[str]]
+    __list_to_kanji: dict[str, list[str]]
 
-    __kanji_to_list: Dict[str, str]
+    __kanji_to_list: dict[str, str]
 
-    __kanji_to_info: Dict[str, KanjiInfo]
+    __kanji_to_info: dict[str, KanjiInfo]
 
     # Public for tests.
     ITEMS_PER_LIST: Final = 100
@@ -93,7 +93,7 @@ class Vocab:
     def filename(self) -> str:
         return self.__filename
 
-    def get_info(self) -> Tuple[int, int]:
+    def get_info(self) -> tuple[int, int]:
         """Returns a tuple of (known, learning) counts."""
         known_count = 0
         learning = 0
@@ -125,7 +125,7 @@ class Vocab:
                 kana in self.__kanji_to_info[kanji][1]
             )
 
-    def search(self, s: str, exact: bool = False) -> List[str]:
+    def search(self, s: str, exact: bool = False) -> list[str]:
         """Search for a string in the kanji and their kana.
         Parameters
         ==========
@@ -215,12 +215,12 @@ class Vocab:
         assert self.contains(kanji, kana), kanji + ', ' + kana
         return self.__kanji_to_info[kanji][1].index(kana)
 
-    def get_kana(self, kanji: str) -> List[str]:
+    def get_kana(self, kanji: str) -> list[str]:
         assert Vocab.valid_string(kanji), kanji
         assert kanji in self, kanji
         return self.__kanji_to_info[kanji][1]
 
-    def replace_all_kana(self, kanji: str, kana_list: List[str]) -> None:
+    def replace_all_kana(self, kanji: str, kana_list: list[str]) -> None:
         assert Vocab.valid_string(kanji), kanji
         assert Vocab.valid_kana_list(kana_list), kana_list
         known = self.__kanji_to_info[kanji][0]
@@ -273,7 +273,7 @@ class Vocab:
         return isinstance(i, int) and i >= 0
 
     @staticmethod
-    def valid_kana_list(kana_list: List[str]) -> bool:
+    def valid_kana_list(kana_list: list[str]) -> bool:
         return isinstance(kana_list, list) and \
             all(isinstance(k, str) and len(k) > 0 for k in kana_list)
 

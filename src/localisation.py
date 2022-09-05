@@ -18,7 +18,7 @@ def _(s: str) -> str:
 
 __locale = None
 
-__translations: Dict[
+__translations: dict[
     str,  # locale.
     NullTranslations
 ] = {}

@@ -56,8 +56,8 @@ def vocab() -> Vocab:
 def test_replace_indices(
         vocab: Vocab,
         search: str,
-        params: List[str],
-        expected_result: List[str]) -> None:
+        params: list[str],
+        expected_result: list[str]) -> None:
     found_kanji = vocab.search(search)
     assert replace_indices(
         vocab,
@@ -72,7 +72,7 @@ def test_replace_indices(
 # {new-kanji}.
 
 
-def __io() -> List[Tuple[str, str]]:
+def __io() -> list[tuple[str, str]]:
     return [
         ('\n', _('search')),
         # Bad command.
@@ -257,7 +257,7 @@ def test_usage(locale: Optional[str]) -> None:
         vocab = Vocab('tests/test_data/vocab_good.csv')
         command_stack = CommandStack()
         previous_search: Optional[str] = None
-        kanji_found: List[str] = []
+        kanji_found: list[str] = []
         for test_input, expected_regex in __io():
             sys.stdin.seek(0)
             sys.stdout.seek(0)

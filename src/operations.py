@@ -25,11 +25,11 @@ class OperationHelp(NamedTuple):
     help_text: str
 
 
-OperationsHelp = List[OperationHelp]
+OperationsHelp = list[OperationHelp]
 
 # Signature of the method function an operation.
 Operation = Callable[
-    [CommandStack, Vocab, List[str]],
+    [CommandStack, Vocab, list[str]],
     OperationResult
 ]
 
@@ -42,7 +42,7 @@ class OperationDescriptor(NamedTuple):
     operation: Operation
 
 
-OperationsDescriptors = Dict[
+OperationsDescriptors = dict[
     str,  # command.
     OperationDescriptor
 ]
@@ -58,7 +58,7 @@ jam: Final = Jamdict()
 
 
 def __look_up(command_stack: CommandStack, vocab: Vocab,
-              params: List[str]) -> OperationResult:
+              params: list[str]) -> OperationResult:
     assert len(params) == 1
     search = params[0]
     result = jam.lookup(search)
@@ -71,7 +71,7 @@ def __look_up(command_stack: CommandStack, vocab: Vocab,
 
 
 def __add(command_stack: CommandStack, vocab: Vocab,
-          params: List[str]) -> OperationResult:
+          params: list[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     if kanji in vocab:
@@ -82,7 +82,7 @@ def __add(command_stack: CommandStack, vocab: Vocab,
 
 
 def __change(command_stack: CommandStack, vocab: Vocab,
-             params: List[str]) -> OperationResult:
+             params: list[str]) -> OperationResult:
     assert len(params) == 2
     kanji, new_kanji = params[:2]
     search = None
@@ -104,7 +104,7 @@ def __change(command_stack: CommandStack, vocab: Vocab,
 
 
 def __delete(command_stack: CommandStack, vocab: Vocab,
-             params: List[str]) -> OperationResult:
+             params: list[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     invalidate_previous_search_results = False
@@ -122,7 +122,7 @@ def __delete(command_stack: CommandStack, vocab: Vocab,
 
 
 def __add_kana(command_stack: CommandStack, vocab: Vocab,
-               params: List[str]) -> OperationResult:
+               params: list[str]) -> OperationResult:
     assert len(params) == 2
     kanji, kana = params[:2]
     if vocab.contains(kanji, kana):
@@ -133,7 +133,7 @@ def __add_kana(command_stack: CommandStack, vocab: Vocab,
 
 
 def __change_kana(command_stack: CommandStack, vocab: Vocab,
-                  params: List[str]) -> OperationResult:
+                  params: list[str]) -> OperationResult:
     assert len(params) == 3
     kanji, kana, new_kana = params[:3]
     search = None
@@ -152,7 +152,7 @@ def __change_kana(command_stack: CommandStack, vocab: Vocab,
 
 
 def __delete_kana(command_stack: CommandStack, vocab: Vocab,
-                  params: List[str]) -> OperationResult:
+                  params: list[str]) -> OperationResult:
     assert len(params) == 2
     kanji, kana = params[:2]
     invalidate_previous_search_results = False
@@ -172,7 +172,7 @@ def __delete_kana(command_stack: CommandStack, vocab: Vocab,
 def __toggle_known_status(
         command_stack: CommandStack,
         vocab: Vocab,
-        params: List[str]) -> OperationResult:
+        params: list[str]) -> OperationResult:
     assert len(params) == 1
     kanji = params[0]
     search = None
@@ -185,21 +185,21 @@ def __toggle_known_status(
 
 
 def __undo(command_stack: CommandStack, vocab: Vocab,
-           params: List[str]) -> OperationResult:
+           params: list[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.undo()
     return OperationResult(message, None, False, True)
 
 
 def __redo(command_stack: CommandStack, vocab: Vocab,
-           params: List[str]) -> OperationResult:
+           params: list[str]) -> OperationResult:
     assert len(params) == 0
     message = command_stack.redo()
     return OperationResult(message, None, False, True)
 
 
 def __save(command_stack: CommandStack, vocab: Vocab,
-           params: List[str]) -> OperationResult:
+           params: list[str]) -> OperationResult:
     assert len(params) == 0
     try:
         print(_('saving') + '...')
@@ -212,7 +212,7 @@ def __save(command_stack: CommandStack, vocab: Vocab,
 
 
 def __info(command_stack: CommandStack, vocab: Vocab,
-           params: List[str]) -> OperationResult:
+           params: list[str]) -> OperationResult:
     assert len(params) == 0
     (known, learning) = vocab.get_info()
     print('\n'
@@ -224,28 +224,28 @@ def __info(command_stack: CommandStack, vocab: Vocab,
 
 
 def __english(command_stack: CommandStack, vocab: Vocab,
-              params: List[str]) -> OperationResult:
+              params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('en')
     return OperationResult(None, None, False, False)
 
 
 def __french(command_stack: CommandStack, vocab: Vocab,
-             params: List[str]) -> OperationResult:
+             params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('fr')
     return OperationResult(None, None, False, False)
 
 
 def __japanese(command_stack: CommandStack, vocab: Vocab,
-               params: List[str]) -> OperationResult:
+               params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('ja')
     return OperationResult(None, None, False, False)
 
 
 def __spanish(command_stack: CommandStack, vocab: Vocab,
-              params: List[str]) -> OperationResult:
+              params: list[str]) -> OperationResult:
     assert len(params) == 0
     set_locale('es')
     return OperationResult(None, None, False, False)
@@ -279,7 +279,7 @@ def __operations_help() -> OperationsHelp:
 
 
 def __show_help(command_stack: CommandStack, vocab: Vocab,
-                params_unused: List[str]) -> OperationResult:
+                params_unused: list[str]) -> OperationResult:
     print(format_help())
     return OperationResult(None, None, False, False)
 

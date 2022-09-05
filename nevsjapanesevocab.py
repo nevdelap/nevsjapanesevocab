@@ -26,7 +26,7 @@ def main() -> None:
     print(format_help())
 
     search: Optional[str] = ''
-    kanji_found: List[str] = []
+    kanji_found: list[str] = []
     while True:
         (search, kanji_found) = main_stuff(
             vocab, command_stack, search, kanji_found)
@@ -45,8 +45,8 @@ def main() -> None:
 def main_stuff(vocab: Vocab,
                command_stack: CommandStack,
                previous_search: Optional[str],
-               previous_kanji_found: List[str]) -> Tuple[Optional[str],
-                                                         List[str]]:
+               previous_kanji_found: list[str]) -> tuple[Optional[str],
+                                                         list[str]]:
     search = ''.join([c if c.isalnum() else ' ' for c in input(
         _('search') + ': ') if c.isalnum() or c.isspace()]).strip()
     params = [param for param in search.split(' ') if len(param) > 0]
@@ -123,9 +123,9 @@ def main_stuff(vocab: Vocab,
 def replace_indices(
         vocab: Vocab,
         previous_search: Optional[str],
-        kanji_found: List[str],
-        params: List[str],
-        accepts_english_params: bool) -> List[str]:
+        kanji_found: list[str],
+        params: list[str],
+        accepts_english_params: bool) -> list[str]:
     """ Given a set of search results, and command
     parameters that reference kanji and kana by index in
     those results, replace the indices with the kanji and
