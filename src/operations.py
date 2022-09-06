@@ -1,4 +1,4 @@
-from typing import Callable, Final, NamedTuple, Optional
+from typing import Callable, Final, Sequence, NamedTuple, Optional
 
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
@@ -38,11 +38,19 @@ Operation = Callable[
 
 
 class OperationDescriptor(NamedTuple):
-    expected_params: int
+    min_params: int
+    max_params: Optional[int]
     accepts_english_params: bool
     validation: Optional[OperationPrecheck]
     error_message: Optional[str]
     operation: Operation
+
+    def are_good_params(self, params: Sequence[str]) -> bool:
+        return len(params) >= self.min_params and (
+            self.max_params is None or len(params) <= self.max_params)
+
+    def operation_is_valid(self, command_stack: CommandStack) -> bool:
+        return self.validation is None or self.validation(command_stack)
 
 
 OperationsDescriptors = dict[
@@ -63,8 +71,8 @@ jam: Final = Jamdict()
 
 def __look_up(_command_stack: CommandStack, _vocab: Vocab,
               params: list[str]) -> OperationResult:
-    assert len(params) == 1
-    search = params[0]
+    assert len(params) >= 1
+    search = ' '.join(params)
     result = jam.lookup(search)
     if len(result.entries) > 0:
         for entry in result.entries:
@@ -311,11 +319,13 @@ def __operations() -> OperationsDescriptors:
     return {
         'l': OperationDescriptor(
             1,
+            None,
             True,
             None,
             _('usage') + ': l ' + _('kanji') + _('bar') + _('kana'),
             __look_up),
         'a': OperationDescriptor(
+            1,
             1,
             False,
             None,
@@ -323,11 +333,13 @@ def __operations() -> OperationsDescriptors:
             __add),
         'd': OperationDescriptor(
             1,
+            1,
             False,
             None,
             _('usage') + ': d ' + _('kanji'),
             __delete),
         'c': OperationDescriptor(
+            2,
             2,
             False,
             None,
@@ -335,11 +347,13 @@ def __operations() -> OperationsDescriptors:
             __change),
         'ak': OperationDescriptor(
             2,
+            2,
             False,
             None,
             _('usage') + ': a ' + _('kanji') + _('space') + _('kana'),
             __add_kana),
         'dk': OperationDescriptor(
+            2,
             2,
             False,
             None,
@@ -347,11 +361,13 @@ def __operations() -> OperationsDescriptors:
             __delete_kana),
         'ck': OperationDescriptor(
             3,
+            3,
             False,
             None,
             _('usage') + ': c ' + _('kanji') + _('space') + _('kana') + _('space') + _('new-kana'),
             __change_kana),
         't': OperationDescriptor(
+            1,
             1,
             False,
             None,
@@ -359,11 +375,13 @@ def __operations() -> OperationsDescriptors:
             __toggle_known_status),
         'u': OperationDescriptor(
             0,
+            0,
             False,
             lambda command_stack: command_stack.undoable(),
             _('there-is-nothing-to-undo'),
             __undo),
         'r': OperationDescriptor(
+            0,
             0,
             False,
             lambda command_stack: command_stack.redoable(),
@@ -371,11 +389,13 @@ def __operations() -> OperationsDescriptors:
             __redo),
         's': OperationDescriptor(
             0,
+            0,
             False,
             None,
             None,
             __save),
         'i': OperationDescriptor(
+            0,
             0,
             False,
             None,
@@ -383,11 +403,13 @@ def __operations() -> OperationsDescriptors:
             __info),
         'en': OperationDescriptor(
             0,
+            0,
             False,
             None,
             'English',
             __english),
         'es': OperationDescriptor(
+            0,
             0,
             False,
             None,
@@ -395,17 +417,20 @@ def __operations() -> OperationsDescriptors:
             __spanish),
         'fr': OperationDescriptor(
             0,
+            0,
             False,
             None,
             'français',
             __french),
         'ja': OperationDescriptor(
             0,
+            0,
             False,
             None,
             '日本語',
             __japanese),
         'h': OperationDescriptor(
+            0,
             0,
             False,
             None,

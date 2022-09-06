@@ -62,9 +62,8 @@ def main_stuff(vocab: Vocab,
                 previous_kanji_found,
                 params,
                 operation_descriptor.accepts_english_params)
-            if len(params) == operation_descriptor.expected_params and (
-                    operation_descriptor.validation is None
-                    or operation_descriptor.validation(command_stack)):
+            if operation_descriptor.are_good_params(
+                    params) and operation_descriptor.operation_is_valid(command_stack):
                 result = operation_descriptor.operation(
                     command_stack, vocab, params)
 
