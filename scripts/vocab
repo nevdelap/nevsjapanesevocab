@@ -5,9 +5,9 @@ if ps -ef | grep 'py.* nevsjapanesevocab.py' | grep -qv grep; then
     sleep 2
     exit 0
 fi
-if [ -d ~/storage/shared/nevsjapanesevocab ]; then
+if [ -d ~/nevsjapanesevocab ]; then
     # Running in Termux.
-    cd ~/storage/shared/nevsjapanesevocab
+    cd ~/nevsjapanesevocab
     export PYTHONPATH="$PWD/src"
 else
     # Running in Linux.
@@ -15,9 +15,5 @@ else
     cd "$SCRIPT_DIR/.."
     export PYTHONPATH="$SCRIPT_DIR/../src"
 fi
-python=python
-# This runs on Android where it cannot be +x'ed.
-if [ "$1" == 'pypy' ]; then
-    python=pypy3
-fi
-$python nevsjapanesevocab.py || read -rp "Press enter to quit."
+pwd
+python nevsjapanesevocab.py || read -rp "Press enter to quit."
