@@ -1,3 +1,6 @@
+import sys
+import termios
+import tty
 from typing import Callable, Final, Sequence, NamedTuple, Optional
 
 from colors import color  # type: ignore
@@ -194,6 +197,82 @@ def __toggle_known_status(
     return OperationResult(None, kanji, False, False)
 
 
+__green_tick = color('✓', fg='green')
+
+
+def __review(command_stack: CommandStack, vocab: Vocab,
+             _params: list[str]) -> OperationResult:
+    fd = sys.stdin.fileno()
+    tcattr = termios.tcgetattr(fd)
+    tty.setraw(fd)
+    try:
+        kanjis = vocab.kanji
+        # Operations done in review mode can be undone and
+        # redone in review mode. Once out of review mode
+        # operations done in review mode are just part of
+        # the infinite undo stack.
+        operations_count = 0
+        kanji_index = 0
+        # This stack allows reset the position in the list
+        # of words being reviewed as undo's and redo's in the
+        # context of review mode are done.
+        stack: list[int] = []
+        current = -1
+        while kanji_index < len(kanjis):
+            commands = ['y', 'n']
+            if operations_count > 0:
+                commands.append('u')
+            if command_stack.redoable():
+                commands.append('r')
+            commands.append('q')
+            prompt = ' 分かる(' + ', '.join(commands) + ')? '
+            prompt_len = len(prompt) + 3  # todo, something about this 3
+            erase = '\b' * prompt_len + ' ' * prompt_len + '\b' * prompt_len
+            kanji = kanjis[kanji_index]
+            if not vocab.is_known(kanji):
+                print(f'  {kanji}{prompt}', end='')
+                sys.stdout.flush()
+                while True:
+                    response = sys.stdin.read(1)
+                    if response in commands:
+                        break
+                if response == 'q':
+                    print('\r')
+                    break
+                if response in ['y', 'n']:
+                    known = response == 'y'
+                    if vocab.is_known(kanji) != known:
+                        __toggle_known_status(command_stack, vocab, [kanji])
+                        operations_count += 1
+                        stack = stack[:current + 1]
+                        stack.append(kanji_index)
+                        current += 1
+                    kanji_index += 1
+                elif response == 'u':
+                    __undo(command_stack, vocab, [])
+                    operations_count -= 1
+                    kanji_index = stack[current]
+                    current -= 1
+                elif response == 'r':
+                    __redo(command_stack, vocab, [])
+                    operations_count += 1
+                    current += 1
+                    kanji_index = stack[int(current)]
+                print(f'{erase}', end='')
+                if vocab.is_known(kanji):
+                    print(f' {__green_tick}', end='')
+                print('\r')
+            else:
+                kanji_index += 1
+        assert operations_count >= current
+        assert current < len(stack)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, tcattr)
+    message = _(
+        '{count}-kanji-changed-to-known').format(count=operations_count)
+    return OperationResult(message, None, False, True)
+
+
 def __undo(command_stack: CommandStack, _vocab: Vocab,
            params: list[str]) -> OperationResult:
     assert len(params) == 0
@@ -256,9 +335,6 @@ def __spanish(_command_stack: CommandStack, _vocab: Vocab,
     return OperationResult(None, None, False, False)
 
 
-__green_tick = color('✓', fg='green')
-
-
 def __operations_help() -> OperationsHelp:
     return [
         OperationHelp('', _('kanji') + _('bar') + _('kana'), _('help-search')),
@@ -270,6 +346,7 @@ def __operations_help() -> OperationsHelp:
         OperationHelp('dk', _('kanji') + _('space') + _('kana'), _('help-delete-kana')),
         OperationHelp('ck', _('kanji') + _('space') + _('kana') + _('space') + _('new-kana'), _('help-change-kana')),
         OperationHelp('t', _('kanji'), _('help-known-or-not?{green_tick}').format(green_tick=__green_tick)),
+        OperationHelp('R', '', _('help-review')),
         OperationHelp('u', '', _('help-undo')),
         OperationHelp('r', '', _('help-redo')),
         OperationHelp('s', '', _('help-save')),
@@ -373,6 +450,13 @@ def __operations() -> OperationsDescriptors:
             None,
             _('usage') + ': t ' + _('kanji'),
             __toggle_known_status),
+        'R': OperationDescriptor(
+            0,
+            0,
+            False,
+            None,
+            None,
+            __review),
         'u': OperationDescriptor(
             0,
             0,

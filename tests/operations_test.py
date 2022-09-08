@@ -21,6 +21,7 @@ from operations import format_help
   dk 漢字　仮名　　　　　仮名削除
   ck 漢字　仮名　新仮名　仮名変更
   t  漢字　　　　　　　　分かったか✓否かを切り換える。
+  R  　　　　　　　　　　レビューモードに入る。
   u  　　　　　　　　　　元に戻す。
   r  　　　　　　　　　　遣り直す。
   s  　　　　　　　　　　書き込む。
@@ -43,6 +44,7 @@ Help:
   dk kanji kana          Delete a kana from a kanji.
   ck kanji kana new-kana Change a kana for a kanji.
   t  kanji               Toggle known ✓ status.
+  R                      Enter review mode.
   u                      Undo.
   r                      Redo.
   s                      Save.
@@ -65,6 +67,7 @@ Uso:
   dk kanji kana            Borrar un kana.
   ck kanji kana kana-nuevo Cambiar un kana.
   t  kanji                 Cambiar el estado conocido ✓.
+  R                        Entrar en el modo de revisión.
   u                        Deshacer.
   r                        Rehacer.
   s                        Guardar.
@@ -87,6 +90,7 @@ L'utilisation:
   dk kanji kana              Supprimer un kana.
   ck kanji kana kana-nouveau Changer un kana.
   t  kanji                   Basculer l'état connu ✓.
+  R                          Entrer dans le mode de révision.
   u                          Défaire.
   r                          Refaire.
   s                          Sauvegarder.

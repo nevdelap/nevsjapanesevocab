@@ -52,10 +52,10 @@ class CommandStack:
         return self.__current
 
     def do(self, command: Command) -> None:
+        command.do()
         self.__commands = self.__commands[:self.__current + 1]
         self.__commands.append(command)
         self.__current += 1
-        self.__commands[self.__current].do()
         assert self.undoable()
         assert not self.redoable()
 

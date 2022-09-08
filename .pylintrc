@@ -14,3 +14,4 @@ good-names=do,i,f,s
 max-branches=18
 max-locals=17
 max-public-methods=25
+max-statements = 60

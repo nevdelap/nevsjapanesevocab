@@ -101,6 +101,10 @@ class Vocab:
     def filename(self) -> str:
         return self.__filename
 
+    @property
+    def kanji(self) -> list[str]:
+        return list(self.__kanji_to_list.keys())
+
     def get_info(self) -> tuple[int, int]:
         """Returns a tuple of (known, learning) counts."""
         known_count = 0
