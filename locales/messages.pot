@@ -31,19 +31,19 @@ msgstr  ""
 msgid   "saving"
 msgstr  ""
 
-#: nevsjapanesevocab.py:46
+#: nevsjapanesevocab.py:50
 msgid   "search"
 msgstr  ""
 
-#: nevsjapanesevocab.py:85
+#: nevsjapanesevocab.py:90
 msgid   "usage-h-to-show-usage"
 msgstr  ""
 
-#: nevsjapanesevocab.py:93
+#: nevsjapanesevocab.py:98
 msgid   "found"
 msgstr  ""
 
-#: nevsjapanesevocab.py:113 src/operations.py:81
+#: nevsjapanesevocab.py:118 src/operations.py:81
 msgid   "nothing-found"
 msgstr  ""
 

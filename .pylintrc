@@ -12,5 +12,5 @@ good-names=do,i,f,s
 [DESIGN]
 # Will review to reduce these to defaults.
 max-branches=18
-max-locals=17
+max-locals=18
 max-public-methods=25

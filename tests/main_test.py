@@ -75,6 +75,7 @@ def test_replace_indices(
 def __io() -> list[tuple[str, str]]:
     return [
         ('\n', _('search')),
+        ('l', f'{_("usage")}: l {_("kanji")}|{_("kana")}'),
         # Bad command.
         ('w 漢字 かな', _('usage-h-to-show-usage')),
         # Bad usage.
@@ -83,10 +84,10 @@ def __io() -> list[tuple[str, str]]:
         ('a 0', f'{_("usage")}: a {_("kanji")}'),
         # Search found and not found.
         ('研究', f'{_("found")}: \\(1\\)\n     1 0100 研究 1 けんきゅう'),
-        ('あああああ', _('nothing-found')),
+        ('asdasd', _('nothing-found')),
         # Each command's usage when used with incorrect
         # parameters or at the wrong time.
-        ('l', f'{_("usage")}: l {_("kanji")}|{_("kana")}'),
+        ('l', _('nothing-found')),
         ('a', f'{_("usage")}: a {_("kanji")}'),
         ('d', f'{_("usage")}: d {_("kanji")}'),
         ('ak', f'{_("usage")}: a {_("kanji")}{_("space")}{_("kana")}\n'),
@@ -256,7 +257,7 @@ def test_usage(locale: Optional[str]) -> None:
     try:
         vocab = Vocab('tests/test_data/vocab_good.csv')
         command_stack = CommandStack()
-        previous_search: Optional[str] = None
+        previous_search: str = ''
         kanji_found: list[str] = []
         for test_input, expected_regex in __io():
             sys.stdin.seek(0)

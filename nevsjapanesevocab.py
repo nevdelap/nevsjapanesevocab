@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import re
 import sys
-from typing import Final, Optional
+from typing import Final, NamedTuple
 from colors import color  # type: ignore
 from commands import CommandStack
 from localisation import _, set_locale
@@ -25,34 +25,39 @@ def main() -> None:
     command_stack = CommandStack()
     print(format_help())
 
-    search: Optional[str] = ''
+    search: str = ''
     kanji_found: list[str] = []
-    while True:
-        (search, kanji_found) = main_stuff(
-            vocab, command_stack, search, kanji_found)
-        if search is None:
-            break
-    print(_('saving') + '...')
-    vocab.save()
+    try:
+        while True:
+            # This is called by tests.
+            main_stuff(vocab, command_stack, search, kanji_found)
+    except BaseException:
+        print(_('saving') + '...')
+        vocab.save()
+        raise
 
 
-# Driven by tests.
+# Called by tests.
 def main_stuff(vocab: Vocab,
                command_stack: CommandStack,
-               previous_search: Optional[str],
-               previous_kanji_found: list[str]) -> tuple[Optional[str],
-                                                         list[str]]:
+               previous_search: str,
+               previous_kanji_found: list[str]
+               ) -> tuple[
+    str,  # search.
+    list[str]  # kanji found.
+]:
     search = ''.join([c if c.isalnum() else ' ' for c in input(
         _('search') + ': ') if c.isalnum() or c.isspace()]).strip()
-    params = [param for param in search.split(' ') if len(param) > 0]
+    parts = [part for part in search.split(' ') if len(part) > 0]
     exact = False
-    if len(params) == 0:
-        search = '' if previous_search is None else previous_search
+    if len(parts) == 0:
+        search = previous_search
     else:
-        command = params[0] if len(params) > 0 else ''
-        params = params[1:] if len(params) > 1 else []
+        command = parts[0] if len(parts) > 0 else ''
+        params = parts[1:] if len(parts) > 1 else []
+        params = do_shortcuts(command, params, len(previous_search) > 0)
         if command == 'q' and len(params) == 0:
-            return None, []
+            sys.exit()
         operations = get_operations()
         if command in operations:
             operation_descriptor = operations[command]
@@ -72,7 +77,7 @@ def main_stuff(vocab: Vocab,
                 if result.invalidate_previous_results:
                     previous_kanji_found = []
                 if result.new_search is None:
-                    search = '' if previous_search is None else previous_search
+                    search = previous_search
                     if not result.repeat_previous_search:
                         return search, previous_kanji_found
                 else:
@@ -80,7 +85,7 @@ def main_stuff(vocab: Vocab,
                     exact = True
             else:
                 print(operation_descriptor.error_message)
-                search = '' if previous_search is None else previous_search
+                search = previous_search
         elif len(params) > 0:
             print(_('usage-h-to-show-usage'))
             return previous_search, previous_kanji_found
@@ -114,9 +119,50 @@ def main_stuff(vocab: Vocab,
     return search, kanji_found
 
 
+class Shortcut(NamedTuple):
+    command: str
+    actual_params: list[str]
+    new_params: list[str]
+    requires_previous_search: bool
+
+
+Shortcuts = list[Shortcut]
+
+
+def __shortcuts() -> Shortcuts:
+    return [
+        Shortcut(
+            'a',
+            [],
+            ['0'],
+            True
+        ),
+        Shortcut(
+            'l',
+            [],
+            ['0'],
+            True
+        ),
+    ]
+
+
+# Allows replacing a given command's actual parameters with different
+# parameters.
+def do_shortcuts(
+        command: str,
+        params: list[str],
+        has_previous_search: bool) -> list[str]:
+    params = params.copy()
+    for shortcut in __shortcuts():
+        if command == shortcut.command and params == shortcut.actual_params and (
+                not shortcut.requires_previous_search or has_previous_search):
+            params = shortcut.new_params
+    return params
+
+
 def replace_indices(
         vocab: Vocab,
-        previous_search: Optional[str],
+        previous_search: str,
         kanji_found: list[str],
         params: list[str],
         accepts_english_params: bool) -> list[str]:
@@ -134,7 +180,6 @@ def replace_indices(
         else:
             kanji_index = int(params[0]) - 1
             if (kanji_index == -1
-                    and previous_search is not None
                     and len(previous_search) > 0):
                 params[0] = previous_search
             elif 0 <= kanji_index < len(kanji_found):

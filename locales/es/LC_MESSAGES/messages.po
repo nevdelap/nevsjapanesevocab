@@ -29,19 +29,19 @@ msgstr  "Falló de cargar el archivo {vocab_file} - {err}"
 msgid   "saving"
 msgstr  "Guardando"
 
-#: nevsjapanesevocab.py:46
+#: nevsjapanesevocab.py:50
 msgid   "search"
 msgstr  "Buscar"
 
-#: nevsjapanesevocab.py:85
+#: nevsjapanesevocab.py:90
 msgid   "usage-h-to-show-usage"
 msgstr  "Usar h para mostrar el ayuda."
 
-#: nevsjapanesevocab.py:93
+#: nevsjapanesevocab.py:98
 msgid   "found"
 msgstr  "Encontró"
 
-#: nevsjapanesevocab.py:113 src/operations.py:81
+#: nevsjapanesevocab.py:118 src/operations.py:81
 msgid   "nothing-found"
 msgstr  "Nada encontrado."
 
