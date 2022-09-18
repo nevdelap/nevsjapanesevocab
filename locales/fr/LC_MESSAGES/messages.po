@@ -25,23 +25,23 @@ msgstr  "Chargement"
 msgid   "{vocab_file}-failed-to-read-{err}"
 msgstr  "Échec de la lecture du {vocab_file} - {err}"
 
-#: nevsjapanesevocab.py:35 src/operations.py:214
+#: nevsjapanesevocab.py:36 src/operations.py:214
 msgid   "saving"
 msgstr  "Sauvegarde"
 
-#: nevsjapanesevocab.py:50
+#: nevsjapanesevocab.py:51
 msgid   "search"
 msgstr  "Chercher"
 
-#: nevsjapanesevocab.py:90
+#: nevsjapanesevocab.py:91
 msgid   "usage-h-to-show-usage"
 msgstr  "Utiliser h pour afficher l'aide."
 
-#: nevsjapanesevocab.py:98
+#: nevsjapanesevocab.py:99
 msgid   "found"
 msgstr  "Trouvé"
 
-#: nevsjapanesevocab.py:118 src/operations.py:81
+#: nevsjapanesevocab.py:119 src/operations.py:81
 msgid   "nothing-found"
 msgstr  "Rien trouvé."
 

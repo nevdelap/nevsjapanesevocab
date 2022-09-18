@@ -30,7 +30,8 @@ def main() -> None:
     try:
         while True:
             # This is called by tests.
-            main_stuff(vocab, command_stack, search, kanji_found)
+            (search, kanji_found) = main_stuff(vocab, command_stack,
+                                               previous_search=search, previous_kanji_found=kanji_found)
     except BaseException:
         print(_('saving') + '...')
         vocab.save()
