@@ -8,7 +8,7 @@ from test_helpers import strip_ansi_terminal_escapes
 
 from commands import CommandStack
 from localisation import _, set_locale, unset_locale
-from nevsjapanesevocab import main_stuff, replace_indices
+from nevsjapanesevocab import is_kanji_or_kana, main_stuff, replace_indices
 from vocab import Vocab
 
 
@@ -300,3 +300,16 @@ def test_remaining_translations_with_interpolations(
     # interpolated variables in the translation.
     _('{vocab_file}-failed-to-read-{e}').format(vocab_file='bogus.csv', e=Exception())
     _('{vocab_file}-failed-to-write-{e}').format(vocab_file='bogus.csv', e=Exception())
+
+
+def test_is_kanji_or_kana() -> None:
+    assert is_kanji_or_kana('多')
+    assert is_kanji_or_kana('々')  # Is used in writing words.
+    assert is_kanji_or_kana('多々')
+    assert is_kanji_or_kana('た')
+    assert is_kanji_or_kana('タ')
+    assert is_kanji_or_kana('〇')  # For this purpose is a word.
+    assert not is_kanji_or_kana('。')  # Other punctuation is not part of words.
+    assert not is_kanji_or_kana('t')
+    assert not is_kanji_or_kana('-')
+    assert not is_kanji_or_kana('0')

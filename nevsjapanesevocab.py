@@ -196,7 +196,7 @@ def replace_indices(
     params = [
         param for param in params
         if accepts_english_params and not __is_index(param) or
-        __is_kanji_or_kana(param)
+        is_kanji_or_kana(param)
     ]
     return params
 
@@ -206,9 +206,9 @@ def __is_index(s: str) -> bool:
     return re.match('^[-+]?[0-9]+$', s) is not None
 
 
-def __is_kanji_or_kana(s: str) -> bool:
+def is_kanji_or_kana(s: str) -> bool:
     return re.match(
-        '^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$',
+        '^[\u3005\u3007\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$',
         s) is not None
 
 
