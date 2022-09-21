@@ -19,10 +19,7 @@ def _(s: str) -> str:
 # pylint: disable=invalid-name
 __locale = None
 
-__translations: dict[
-    str,  # locale.
-    NullTranslations
-] = {}
+__translations: dict[str, NullTranslations] = {}  # locale.
 
 
 def get_locale() -> Optional[str]:
@@ -35,7 +32,8 @@ def set_locale(locale: str) -> None:
     __locale = locale
     if __locale not in __translations:
         __translations[__locale] = translation(
-            'messages', localedir='locales', languages=[__locale])
+            'messages', localedir='locales', languages=[__locale]
+        )
     # pylint: disable=global-statement
     global __
     __ = __translations[__locale].gettext

@@ -56,9 +56,7 @@ class Vocab:
                         f"line {line_number + 1}: bad list name '{list_name}', expected numeric."
                     )
                 if not Vocab.valid_string(kanji):
-                    raise Exception(
-                        f"line {line_number + 1}: empty kanji '{kanji}'."
-                    )
+                    raise Exception(f"line {line_number + 1}: empty kanji '{kanji}'.")
                 if known not in ['0', '1']:
                     raise Exception(
                         f"line {line_number + 1}: bad known status '{known}', expected 0 or 1."
@@ -68,15 +66,15 @@ class Vocab:
                     kana_list = []
                 if not Vocab.valid_kana_list(kana_list):
                     raise Exception(
-                        f"line {line_number + 1}: bad kana list '" +
-                        ','.join(kana_list) + "'"
+                        f"line {line_number + 1}: bad kana list '"
+                        + ','.join(kana_list)
+                        + "'"
                     )
                 if list_name not in self.__list_to_kanji:
                     self.__list_to_kanji[list_name] = []
                 self.__list_to_kanji[list_name].append(kanji)
                 self.__kanji_to_list[kanji] = list_name
-                self.__kanji_to_info[kanji] = KanjiInfo(
-                    known == '1', kana_list)
+                self.__kanji_to_info[kanji] = KanjiInfo(known == '1', kana_list)
 
     def save(self, filename: Optional[str] = None) -> None:
         """Saves the vocab back to its original file."""
@@ -91,10 +89,15 @@ class Vocab:
                         f.write(
                             normalize(
                                 'NFC',
-                                f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n'))
+                                f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n',
+                            )
+                        )
         except IOError as err:
             print(
-                _('{vocab_file}-failed-to-write-{err}').format(vocab_file=save_filename, err=err))
+                _('{vocab_file}-failed-to-write-{err}').format(
+                    vocab_file=save_filename, err=err
+                )
+            )
             sys.exit(1)
 
     @property
@@ -127,11 +130,9 @@ class Vocab:
     def contains(self, kanji: str, kana: Optional[str] = None) -> bool:
         assert Vocab.valid_string(kanji), kanji
         assert kana is None or Vocab.valid_string(kana), kana
-        return kanji in self.__kanji_to_info \
-            and (
-                kana is None or
-                kana in self.__kanji_to_info[kanji][1]
-            )
+        return kanji in self.__kanji_to_info and (
+            kana is None or kana in self.__kanji_to_info[kanji][1]
+        )
 
     def search(self, s: str, exact: bool = False) -> list[str]:
         """Search for a string in the kanji and their kana.
@@ -144,9 +145,12 @@ class Vocab:
         kanji_found = []
         for kanji in self.__kanji_to_list:
             kana_list = self.__kanji_to_info[kanji][1]
-            if not exact and (
-                s in kanji or any(
-                    s in kana for kana in kana_list)) or exact and s == kanji:
+            if (
+                not exact
+                and (s in kanji or any(s in kana for kana in kana_list))
+                or exact
+                and s == kanji
+            ):
                 kanji_found.append(kanji)
         return kanji_found
 
@@ -156,8 +160,7 @@ class Vocab:
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
         if list_name is None:
             list_name = self.new_kanji_list_name()
-        kana = ''.join([result['hira']
-                       for result in self.__kks.convert(kanji)])
+        kana = ''.join([result['hira'] for result in self.__kks.convert(kanji)])
         known = False
         kana_list = [kana] if kana != kanji else []
         self.__list_to_kanji[list_name].append(kanji)
@@ -208,11 +211,7 @@ class Vocab:
         assert kanji not in self, kanji
         return list_name
 
-    def add_kana(
-            self,
-            kanji: str,
-            kana: str,
-            index: Optional[int] = None) -> int:
+    def add_kana(self, kanji: str, kana: str, index: Optional[int] = None) -> int:
         assert Vocab.valid_string(kanji), kanji
         assert kanji in self, kanji
         assert Vocab.valid_string(kana), kana
@@ -283,13 +282,13 @@ class Vocab:
 
     @staticmethod
     def valid_kana_list(kana_list: list[str]) -> bool:
-        return isinstance(kana_list, list) and \
-            all(isinstance(k, str) and len(k) > 0 for k in kana_list)
+        return isinstance(kana_list, list) and all(
+            isinstance(k, str) and len(k) > 0 for k in kana_list
+        )
 
     @staticmethod
     def valid_list_name(list_name: str) -> bool:
-        return isinstance(list_name, str) and \
-            list_name.isnumeric()
+        return isinstance(list_name, str) and list_name.isnumeric()
 
     @staticmethod
     def valid_string(s: str) -> bool:

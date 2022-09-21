@@ -23,48 +23,45 @@ def vocab() -> Vocab:
     return vocab
 
 
-@pytest.mark.parametrize('search, params, expected_result',
-                         [
-                             ('新しい', ['-50'], []),
-                             ('新しい', ['-1'], []),
-                             ('新しい', ['0'], ['あああああ']),
-                             ('新しい', ['1'], ['新しい']),
-                             ('新しい', ['2'], ['新しい二']),
-                             ('新しい', ['3'], ['新しい三']),
-                             ('新しい', ['4'], []),
-                             ('新しい', ['999'], []),
-                             ('新しい', ['1', '1'], ['新しい', 'あたらしい']),
-                             ('新しい', ['新しい', '1'], ['新しい', 'あたらしい']),
-                             ('新しい', ['2', '-50'], ['新しい二']),
-                             ('新しい', ['2', '-1'], ['新しい二']),
-                             ('新しい', ['2', '0'], ['新しい二']),
-                             ('新しい', ['2', '1'], ['新しい二', 'あたらしいに']),
-                             ('新しい', ['2', '2'], ['新しい二', 'かなに']),
-                             ('新しい', ['2', '3'], ['新しい二', 'かなさん']),
-                             ('新しい', ['2', '4'], ['新しい二']),
-                             ('新しい', ['2', '999'], ['新しい二']),
-                             ('新しい', ['新しい二', '-50'], ['新しい二']),
-                             ('新しい', ['新しい二', '-1'], ['新しい二']),
-                             ('新しい', ['新しい二', '0'], ['新しい二']),
-                             ('新しい', ['新しい二', '1'], ['新しい二', 'あたらしいに']),
-                             ('新しい', ['新しい二', '2'], ['新しい二', 'かなに']),
-                             ('新しい', ['新しい二', '3'], ['新しい二', 'かなさん']),
-                             ('新しい', ['新しい二', '4'], ['新しい二']),
-                             ('新しい', ['新しい二', '999'], ['新しい二']),
-                         ]
-                         )
+@pytest.mark.parametrize(
+    'search, params, expected_result',
+    [
+        ('新しい', ['-50'], []),
+        ('新しい', ['-1'], []),
+        ('新しい', ['0'], ['あああああ']),
+        ('新しい', ['1'], ['新しい']),
+        ('新しい', ['2'], ['新しい二']),
+        ('新しい', ['3'], ['新しい三']),
+        ('新しい', ['4'], []),
+        ('新しい', ['999'], []),
+        ('新しい', ['1', '1'], ['新しい', 'あたらしい']),
+        ('新しい', ['新しい', '1'], ['新しい', 'あたらしい']),
+        ('新しい', ['2', '-50'], ['新しい二']),
+        ('新しい', ['2', '-1'], ['新しい二']),
+        ('新しい', ['2', '0'], ['新しい二']),
+        ('新しい', ['2', '1'], ['新しい二', 'あたらしいに']),
+        ('新しい', ['2', '2'], ['新しい二', 'かなに']),
+        ('新しい', ['2', '3'], ['新しい二', 'かなさん']),
+        ('新しい', ['2', '4'], ['新しい二']),
+        ('新しい', ['2', '999'], ['新しい二']),
+        ('新しい', ['新しい二', '-50'], ['新しい二']),
+        ('新しい', ['新しい二', '-1'], ['新しい二']),
+        ('新しい', ['新しい二', '0'], ['新しい二']),
+        ('新しい', ['新しい二', '1'], ['新しい二', 'あたらしいに']),
+        ('新しい', ['新しい二', '2'], ['新しい二', 'かなに']),
+        ('新しい', ['新しい二', '3'], ['新しい二', 'かなさん']),
+        ('新しい', ['新しい二', '4'], ['新しい二']),
+        ('新しい', ['新しい二', '999'], ['新しい二']),
+    ],
+)
 def test_replace_indices(
-        vocab: Vocab,
-        search: str,
-        params: list[str],
-        expected_result: list[str]) -> None:
+    vocab: Vocab, search: str, params: list[str], expected_result: list[str]
+) -> None:
     found_kanji = vocab.search(search)
-    assert replace_indices(
-        vocab,
-        'あああああ',
-        found_kanji,
-        params,
-        False) == expected_result
+    assert (
+        replace_indices(vocab, 'あああああ', found_kanji, params, False) == expected_result
+    )
+
 
 # This has examples of all translations to ensure that the
 # translations themselves are syntactically correct in
@@ -98,15 +95,24 @@ def __io() -> list[tuple[str, str]]:
         ('r', _('there-is-nothing-to-redo')),
         # Toggle status.
         ('t 研究', f'{_("found")}: \\(1\\)\n     1 0100 研究 1 けんきゅう ' + '✓'),
-        ('u',
-         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
-                                                           known_status=_('unknown'))),
-        ('r',
-         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
-                                                           known_status=_('already-known') + '\\(✓\\)')),
-        ('u',
-         _('toggled-the-{known_status}-of-{kanji}').format(kanji='研究',
-                                                           known_status=_('unknown'))),
+        (
+            'u',
+            _('toggled-the-{known_status}-of-{kanji}').format(
+                kanji='研究', known_status=_('unknown')
+            ),
+        ),
+        (
+            'r',
+            _('toggled-the-{known_status}-of-{kanji}').format(
+                kanji='研究', known_status=_('already-known') + '\\(✓\\)'
+            ),
+        ),
+        (
+            'u',
+            _('toggled-the-{known_status}-of-{kanji}').format(
+                kanji='研究', known_status=_('unknown')
+            ),
+        ),
         # Each command and undo/redo.
         ('h', f'{_("usage")}:.*{_("help-quit")}'),
         ('l 研究', 'けんきゅう \\(研究\\) : study/research/investigation'),
@@ -116,41 +122,66 @@ def __io() -> list[tuple[str, str]]:
         ('新しい', f'{_("found")}:.*1 0100 新しい'),
         ('c 新しい 別', f'{_("found")}: \\(1\\)\n     1 0100 別'),
         ('別', f'{_("found")}: \\(1\\)\n     1 0100 別'),
-        ('u',
-         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい',
-                                                         new_kanji='別')),
+        (
+            'u',
+            _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい', new_kanji='別'),
+        ),
         ('r', _('{kanji}-changed-to-{new_kanji}').format(kanji='新しい', new_kanji='別')),
-        ('u',
-         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい',
-                                                         new_kanji='別')),
-        ('u',
-         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='新しい',
-                                                                    list_name='0100')),
-        ('r',
-         _('{kanji}-added-to-list-{list_name}').format(kanji='新しい',
-                                                       list_name='0100')),
+        (
+            'u',
+            _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい', new_kanji='別'),
+        ),
+        (
+            'u',
+            _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
+        (
+            'r',
+            _('{kanji}-added-to-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
         ('d 新しい', _('{kanji}-deleted').format(kanji='新しい')),
-        ('u',
-         _('{kanji}-added-to-list-{list_name}').format(kanji='新しい',
-                                                       list_name='0100')),
-        ('r',
-         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='新しい',
-                                                                    list_name='0100')),
-        ('u',
-         _('{kanji}-added-to-list-{list_name}').format(kanji='新しい',
-                                                       list_name='0100')),
+        (
+            'u',
+            _('{kanji}-added-to-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
+        (
+            'r',
+            _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
+        (
+            'u',
+            _('{kanji}-added-to-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
         ('ak 新しい べつ', f'{_("found")}: \\(1\\).*1 0100 新しい 1 あたらしい 2 べつ'),
         ('u', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='べつ')),
         ('r', _('{kana}-added-to-{kanji}').format(kanji='新しい', kana='べつ')),
-        ('dk 新しい べつ', _(
-            '{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='べつ')),
+        ('dk 新しい べつ', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='べつ')),
         ('u', _('{kana}-added-to-{kanji}').format(kanji='新しい', kana='べつ')),
         ('r', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='べつ')),
-        ('i', f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6'),
+        (
+            'i',
+            f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6',
+        ),
         ('t 新しい', f'{_("found")}: \\(1\\)\n     1 0100 新しい 1 あたらしい ✓'),
-        ('i', f'{_("info")}:\n  {_("known")}: 1\n  {_("learning")}: 5\n  {_("total")}: 6'),
+        (
+            'i',
+            f'{_("info")}:\n  {_("known")}: 1\n  {_("learning")}: 5\n  {_("total")}: 6',
+        ),
         ('t 新しい', f'{_("found")}: \\(1\\)\n     1 0100 新しい 1 あたらしい[^✓]+$'),
-        ('i', f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6'),
+        (
+            'i',
+            f'{_("info")}:\n  {_("known")}: 0\n  {_("learning")}: 6\n  {_("total")}: 6',
+        ),
         ('d 新しい', _('{kanji}-deleted').format(kanji='新しい')),
         # Indexes.
         ('新しい', _('nothing-found')),
@@ -159,58 +190,72 @@ def __io() -> list[tuple[str, str]]:
         ('ak 1 かなに', '1 0100 新しい 1 あたらしい 2 かな 3 かなに'),
         ('ak 1 かなさん', '1 0100 新しい 1 あたらしい 2 かな 3 かなに 4 かなさん'),
         ('ck 1 かなに かなよん', '1 0100 新しい 1 あたらしい 2 かな 3 かなよん 4 かなさん'),
-        ('u',
-         _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(kanji='新しい',
-                                                                   kana='かなに',
-                                                                   new_kana='かなよん')),
-        ('r',
-         _('{kana}-changed-to-{new_kana}-for-{kanji}').format(kanji='新しい',
-                                                              kana='かなに',
-                                                              new_kana='かなよん')),
-        ('u',
-         _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(kanji='新しい',
-                                                                   kana='かなに',
-                                                                   new_kana='かなよん')),
+        (
+            'u',
+            _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(
+                kanji='新しい', kana='かなに', new_kana='かなよん'
+            ),
+        ),
+        (
+            'r',
+            _('{kana}-changed-to-{new_kana}-for-{kanji}').format(
+                kanji='新しい', kana='かなに', new_kana='かなよん'
+            ),
+        ),
+        (
+            'u',
+            _('{new_kana}-changed-back-to-{kana}-for-{kanji}').format(
+                kanji='新しい', kana='かなに', new_kana='かなよん'
+            ),
+        ),
         ('新しい', '1 0100 新しい 1 あたらしい 2 かな 3 かなに 4 かなさん'),
         ('t 1', '1 0100 新しい 1 あたらしい 2 かな 3 かなに 4 かなさん ✓'),
         ('t 1', '1 0100 新しい 1 あたらしい 2 かな 3 かなに 4 かなさん[^✓]+$'),
-        ('dk 1 3',
-         _('{kana}-deleted-from-{kanji}').format(kanji='新しい',
-                                                 kana='かなに')),
+        ('dk 1 3', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かなに')),
         ('新しい', '1 0100 新しい 1 あたらしい 2 かな 3 かなさん'),
-        ('dk 1 3',
-         _('{kana}-deleted-from-{kanji}').format(kanji='新しい',
-                                                 kana='かなさん')),
+        ('dk 1 3', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かなさん')),
         ('新しい', '1 0100 新しい 1 あたらしい 2 かな'),
-        ('dk 1 2', _(
-            '{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かな')),
+        ('dk 1 2', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かな')),
         ('新しい', '1 0100 新しい'),
         ('c 1 別', f'{_("found")}: \\(1\\)\n     1 0100 別'),
         ('別', f'{_("found")}: \\(1\\)\n     1 0100 別'),
-        ('u',
-         _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい',
-                                                         new_kanji='別')),
+        (
+            'u',
+            _('{new_kanji}-changed-back-to-{kanji}').format(kanji='新しい', new_kanji='別'),
+        ),
         ('新しい', f'{_("found")}: \\(1\\)\n     1 0100 新しい'),
         ('d 1', _('{kanji}-deleted').format(kanji='新しい')),
         # ('新しい', _('nothing-found')),
-        ('u',
-         _('{kanji}-added-to-list-{list_name}').format(kanji='新しい',
-                                                       list_name='0100')),
+        (
+            'u',
+            _('{kanji}-added-to-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
         ('u', _('{kana}-added-to-{kanji}').format(kanji='新しい', kana='かな')),
         ('u', _('{kana}-added-to-{kanji}').format(kanji='新しい', kana='かなさん')),
         ('u', _('{kana}-added-to-{kanji}').format(kanji='新しい', kana='かなに')),
-        ('u',
-         _('toggled-the-{known_status}-of-{kanji}').format(kanji='新しい',
-                                                           known_status=_('already-known') + '\\(✓\\)')),
-        ('u',
-         _('toggled-the-{known_status}-of-{kanji}').format(kanji='新しい',
-                                                           known_status=_('unknown'))),
+        (
+            'u',
+            _('toggled-the-{known_status}-of-{kanji}').format(
+                kanji='新しい', known_status=_('already-known') + '\\(✓\\)'
+            ),
+        ),
+        (
+            'u',
+            _('toggled-the-{known_status}-of-{kanji}').format(
+                kanji='新しい', known_status=_('unknown')
+            ),
+        ),
         ('u', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かなさん')),
         ('u', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かなに')),
         ('u', _('{kana}-deleted-from-{kanji}').format(kanji='新しい', kana='かな')),
-        ('u',
-         _('{kanji}-has-been-deleted-from-list-{list_name}').format(kanji='新しい',
-                                                                    list_name='0100')),
+        (
+            'u',
+            _('{kanji}-has-been-deleted-from-list-{list_name}').format(
+                kanji='新しい', list_name='0100'
+            ),
+        ),
         ('新しい', _('nothing-found')),
         # Each command's error messages.
         ('a 新しい', f'{_("found")}: \\(1\\)\n     1 0100 新しい'),
@@ -219,14 +264,22 @@ def __io() -> list[tuple[str, str]]:
         ('c 新しい 新しい', _('{kanji}-already-exists').format(kanji='新しい')),
         ('d 新しい二', _('{kanji}-not-found').format(kanji='新しい二')),
         ('ak 新しい かな', f'{_("found")}: \\(1\\)\n     1 0100 新しい 1 あたらしい 2 かな'),
-        ('ak 新しい かな', _(
-            '{kana}-already-exists-for-{kanji}').format(kanji='新しい', kana='かな')),
-        ('ck 新しい かなに かなさん', _(
-            '{kana}-not-found-for-{kanji}').format(kanji='新しい', kana='かなに')),
-        ('ck 新しい かな かな', _(
-            '{kana}-already-exists-for-{kanji}').format(kanji='新しい', kana='かな')),
-        ('dk 新しい かなに', _(
-            '{kana}-not-found-for-{kanji}').format(kanji='新しい', kana='かなに')),
+        (
+            'ak 新しい かな',
+            _('{kana}-already-exists-for-{kanji}').format(kanji='新しい', kana='かな'),
+        ),
+        (
+            'ck 新しい かなに かなさん',
+            _('{kana}-not-found-for-{kanji}').format(kanji='新しい', kana='かなに'),
+        ),
+        (
+            'ck 新しい かな かな',
+            _('{kana}-already-exists-for-{kanji}').format(kanji='新しい', kana='かな'),
+        ),
+        (
+            'dk 新しい かなに',
+            _('{kana}-not-found-for-{kanji}').format(kanji='新しい', kana='かなに'),
+        ),
         ('t 新しい二', _('{kanji}-not-found').format(kanji='新しい二')),
         ('あああああ', _('nothing-found')),
         ('a あああああ', f'{_("found")}: \\(1\\)\n     1 0100 あああああ'),
@@ -235,15 +288,16 @@ def __io() -> list[tuple[str, str]]:
     ]
 
 
-@pytest.mark.parametrize('locale',
-                         [
-                             None,
-                             ('ja'),
-                             ('en'),
-                             ('es'),
-                             ('fr'),
-                         ]
-                         )
+@pytest.mark.parametrize(
+    'locale',
+    [
+        None,
+        ('ja'),
+        ('en'),
+        ('es'),
+        ('fr'),
+    ],
+)
 def test_usage(locale: Optional[str]) -> None:
     if locale is None:
         unset_locale()
@@ -280,17 +334,17 @@ def test_usage(locale: Optional[str]) -> None:
         sys.stdout = stdout
 
 
-@pytest.mark.parametrize('locale',
-                         [
-                             None,
-                             ('ja'),
-                             ('en'),
-                             ('es'),
-                             ('fr'),
-                         ]
-                         )
-def test_remaining_translations_with_interpolations(
-        locale: Optional[str]) -> None:
+@pytest.mark.parametrize(
+    'locale',
+    [
+        None,
+        ('ja'),
+        ('en'),
+        ('es'),
+        ('fr'),
+    ],
+)
+def test_remaining_translations_with_interpolations(locale: Optional[str]) -> None:
     if locale is None:
         unset_locale()
     else:

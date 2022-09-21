@@ -14,9 +14,7 @@ def test_new_kanji_list_name(vocab: Vocab) -> None:
     assert vocab.new_kanji_list_name() == '0100'
     with open(vocab.filename, encoding='utf-8') as f:
         assert vocab.count_in_current_list() == len(f.readlines())
-    for i in range(
-            0,
-            vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
+    for i in range(0, vocab.ITEMS_PER_LIST - vocab.count_in_current_list() - 1):
         vocab.add(f'new{i}')
     assert vocab.count_in_current_list() == vocab.ITEMS_PER_LIST - 1
     assert vocab.new_kanji_list_name() == '0100'
@@ -103,15 +101,18 @@ def test_change_kana(vocab: Vocab) -> None:
     assert ['kana3', 'kana2'] == vocab.get_kana('new')
 
 
-@pytest.mark.parametrize('filename, expected_error',
-                         [('vocab_bad_kana.csv',
-                           "line 3: bad kana list ',,'"),
-                          ('vocab_bad_kanji.csv',
-                           "line 3: empty kanji ''."),
-                          ('vocab_bad_line.csv',
-                           "line 3: bad line '0100,送る', 2 fields, expected at least 4."),
-                          ('vocab_bad_list_name.csv',
-                           "line 3: bad list name 'asdd', expected numeric.")])
+@pytest.mark.parametrize(
+    'filename, expected_error',
+    [
+        ('vocab_bad_kana.csv', "line 3: bad kana list ',,'"),
+        ('vocab_bad_kanji.csv', "line 3: empty kanji ''."),
+        (
+            'vocab_bad_line.csv',
+            "line 3: bad line '0100,送る', 2 fields, expected at least 4.",
+        ),
+        ('vocab_bad_list_name.csv', "line 3: bad list name 'asdd', expected numeric."),
+    ],
+)
 def test_bad_files(filename: str, expected_error: str) -> None:
     with pytest.raises(Exception) as e_info:
         Vocab(f'tests/test_data/{filename}')

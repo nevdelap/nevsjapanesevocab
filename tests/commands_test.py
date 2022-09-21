@@ -1,9 +1,16 @@
 import pytest
 from test_helpers import strip_ansi_terminal_escapes
 
-from commands import \
-    AddCommand, AddKanaCommand, ChangeCommand, ChangeKanaCommand, \
-    CommandStack, DeleteCommand, DeleteKanaCommand, ToggleKnownCommand
+from commands import (
+    AddCommand,
+    AddKanaCommand,
+    ChangeCommand,
+    ChangeKanaCommand,
+    CommandStack,
+    DeleteCommand,
+    DeleteKanaCommand,
+    ToggleKnownCommand,
+)
 from vocab import Vocab
 
 
@@ -130,8 +137,7 @@ def test_new_kana_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
 
 
-def test_change_kana_command(vocab: Vocab,
-                             command_stack: CommandStack) -> None:
+def test_change_kana_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert command_stack.current() == -1
     command_stack.do(AddCommand(vocab, 'new'))
     command_stack.do(AddKanaCommand(vocab, 'new', 'kana'))
@@ -167,8 +173,7 @@ def test_change_kana_command(vocab: Vocab,
     assert not vocab.contains('new', 'kana3')
 
 
-def test_delete_kana_command(vocab: Vocab,
-                             command_stack: CommandStack) -> None:
+def test_delete_kana_command(vocab: Vocab, command_stack: CommandStack) -> None:
     assert vocab.get_kana('送る') == ['おくる']
     command_stack.do(AddKanaCommand(vocab, '送る', 'new'))
     assert vocab.contains('送る', 'new')
@@ -208,8 +213,7 @@ def test_delete_kana_command(vocab: Vocab,
     assert vocab.get_kana('送る') == ['おくる']
 
 
-def test_toggle_status_command(vocab: Vocab,
-                               command_stack: CommandStack) -> None:
+def test_toggle_status_command(vocab: Vocab, command_stack: CommandStack) -> None:
     known = vocab.is_known('送る')
     command_stack.do(ToggleKnownCommand(vocab, '送る'))
     assert vocab.is_known('送る') == (not known)
@@ -217,8 +221,7 @@ def test_toggle_status_command(vocab: Vocab,
     assert message == 'toggled-the-unknown-of-送る'
     assert vocab.is_known('送る') == known
     message = command_stack.redo()
-    assert strip_ansi_terminal_escapes(
-        message) == 'toggled-the-already-known(✓)-of-送る'
+    assert strip_ansi_terminal_escapes(message) == 'toggled-the-already-known(✓)-of-送る'
     assert vocab.is_known('送る') == (not known)
     command_stack.undo()
     assert vocab.is_known('送る') == known

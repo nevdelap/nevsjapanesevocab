@@ -27,27 +27,27 @@ msgstr  ""
 msgid   "{vocab_file}-failed-to-read-{err}"
 msgstr  ""
 
-#: nevsjapanesevocab.py:36 src/operations.py:214
+#: nevsjapanesevocab.py:41 src/operations.py:216
 msgid   "saving"
 msgstr  ""
 
-#: nevsjapanesevocab.py:51
+#: nevsjapanesevocab.py:56
 msgid   "search"
 msgstr  ""
 
-#: nevsjapanesevocab.py:91
+#: nevsjapanesevocab.py:100
 msgid   "usage-h-to-show-usage"
 msgstr  ""
 
-#: nevsjapanesevocab.py:99
+#: nevsjapanesevocab.py:108
 msgid   "found"
 msgstr  ""
 
-#: nevsjapanesevocab.py:119 src/operations.py:81
+#: nevsjapanesevocab.py:135 src/operations.py:84
 msgid   "nothing-found"
 msgstr  ""
 
-#: src/commands.py:102 src/commands.py:137
+#: src/commands.py:101 src/commands.py:138
 #, python-brace-format
 msgid   "{kanji}-has-been-deleted-from-list-{list_name}"
 msgstr  ""
@@ -57,204 +57,204 @@ msgstr  ""
 msgid   "{kanji}-added-to-list-{list_name}"
 msgstr  ""
 
-#: src/commands.py:160
+#: src/commands.py:161
 #, python-brace-format
 msgid   "{new_kanji}-changed-back-to-{kanji}"
 msgstr  ""
 
-#: src/commands.py:164
+#: src/commands.py:166
 #, python-brace-format
 msgid   "{kanji}-changed-to-{new_kanji}"
 msgstr  ""
 
-#: src/commands.py:189 src/commands.py:255 src/operations.py:175
+#: src/commands.py:190 src/commands.py:249 src/operations.py:179
 #, python-brace-format
 msgid   "{kana}-deleted-from-{kanji}"
 msgstr  ""
 
-#: src/commands.py:193 src/commands.py:250
+#: src/commands.py:195 src/commands.py:246
 #, python-brace-format
 msgid   "{kana}-added-to-{kanji}"
 msgstr  ""
 
-#: src/commands.py:222
+#: src/commands.py:217
 #, python-brace-format
 msgid   "{new_kana}-changed-back-to-{kana}-for-{kanji}"
 msgstr  ""
 
-#: src/commands.py:226
+#: src/commands.py:222
 #, python-brace-format
 msgid   "{kana}-changed-to-{new_kana}-for-{kanji}"
 msgstr  ""
 
-#: src/commands.py:285
+#: src/commands.py:280
 msgid   "already-known"
 msgstr  ""
 
-#: src/commands.py:286
+#: src/commands.py:282
 msgid   "unknown"
 msgstr  ""
 
-#: src/commands.py:287
+#: src/commands.py:284
 #, python-brace-format
 msgid   "toggled-the-{known_status}-of-{kanji}"
 msgstr  ""
 
-#: src/operations.py:90 src/operations.py:105
+#: src/operations.py:94 src/operations.py:110
 #, python-brace-format
 msgid   "{kanji}-already-exists"
 msgstr  ""
 
-#: src/operations.py:103 src/operations.py:124 src/operations.py:153
-#: src/operations.py:191
+#: src/operations.py:108 src/operations.py:126 src/operations.py:153
+#: src/operations.py:190
 #, python-brace-format
 msgid   "{kanji}-not-found"
 msgstr  ""
 
-#: src/operations.py:127
+#: src/operations.py:129
 #, python-brace-format
 msgid   "{kanji}-deleted"
 msgstr  ""
 
-#: src/operations.py:141 src/operations.py:160
+#: src/operations.py:140 src/operations.py:160
 #, python-brace-format
 msgid   "{kana}-already-exists-for-{kanji}"
 msgstr  ""
 
-#: src/operations.py:155 src/operations.py:172
+#: src/operations.py:155 src/operations.py:176
 #, python-brace-format
 msgid   "{kana}-not-found-for-{kanji}"
 msgstr  ""
 
-#: src/operations.py:224
+#: src/operations.py:228
 msgid   "info"
 msgstr  ""
 
-#: src/operations.py:225
+#: src/operations.py:230
 msgid   "known"
 msgstr  ""
 
-#: src/operations.py:226
+#: src/operations.py:232
 msgid   "learning"
 msgstr  ""
 
-#: src/operations.py:227
+#: src/operations.py:234
 msgid   "total"
 msgstr  ""
 
-#: src/operations.py:264 src/operations.py:266 src/operations.py:267
-#: src/operations.py:268 src/operations.py:269 src/operations.py:270
-#: src/operations.py:271 src/operations.py:272 src/operations.py:325
-#: src/operations.py:332 src/operations.py:339 src/operations.py:346
-#: src/operations.py:353 src/operations.py:360 src/operations.py:367
-#: src/operations.py:374
+#: src/operations.py:277 src/operations.py:281 src/operations.py:282
+#: src/operations.py:284 src/operations.py:286 src/operations.py:287
+#: src/operations.py:290 src/operations.py:295 src/operations.py:353
+#: src/operations.py:357 src/operations.py:360 src/operations.py:367
+#: src/operations.py:375 src/operations.py:383 src/operations.py:393
+#: src/operations.py:401
 msgid   "kanji"
 msgstr  ""
 
-#: src/operations.py:264 src/operations.py:265 src/operations.py:325
+#: src/operations.py:277 src/operations.py:279 src/operations.py:353
 msgid   "bar"
 msgstr  ""
 
-#: src/operations.py:264 src/operations.py:269 src/operations.py:270
-#: src/operations.py:271 src/operations.py:325 src/operations.py:353
-#: src/operations.py:360 src/operations.py:367
+#: src/operations.py:277 src/operations.py:286 src/operations.py:287
+#: src/operations.py:290 src/operations.py:353 src/operations.py:375
+#: src/operations.py:383 src/operations.py:395
 msgid   "kana"
 msgstr  ""
 
-#: src/operations.py:264
+#: src/operations.py:277
 msgid   "help-search"
 msgstr  ""
 
-#: src/operations.py:265
+#: src/operations.py:279
 msgid   "japanese"
 msgstr  ""
 
-#: src/operations.py:265
+#: src/operations.py:279
 msgid   "english"
 msgstr  ""
 
-#: src/operations.py:265
+#: src/operations.py:279
 msgid   "help-dictionary-search"
 msgstr  ""
 
-#: src/operations.py:266
+#: src/operations.py:281
 msgid   "help-new-kanji"
 msgstr  ""
 
-#: src/operations.py:267
+#: src/operations.py:282
 msgid   "help-delete-kanji"
 msgstr  ""
 
-#: src/operations.py:268 src/operations.py:269 src/operations.py:270
-#: src/operations.py:271 src/operations.py:346 src/operations.py:353
-#: src/operations.py:360 src/operations.py:367
+#: src/operations.py:284 src/operations.py:286 src/operations.py:287
+#: src/operations.py:290 src/operations.py:367 src/operations.py:375
+#: src/operations.py:383 src/operations.py:394 src/operations.py:396
 msgid   "space"
 msgstr  ""
 
-#: src/operations.py:268 src/operations.py:346
+#: src/operations.py:284 src/operations.py:367
 msgid   "new-kanji"
 msgstr  ""
 
-#: src/operations.py:268
+#: src/operations.py:284
 msgid   "help-change-kanji"
 msgstr  ""
 
-#: src/operations.py:269
+#: src/operations.py:286
 msgid   "help-new-kana"
 msgstr  ""
 
-#: src/operations.py:270
+#: src/operations.py:287
 msgid   "help-delete-kana"
 msgstr  ""
 
-#: src/operations.py:271 src/operations.py:367
+#: src/operations.py:290 src/operations.py:397
 msgid   "new-kana"
 msgstr  ""
 
-#: src/operations.py:271
+#: src/operations.py:291
 msgid   "help-change-kana"
 msgstr  ""
 
-#: src/operations.py:272
+#: src/operations.py:296
 #, python-brace-format
 msgid   "help-known-or-not?{green_tick}"
 msgstr  ""
 
-#: src/operations.py:273
+#: src/operations.py:298
 msgid   "help-undo"
 msgstr  ""
 
-#: src/operations.py:274
+#: src/operations.py:299
 msgid   "help-redo"
 msgstr  ""
 
-#: src/operations.py:275
+#: src/operations.py:300
 msgid   "help-save"
 msgstr  ""
 
-#: src/operations.py:276
+#: src/operations.py:301
 msgid   "help-info"
 msgstr  ""
 
-#: src/operations.py:281
+#: src/operations.py:306
 msgid   "help-show-this-help"
 msgstr  ""
 
-#: src/operations.py:282
+#: src/operations.py:307
 msgid   "help-quit"
 msgstr  ""
 
-#: src/operations.py:294 src/operations.py:325 src/operations.py:332
-#: src/operations.py:339 src/operations.py:346 src/operations.py:353
-#: src/operations.py:360 src/operations.py:367 src/operations.py:374
+#: src/operations.py:320 src/operations.py:353 src/operations.py:357
+#: src/operations.py:360 src/operations.py:367 src/operations.py:375
+#: src/operations.py:383 src/operations.py:391 src/operations.py:401
 msgid   "usage"
 msgstr  ""
 
-#: src/operations.py:381
+#: src/operations.py:408
 msgid   "there-is-nothing-to-undo"
 msgstr  ""
 
-#: src/operations.py:388
+#: src/operations.py:416
 msgid   "there-is-nothing-to-redo"
 msgstr  ""
 
