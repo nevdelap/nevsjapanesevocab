@@ -1,16 +1,14 @@
 import pytest
 from test_helpers import strip_ansi_terminal_escapes
 
-from commands import (
-    AddCommand,
-    AddKanaCommand,
-    ChangeCommand,
-    ChangeKanaCommand,
-    CommandStack,
-    DeleteCommand,
-    DeleteKanaCommand,
-    ToggleKnownCommand,
-)
+from commands import AddCommand
+from commands import AddKanaCommand
+from commands import ChangeCommand
+from commands import ChangeKanaCommand
+from commands import CommandStack
+from commands import DeleteCommand
+from commands import DeleteKanaCommand
+from commands import ToggleKnownCommand
 from vocab import Vocab
 
 

@@ -1,6 +1,7 @@
-from gettext import NullTranslations, translation
-from typing import Callable, Optional
-
+from gettext import NullTranslations
+from gettext import translation
+from typing import Callable
+from typing import Optional
 
 GetText = Callable[[str], str]
 

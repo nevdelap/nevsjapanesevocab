@@ -1,6 +1,8 @@
 import sys
 from copy import copy
-from typing import Final, NamedTuple, Optional
+from typing import Final
+from typing import NamedTuple
+from typing import Optional
 from unicodedata import normalize
 
 from pykakasi import kakasi

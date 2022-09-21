@@ -1,19 +1,23 @@
-from typing import Callable, Final, Sequence, NamedTuple, Optional
+from typing import Callable
+from typing import Final
+from typing import NamedTuple
+from typing import Optional
+from typing import Sequence
 
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
 
-from commands import (
-    AddCommand,
-    AddKanaCommand,
-    ChangeCommand,
-    ChangeKanaCommand,
-    CommandStack,
-    DeleteCommand,
-    DeleteKanaCommand,
-    ToggleKnownCommand,
-)
-from localisation import _, get_locale, set_locale
+from commands import AddCommand
+from commands import AddKanaCommand
+from commands import ChangeCommand
+from commands import ChangeKanaCommand
+from commands import CommandStack
+from commands import DeleteCommand
+from commands import DeleteKanaCommand
+from commands import ToggleKnownCommand
+from localisation import _
+from localisation import get_locale
+from localisation import set_locale
 from vocab import Vocab
 
 # A function that can be called to check if the operation is

@@ -1,11 +1,16 @@
 #!/usr/bin/python
 import re
 import sys
-from typing import Final, NamedTuple
+from typing import Final
+from typing import NamedTuple
+
 from colors import color  # type: ignore
+
 from commands import CommandStack
-from localisation import _, set_locale
-from operations import format_help, get_operations
+from localisation import _
+from localisation import set_locale
+from operations import format_help
+from operations import get_operations
 from vocab import Vocab
 
 

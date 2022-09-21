@@ -7,8 +7,12 @@ import pytest
 from test_helpers import strip_ansi_terminal_escapes
 
 from commands import CommandStack
-from localisation import _, set_locale, unset_locale
-from nevsjapanesevocab import is_kanji_or_kana, main_stuff, replace_indices
+from localisation import _
+from localisation import set_locale
+from localisation import unset_locale
+from nevsjapanesevocab import is_kanji_or_kana
+from nevsjapanesevocab import main_stuff
+from nevsjapanesevocab import replace_indices
 from vocab import Vocab
 
 
