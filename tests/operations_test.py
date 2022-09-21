@@ -9,11 +9,11 @@ from operations import format_help
 
 
 @pytest.mark.parametrize(
-    'locale, expected_help',
+    "locale, expected_help",
     [
         (
-            'ja',
-            '''
+            "ja",
+            """
 使い方:
      漢字｜仮名　　　　　検索
   l  日本語｜英語　　　　和英辞書で検索する。
@@ -34,11 +34,11 @@ from operations import format_help
   ja 　　　　　　　　　　日本語
   h  　　　　　　　　　　この使い方を表示する。
   q  　　　　　　　　　　終了
-''',
+""",
         ),
         (
-            'en',
-            '''
+            "en",
+            """
 Help:
      kanji|kana          Search.
   l  Japanese|English    Search the Japanese/English dictionary.
@@ -59,11 +59,11 @@ Help:
   ja                     日本語
   h                      Show this help.
   q                      Quit.
-''',
+""",
         ),
         (
-            'es',
-            '''
+            "es",
+            """
 Uso:
      kanji|kana            Buscar.
   l  japonés|inglés        Buscar en el diccionario japonés/inglés.
@@ -84,11 +84,11 @@ Uso:
   ja                       日本語
   h                        Mostrar esta ayuda.
   q                        Salir.
-''',
+""",
         ),
         (
-            'fr',
-            '''
+            "fr",
+            """
 L'utilisation:
      kanji|kana              Chercher.
   l  japonais|anglais        Rechercher dans le dictionnaire japonais/anglais.
@@ -109,7 +109,7 @@ L'utilisation:
   ja                         日本語
   h                          Afficher cet aide.
   q                          Quitter.
-''',
+""",
         ),
     ],
 )

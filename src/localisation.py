@@ -32,7 +32,7 @@ def set_locale(locale: str) -> None:
     __locale = locale
     if __locale not in __translations:
         __translations[__locale] = translation(
-            'messages', localedir='locales', languages=[__locale]
+            "messages", localedir="locales", languages=[__locale]
         )
     # pylint: disable=global-statement
     global __

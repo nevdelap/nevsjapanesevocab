@@ -10,23 +10,23 @@ from vocab import Vocab
 
 
 def main() -> None:
-    set_locale('ja')
-    print(color(_('nevs-japanese-vocab-list'), style='bold'))
+    set_locale("ja")
+    print(color(_("nevs-japanese-vocab-list"), style="bold"))
 
-    vocab_file: Final = 'vocab.csv'
+    vocab_file: Final = "vocab.csv"
     try:
-        print(_('loading') + '...')
+        print(_("loading") + "...")
         vocab = Vocab(vocab_file)
     except IOError as err:
         print(
-            _('{vocab_file}-failed-to-read-{err}').format(vocab_file=vocab_file, e=err)
+            _("{vocab_file}-failed-to-read-{err}").format(vocab_file=vocab_file, e=err)
         )
         sys.exit(1)
 
     command_stack = CommandStack()
     print(format_help())
 
-    search: str = ''
+    search: str = ""
     kanji_found: list[str] = []
     try:
         while True:
@@ -38,7 +38,7 @@ def main() -> None:
                 previous_kanji_found=kanji_found,
             )
     except BaseException:
-        print(_('saving') + '...')
+        print(_("saving") + "...")
         vocab.save()
         raise
 
@@ -50,22 +50,22 @@ def main_stuff(
     previous_search: str,
     previous_kanji_found: list[str],
 ) -> tuple[str, list[str]]:  # search.  # kanji found.
-    search = ''.join(
+    search = "".join(
         [
-            c if c.isalnum() else ' '
-            for c in input(_('search') + ': ')
+            c if c.isalnum() else " "
+            for c in input(_("search") + ": ")
             if c.isalnum() or c.isspace()
         ]
     ).strip()
-    parts = [part for part in search.split(' ') if len(part) > 0]
+    parts = [part for part in search.split(" ") if len(part) > 0]
     exact = False
     if len(parts) == 0:
         search = previous_search
     else:
-        command = parts[0] if len(parts) > 0 else ''
+        command = parts[0] if len(parts) > 0 else ""
         params = parts[1:] if len(parts) > 1 else []
         params = do_shortcuts(command, params, len(previous_search) > 0)
-        if command == 'q' and len(params) == 0:
+        if command == "q" and len(params) == 0:
             sys.exit()
         operations = get_operations()
         if command in operations:
@@ -97,42 +97,42 @@ def main_stuff(
                 print(operation_descriptor.error_message)
                 search = previous_search
         elif len(params) > 0:
-            print(_('usage-h-to-show-usage'))
+            print(_("usage-h-to-show-usage"))
             return previous_search, previous_kanji_found
 
-    if search == '':
-        return '', previous_kanji_found
+    if search == "":
+        return "", previous_kanji_found
 
     kanji_found = vocab.search(search, exact)
     if len(kanji_found) > 0:
-        print(_('found') + f': ({len(kanji_found)})')
+        print(_("found") + f": ({len(kanji_found)})")
         for kanji_index, kanji in enumerate(kanji_found):
             out = [
-                color(f'{kanji_index + 1:4d}', fg='grey')
-                + ' '
-                + color(vocab.get_list_name(kanji), fg='grey')
-                + ' '
+                color(f"{kanji_index + 1:4d}", fg="grey")
+                + " "
+                + color(vocab.get_list_name(kanji), fg="grey")
+                + " "
                 + kanji
             ]
             kana_list = vocab.get_kana(kanji)
             if len(kana_list) > 0:
                 out.append(
                     color(
-                        ' '.join(
+                        " ".join(
                             [
                                 f'{color(str(kana_index + 1), fg="grey")} {kana}'
                                 for kana_index, kana in enumerate(kana_list)
                             ]
                         ),
-                        fg='grey',
+                        fg="grey",
                     )
                 )
             if vocab.is_known(kanji):
-                green_tick = color('✓', fg='green')
+                green_tick = color("✓", fg="green")
                 out.append(green_tick)
-            print('  ' + ' '.join(out))
+            print("  " + " ".join(out))
     else:
-        print(_('nothing-found'))
+        print(_("nothing-found"))
     return search, kanji_found
 
 
@@ -148,8 +148,8 @@ Shortcuts = list[Shortcut]
 
 def __shortcuts() -> Shortcuts:
     return [
-        Shortcut('a', [], ['0'], True),
-        Shortcut('l', [], ['0'], True),
+        Shortcut("a", [], ["0"], True),
+        Shortcut("l", [], ["0"], True),
     ]
 
 
@@ -209,16 +209,16 @@ def replace_indices(
 
 def __is_index(s: str) -> bool:
     # Because isnumeric doesn't know about negative numbers.
-    return re.match('^[-+]?[0-9]+$', s) is not None
+    return re.match("^[-+]?[0-9]+$", s) is not None
 
 
 def is_kanji_or_kana(s: str) -> bool:
     return (
-        re.match('^[\u3005\u3007\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$', s)
+        re.match("^[\u3005\u3007\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF]+$", s)
         is not None
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
     sys.exit(0)

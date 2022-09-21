@@ -75,13 +75,13 @@ def __look_up(
     _command_stack: CommandStack, _vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) >= 1
-    search = ' '.join(params)
+    search = " ".join(params)
     result = jam.lookup(search)
     if len(result.entries) > 0:
         for entry in result.entries:
-            print('  ' + entry.text(True))
+            print("  " + entry.text(True))
     else:
-        print(_('nothing-found'))
+        print(_("nothing-found"))
     return OperationResult(None, None, False, False)
 
 
@@ -91,7 +91,7 @@ def __add(
     assert len(params) == 1
     kanji = params[0]
     if kanji in vocab:
-        print(_('{kanji}-already-exists').format(kanji=kanji))
+        print(_("{kanji}-already-exists").format(kanji=kanji))
     else:
         command_stack.do(AddCommand(vocab, kanji))
     return OperationResult(None, kanji, False, False)
@@ -105,9 +105,9 @@ def __change(
     search = None
     invalidate_previous_search_results = False
     if kanji not in vocab:
-        print(_('{kanji}-not-found').format(kanji=kanji))
+        print(_("{kanji}-not-found").format(kanji=kanji))
     elif new_kanji in vocab:
-        print(_('{kanji}-already-exists').format(kanji=new_kanji))
+        print(_("{kanji}-already-exists").format(kanji=new_kanji))
         search = new_kanji
     else:
         command_stack.do(ChangeCommand(vocab, kanji, new_kanji))
@@ -123,10 +123,10 @@ def __delete(
     kanji = params[0]
     invalidate_previous_search_results = False
     if kanji not in vocab:
-        print(_('{kanji}-not-found').format(kanji=kanji))
+        print(_("{kanji}-not-found").format(kanji=kanji))
     else:
         command_stack.do(DeleteCommand(vocab, kanji))
-        print(_('{kanji}-deleted').format(kanji=kanji))
+        print(_("{kanji}-deleted").format(kanji=kanji))
         invalidate_previous_search_results = True
     return OperationResult(None, None, False, invalidate_previous_search_results)
 
@@ -137,7 +137,7 @@ def __add_kana(
     assert len(params) == 2
     kanji, kana = params[:2]
     if vocab.contains(kanji, kana):
-        print(_('{kana}-already-exists-for-{kanji}').format(kanji=kanji, kana=kana))
+        print(_("{kana}-already-exists-for-{kanji}").format(kanji=kanji, kana=kana))
     else:
         command_stack.do(AddKanaCommand(vocab, kanji, kana))
     return OperationResult(None, kanji, False, False)
@@ -150,14 +150,14 @@ def __change_kana(
     kanji, kana, new_kana = params[:3]
     search = None
     if kanji not in vocab:
-        print(_('{kanji}-not-found').format(kanji=kanji))  # Needs test.
+        print(_("{kanji}-not-found").format(kanji=kanji))  # Needs test.
     elif not vocab.contains(kanji, kana):
-        print(_('{kana}-not-found-for-{kanji}').format(kanji=kanji, kana=kana))
+        print(_("{kana}-not-found-for-{kanji}").format(kanji=kanji, kana=kana))
     else:
         search = kanji
         if vocab.contains(kanji, new_kana):
             print(
-                _('{kana}-already-exists-for-{kanji}').format(
+                _("{kana}-already-exists-for-{kanji}").format(
                     kanji=kanji, kana=new_kana
                 )
             )
@@ -173,10 +173,10 @@ def __delete_kana(
     kanji, kana = params[:2]
     invalidate_previous_search_results = False
     if not vocab.contains(kanji, kana):
-        print(_('{kana}-not-found-for-{kanji}').format(kanji=kanji, kana=kana))
+        print(_("{kana}-not-found-for-{kanji}").format(kanji=kanji, kana=kana))
     else:
         command_stack.do(DeleteKanaCommand(vocab, kanji, kana))
-        print(_('{kana}-deleted-from-{kanji}').format(kanji=kanji, kana=kana))
+        print(_("{kana}-deleted-from-{kanji}").format(kanji=kanji, kana=kana))
         invalidate_previous_search_results = True
     return OperationResult(None, kanji, False, invalidate_previous_search_results)
 
@@ -187,7 +187,7 @@ def __toggle_known_status(
     assert len(params) == 1
     kanji = params[0]
     if kanji not in vocab:
-        print(_('{kanji}-not-found').format(kanji=kanji))
+        print(_("{kanji}-not-found").format(kanji=kanji))
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))
     return OperationResult(None, kanji, False, False)
@@ -213,7 +213,7 @@ def __save(
     _command_stack: CommandStack, vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) == 0
-    print(_('saving') + '...')
+    print(_("saving") + "...")
     vocab.save()
     return OperationResult(None, None, False, False)
 
@@ -224,15 +224,15 @@ def __info(
     assert len(params) == 0
     (known, learning) = vocab.get_info()
     print(
-        '\n'
-        + _('info')
-        + ':\n  '
-        + _('known')
-        + f': {known}\n  '
-        + _('learning')
-        + f': {learning}\n  '
-        + _('total')
-        + f': {known + learning}\n'
+        "\n"
+        + _("info")
+        + ":\n  "
+        + _("known")
+        + f": {known}\n  "
+        + _("learning")
+        + f": {learning}\n  "
+        + _("total")
+        + f": {known + learning}\n"
     )
     return OperationResult(None, None, False, False)
 
@@ -241,7 +241,7 @@ def __english(
     _command_stack: CommandStack, _vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) == 0
-    set_locale('en')
+    set_locale("en")
     return OperationResult(None, None, False, False)
 
 
@@ -249,7 +249,7 @@ def __french(
     _command_stack: CommandStack, _vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) == 0
-    set_locale('fr')
+    set_locale("fr")
     return OperationResult(None, None, False, False)
 
 
@@ -257,7 +257,7 @@ def __japanese(
     _command_stack: CommandStack, _vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) == 0
-    set_locale('ja')
+    set_locale("ja")
     return OperationResult(None, None, False, False)
 
 
@@ -265,46 +265,46 @@ def __spanish(
     _command_stack: CommandStack, _vocab: Vocab, params: list[str]
 ) -> OperationResult:
     assert len(params) == 0
-    set_locale('es')
+    set_locale("es")
     return OperationResult(None, None, False, False)
 
 
-__green_tick = color('✓', fg='green')
+__green_tick = color("✓", fg="green")
 
 
 def __operations_help() -> OperationsHelp:
     return [
-        OperationHelp('', _('kanji') + _('bar') + _('kana'), _('help-search')),
+        OperationHelp("", _("kanji") + _("bar") + _("kana"), _("help-search")),
         OperationHelp(
-            'l', _('japanese') + _('bar') + _('english'), _('help-dictionary-search')
+            "l", _("japanese") + _("bar") + _("english"), _("help-dictionary-search")
         ),
-        OperationHelp('a', _('kanji'), _('help-new-kanji')),
-        OperationHelp('d', _('kanji'), _('help-delete-kanji')),
+        OperationHelp("a", _("kanji"), _("help-new-kanji")),
+        OperationHelp("d", _("kanji"), _("help-delete-kanji")),
         OperationHelp(
-            'c', _('kanji') + _('space') + _('new-kanji'), _('help-change-kanji')
+            "c", _("kanji") + _("space") + _("new-kanji"), _("help-change-kanji")
         ),
-        OperationHelp('ak', _('kanji') + _('space') + _('kana'), _('help-new-kana')),
-        OperationHelp('dk', _('kanji') + _('space') + _('kana'), _('help-delete-kana')),
+        OperationHelp("ak", _("kanji") + _("space") + _("kana"), _("help-new-kana")),
+        OperationHelp("dk", _("kanji") + _("space") + _("kana"), _("help-delete-kana")),
         OperationHelp(
-            'ck',
-            _('kanji') + _('space') + _('kana') + _('space') + _('new-kana'),
-            _('help-change-kana'),
+            "ck",
+            _("kanji") + _("space") + _("kana") + _("space") + _("new-kana"),
+            _("help-change-kana"),
         ),
         OperationHelp(
-            't',
-            _('kanji'),
-            _('help-known-or-not?{green_tick}').format(green_tick=__green_tick),
+            "t",
+            _("kanji"),
+            _("help-known-or-not?{green_tick}").format(green_tick=__green_tick),
         ),
-        OperationHelp('u', '', _('help-undo')),
-        OperationHelp('r', '', _('help-redo')),
-        OperationHelp('s', '', _('help-save')),
-        OperationHelp('i', '', _('help-info')),
-        OperationHelp('en', '', 'English'),
-        OperationHelp('es', '', 'español'),
-        OperationHelp('fr', '', 'français'),
-        OperationHelp('ja', '', '日本語'),
-        OperationHelp('h', '', _('help-show-this-help')),
-        OperationHelp('q', '', _('help-quit')),
+        OperationHelp("u", "", _("help-undo")),
+        OperationHelp("r", "", _("help-redo")),
+        OperationHelp("s", "", _("help-save")),
+        OperationHelp("i", "", _("help-info")),
+        OperationHelp("en", "", "English"),
+        OperationHelp("es", "", "español"),
+        OperationHelp("fr", "", "français"),
+        OperationHelp("ja", "", "日本語"),
+        OperationHelp("h", "", _("help-show-this-help")),
+        OperationHelp("q", "", _("help-quit")),
     ]
 
 
@@ -316,18 +316,18 @@ def __show_help(
 
 
 def format_help() -> str:
-    space = '\u3000' if get_locale() == 'ja' else ' '
-    help_text = '\n' + _('usage') + ':\n'
+    space = "\u3000" if get_locale() == "ja" else " "
+    help_text = "\n" + _("usage") + ":\n"
     column_widths = __get_help_column_widths()
     for operation_help in __operations_help():
         help_text += (
-            '  '
+            "  "
             + operation_help.command.ljust(column_widths.command)
-            + ' '
+            + " "
             + operation_help.params.ljust(column_widths.params, space)
             + space
             + operation_help.help_text
-            + '\n'
+            + "\n"
         )
     return help_text
 
@@ -345,89 +345,89 @@ def __get_help_column_widths() -> HelpColumnWidths:
 
 def __operations() -> OperationsDescriptors:
     return {
-        'l': OperationDescriptor(
+        "l": OperationDescriptor(
             1,
             None,
             True,
             None,
-            _('usage') + ': l ' + _('kanji') + _('bar') + _('kana'),
+            _("usage") + ": l " + _("kanji") + _("bar") + _("kana"),
             __look_up,
         ),
-        'a': OperationDescriptor(
-            1, 1, False, None, _('usage') + ': a ' + _('kanji'), __add
+        "a": OperationDescriptor(
+            1, 1, False, None, _("usage") + ": a " + _("kanji"), __add
         ),
-        'd': OperationDescriptor(
-            1, 1, False, None, _('usage') + ': d ' + _('kanji'), __delete
+        "d": OperationDescriptor(
+            1, 1, False, None, _("usage") + ": d " + _("kanji"), __delete
         ),
-        'c': OperationDescriptor(
+        "c": OperationDescriptor(
             2,
             2,
             False,
             None,
-            _('usage') + ': c ' + _('kanji') + _('space') + _('new-kanji'),
+            _("usage") + ": c " + _("kanji") + _("space") + _("new-kanji"),
             __change,
         ),
-        'ak': OperationDescriptor(
+        "ak": OperationDescriptor(
             2,
             2,
             False,
             None,
-            _('usage') + ': a ' + _('kanji') + _('space') + _('kana'),
+            _("usage") + ": a " + _("kanji") + _("space") + _("kana"),
             __add_kana,
         ),
-        'dk': OperationDescriptor(
+        "dk": OperationDescriptor(
             2,
             2,
             False,
             None,
-            _('usage') + ': d ' + _('kanji') + _('space') + _('kana'),
+            _("usage") + ": d " + _("kanji") + _("space") + _("kana"),
             __delete_kana,
         ),
-        'ck': OperationDescriptor(
+        "ck": OperationDescriptor(
             3,
             3,
             False,
             None,
-            _('usage')
-            + ': c '
-            + _('kanji')
-            + _('space')
-            + _('kana')
-            + _('space')
-            + _('new-kana'),
+            _("usage")
+            + ": c "
+            + _("kanji")
+            + _("space")
+            + _("kana")
+            + _("space")
+            + _("new-kana"),
             __change_kana,
         ),
-        't': OperationDescriptor(
-            1, 1, False, None, _('usage') + ': t ' + _('kanji'), __toggle_known_status
+        "t": OperationDescriptor(
+            1, 1, False, None, _("usage") + ": t " + _("kanji"), __toggle_known_status
         ),
-        'u': OperationDescriptor(
+        "u": OperationDescriptor(
             0,
             0,
             False,
             lambda command_stack: command_stack.undoable(),
-            _('there-is-nothing-to-undo'),
+            _("there-is-nothing-to-undo"),
             __undo,
         ),
-        'r': OperationDescriptor(
+        "r": OperationDescriptor(
             0,
             0,
             False,
             lambda command_stack: command_stack.redoable(),
-            _('there-is-nothing-to-redo'),
+            _("there-is-nothing-to-redo"),
             __redo,
         ),
-        's': OperationDescriptor(0, 0, False, None, None, __save),
-        'i': OperationDescriptor(0, 0, False, None, None, __info),
-        'en': OperationDescriptor(0, 0, False, None, 'English', __english),
-        'es': OperationDescriptor(0, 0, False, None, 'español', __spanish),
-        'fr': OperationDescriptor(0, 0, False, None, 'français', __french),
-        'ja': OperationDescriptor(0, 0, False, None, '日本語', __japanese),
-        'h': OperationDescriptor(0, 0, False, None, None, __show_help),
+        "s": OperationDescriptor(0, 0, False, None, None, __save),
+        "i": OperationDescriptor(0, 0, False, None, None, __info),
+        "en": OperationDescriptor(0, 0, False, None, "English", __english),
+        "es": OperationDescriptor(0, 0, False, None, "español", __spanish),
+        "fr": OperationDescriptor(0, 0, False, None, "français", __french),
+        "ja": OperationDescriptor(0, 0, False, None, "日本語", __japanese),
+        "h": OperationDescriptor(0, 0, False, None, None, __show_help),
     }
 
 
 assert sorted(
-    [operation[0] for operation in __operations_help() if operation[0] not in ['', 'q']]
+    [operation[0] for operation in __operations_help() if operation[0] not in ["", "q"]]
 ) == sorted(list(__operations()))
 
 

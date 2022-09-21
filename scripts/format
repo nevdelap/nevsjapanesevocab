@@ -4,6 +4,6 @@ shopt -s globstar
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 for f in **/*.py; do
-    black --skip-string-normalization "$f"
+    black "$f"
 done
 git diff

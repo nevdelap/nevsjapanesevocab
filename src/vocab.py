@@ -41,11 +41,11 @@ class Vocab:
         self.__list_to_kanji = {}
         self.__kanji_to_list = {}
         self.__kanji_to_info = {}
-        with open(self.__filename, encoding='utf-8') as f:
+        with open(self.__filename, encoding="utf-8") as f:
             lines = f.readlines()
             for line_number, line in enumerate(lines):
                 line = line.strip()
-                parts = line.split(',')
+                parts = line.split(",")
                 if len(parts) < 3:
                     raise Exception(
                         f"line {line_number + 1}: bad line '{line}', {len(parts)} fields, expected at least 4."
@@ -57,30 +57,30 @@ class Vocab:
                     )
                 if not Vocab.valid_string(kanji):
                     raise Exception(f"line {line_number + 1}: empty kanji '{kanji}'.")
-                if known not in ['0', '1']:
+                if known not in ["0", "1"]:
                     raise Exception(
                         f"line {line_number + 1}: bad known status '{known}', expected 0 or 1."
                     )
                 kana_list = parts[3:]
-                if kana_list == ['']:
+                if kana_list == [""]:
                     kana_list = []
                 if not Vocab.valid_kana_list(kana_list):
                     raise Exception(
                         f"line {line_number + 1}: bad kana list '"
-                        + ','.join(kana_list)
+                        + ",".join(kana_list)
                         + "'"
                     )
                 if list_name not in self.__list_to_kanji:
                     self.__list_to_kanji[list_name] = []
                 self.__list_to_kanji[list_name].append(kanji)
                 self.__kanji_to_list[kanji] = list_name
-                self.__kanji_to_info[kanji] = KanjiInfo(known == '1', kana_list)
+                self.__kanji_to_info[kanji] = KanjiInfo(known == "1", kana_list)
 
     def save(self, filename: Optional[str] = None) -> None:
         """Saves the vocab back to its original file."""
         save_filename = self.__filename if filename is None else filename
         try:
-            with open(save_filename, 'w', encoding='utf-8') as f:
+            with open(save_filename, "w", encoding="utf-8") as f:
                 for list_name in sorted(self.__list_to_kanji):
                     for kanji in sorted(self.__list_to_kanji[list_name]):
                         (known, kana_list) = self.__kanji_to_info[kanji]
@@ -88,13 +88,13 @@ class Vocab:
                             kana_list.remove(kanji)
                         f.write(
                             normalize(
-                                'NFC',
+                                "NFC",
                                 f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n',
                             )
                         )
         except IOError as err:
             print(
-                _('{vocab_file}-failed-to-write-{err}').format(
+                _("{vocab_file}-failed-to-write-{err}").format(
                     vocab_file=save_filename, err=err
                 )
             )
@@ -160,7 +160,7 @@ class Vocab:
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
         if list_name is None:
             list_name = self.new_kanji_list_name()
-        kana = ''.join([result['hira'] for result in self.__kks.convert(kanji)])
+        kana = "".join([result["hira"] for result in self.__kks.convert(kanji)])
         known = False
         kana_list = [kana] if kana != kanji else []
         self.__list_to_kanji[list_name].append(kanji)
@@ -191,7 +191,7 @@ class Vocab:
         """Public for tests."""
         list_name = max(self.__list_to_kanji.keys())
         if len(self.__list_to_kanji[list_name]) >= Vocab.ITEMS_PER_LIST:
-            list_name = f'{int(list_name) + Vocab.ITEMS_PER_LIST:04d}'
+            list_name = f"{int(list_name) + Vocab.ITEMS_PER_LIST:04d}"
             self.__list_to_kanji[list_name] = []
         assert Vocab.valid_list_name(list_name), list_name
         return list_name
@@ -220,7 +220,7 @@ class Vocab:
         if index is None:
             index = len(self.__kanji_to_info[kanji][1])
         self.__kanji_to_info[kanji][1].insert(index, kana)
-        assert self.contains(kanji, kana), kanji + ', ' + kana
+        assert self.contains(kanji, kana), kanji + ", " + kana
         return self.__kanji_to_info[kanji][1].index(kana)
 
     def get_kana(self, kanji: str) -> list[str]:
