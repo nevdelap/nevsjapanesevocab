@@ -256,7 +256,7 @@ msgstr  "There is nothing to undo."
 msgid   "there-is-nothing-to-redo"
 msgstr  "There is nothing to redo."
 
-#: src/vocab.py:99
+#: src/vocab.py:103
 #, python-brace-format
 msgid   "{vocab_file}-failed-to-write-{err}"
 msgstr  "Failed to save {vocab_file} - {err}"

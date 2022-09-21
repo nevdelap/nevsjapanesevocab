@@ -50,18 +50,21 @@ class Vocab:
                 parts = line.split(",")
                 if len(parts) < 3:
                     raise Exception(
-                        f"line {line_number + 1}: bad line '{line}', {len(parts)} fields, expected at least 4."
+                        f"line {line_number + 1}: bad line '{line}', "
+                        + f"{len(parts)} fields, expected at least 4."
                     )
                 (list_name, kanji, known) = parts[:3]
                 if not Vocab.valid_list_name(list_name):
                     raise Exception(
-                        f"line {line_number + 1}: bad list name '{list_name}', expected numeric."
+                        f"line {line_number + 1}: bad list name '{list_name}', "
+                        + "expected numeric."
                     )
                 if not Vocab.valid_string(kanji):
                     raise Exception(f"line {line_number + 1}: empty kanji '{kanji}'.")
                 if known not in ["0", "1"]:
                     raise Exception(
-                        f"line {line_number + 1}: bad known status '{known}', expected 0 or 1."
+                        f"line {line_number + 1}: bad known status '{known}', "
+                        + "expected 0 or 1."
                     )
                 kana_list = parts[3:]
                 if kana_list == [""]:
@@ -91,7 +94,8 @@ class Vocab:
                         f.write(
                             normalize(
                                 "NFC",
-                                f'{list_name},{kanji},{1 if known else 0},{",".join(kana_list)}\n',
+                                f"{list_name},{kanji},"
+                                + f"{1 if known else 0},{','.join(kana_list)}\n",
                             )
                         )
         except IOError as err:

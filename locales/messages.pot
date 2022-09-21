@@ -258,7 +258,7 @@ msgstr  ""
 msgid   "there-is-nothing-to-redo"
 msgstr  ""
 
-#: src/vocab.py:99
+#: src/vocab.py:103
 #, python-brace-format
 msgid   "{vocab_file}-failed-to-write-{err}"
 msgstr  ""

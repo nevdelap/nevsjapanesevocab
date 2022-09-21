@@ -256,7 +256,7 @@ msgstr  "元に戻すものがない。"
 msgid   "there-is-nothing-to-redo"
 msgstr  "遣り直すものがない。"
 
-#: src/vocab.py:99
+#: src/vocab.py:103
 #, python-brace-format
 msgid   "{vocab_file}-failed-to-write-{err}"
 msgstr  "{vocab_file}が書き込みに失敗した。{err}"

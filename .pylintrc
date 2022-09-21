@@ -3,7 +3,7 @@
 disable=missing-docstring,redefined-outer-name
 
 [FORMAT]
-max-line-length=120
+max-line-length=88
 
 [BASIC]
 # do method on undoable commands, i for index, f for file, s for meaningless string.

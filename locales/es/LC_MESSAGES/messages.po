@@ -256,7 +256,7 @@ msgstr  "No hay nada para deshacer."
 msgid   "there-is-nothing-to-redo"
 msgstr  "No hay nada para deshacer."
 
-#: src/vocab.py:99
+#: src/vocab.py:103
 #, python-brace-format
 msgid   "{vocab_file}-failed-to-write-{err}"
 msgstr  "Falló de guardar el archivo {vocab_file} - {err}"
