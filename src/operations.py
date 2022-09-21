@@ -1,8 +1,7 @@
-from typing import Callable
+from collections.abc import Callable
+from collections.abc import Sequence
 from typing import Final
 from typing import NamedTuple
-from typing import Optional
-from typing import Sequence
 
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
@@ -26,9 +25,9 @@ OperationPrecheck = Callable[[CommandStack], bool]
 
 
 class OperationResult(NamedTuple):
-    message: Optional[str]
+    message: str | None
     # a string to search for, otherwise repeat the previous search,
-    new_search: Optional[str]
+    new_search: str | None
     repeat_previous_search: bool
     invalidate_previous_results: bool
 
@@ -47,10 +46,10 @@ Operation = Callable[[CommandStack, Vocab, list[str]], OperationResult]
 
 class OperationDescriptor(NamedTuple):
     min_params: int
-    max_params: Optional[int]
+    max_params: int | None
     accepts_english_params: bool
-    validation: Optional[OperationPrecheck]
-    error_message: Optional[str]
+    validation: OperationPrecheck | None
+    error_message: str | None
     operation: Operation
 
     def are_good_params(self, params: Sequence[str]) -> bool:

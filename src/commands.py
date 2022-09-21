@@ -1,6 +1,5 @@
 from abc import ABC
 from abc import abstractmethod
-from typing import Optional
 
 from colors import color  # type: ignore
 
@@ -85,7 +84,7 @@ class AddCommand(Command):
     def __init__(self, vocab: Vocab, kanji: str) -> None:
         Command.__init__(self, vocab)
         self.__kanji: str = kanji
-        self.__list_name: Optional[str] = None
+        self.__list_name: str | None = None
 
     def do(self) -> None:
         self.__list_name = self.vocab.add(self.__kanji)
@@ -115,7 +114,7 @@ class DeleteCommand(Command):
         self.__kanji: str = kanji
         self.__known: bool = self.vocab.is_known(kanji)
         self.__kana: list[str] = list(self.vocab.get_kana(kanji))
-        self.__list_name: Optional[str] = None
+        self.__list_name: str | None = None
 
     def do(self) -> None:
         self.__list_name = self.vocab.delete(self.__kanji)

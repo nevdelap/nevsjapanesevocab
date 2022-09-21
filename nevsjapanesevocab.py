@@ -22,7 +22,7 @@ def main() -> None:
     try:
         print(_("loading") + "...")
         vocab = Vocab(vocab_file)
-    except IOError as err:
+    except OSError as err:
         print(
             _("{vocab_file}-failed-to-read-{err}").format(vocab_file=vocab_file, e=err)
         )

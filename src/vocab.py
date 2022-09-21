@@ -2,7 +2,6 @@ import sys
 from copy import copy
 from typing import Final
 from typing import NamedTuple
-from typing import Optional
 from unicodedata import normalize
 
 from pykakasi import kakasi
@@ -81,7 +80,7 @@ class Vocab:
                 self.__kanji_to_list[kanji] = list_name
                 self.__kanji_to_info[kanji] = KanjiInfo(known == "1", kana_list)
 
-    def save(self, filename: Optional[str] = None) -> None:
+    def save(self, filename: str | None = None) -> None:
         """Saves the vocab back to its original file."""
         save_filename = self.__filename if filename is None else filename
         try:
@@ -98,7 +97,7 @@ class Vocab:
                                 + f"{1 if known else 0},{','.join(kana_list)}\n",
                             )
                         )
-        except IOError as err:
+        except OSError as err:
             print(
                 _("{vocab_file}-failed-to-write-{err}").format(
                     vocab_file=save_filename, err=err
@@ -133,7 +132,7 @@ class Vocab:
         assert Vocab.valid_string(kanji), kanji
         return kanji in self.__kanji_to_info
 
-    def contains(self, kanji: str, kana: Optional[str] = None) -> bool:
+    def contains(self, kanji: str, kana: str | None = None) -> bool:
         assert Vocab.valid_string(kanji), kanji
         assert kana is None or Vocab.valid_string(kana), kana
         return kanji in self.__kanji_to_info and (
@@ -160,7 +159,7 @@ class Vocab:
                 kanji_found.append(kanji)
         return kanji_found
 
-    def add(self, kanji: str, list_name: Optional[str] = None) -> str:
+    def add(self, kanji: str, list_name: str | None = None) -> str:
         assert Vocab.valid_string(kanji), kanji
         assert kanji not in self, kanji
         assert list_name is None or Vocab.valid_list_name(list_name), list_name
@@ -217,7 +216,7 @@ class Vocab:
         assert kanji not in self, kanji
         return list_name
 
-    def add_kana(self, kanji: str, kana: str, index: Optional[int] = None) -> int:
+    def add_kana(self, kanji: str, kana: str, index: int | None = None) -> int:
         assert Vocab.valid_string(kanji), kanji
         assert kanji in self, kanji
         assert Vocab.valid_string(kana), kana

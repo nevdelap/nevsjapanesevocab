@@ -25,7 +25,7 @@ msgstr  "読み込み中"
 msgid   "{vocab_file}-failed-to-read-{err}"
 msgstr  "{vocab_file}が読み込みに失敗した。{err}"
 
-#: nevsjapanesevocab.py:46 src/operations.py:220
+#: nevsjapanesevocab.py:46 src/operations.py:219
 msgid   "saving"
 msgstr  "読み込み中"
 
@@ -41,222 +41,222 @@ msgstr  "使い方: h 使い方を表示する。"
 msgid   "found"
 msgstr  "見つかった"
 
-#: nevsjapanesevocab.py:140 src/operations.py:88
+#: nevsjapanesevocab.py:140 src/operations.py:87
 msgid   "nothing-found"
 msgstr  "何も見つからない。"
 
-#: src/commands.py:102 src/commands.py:139
+#: src/commands.py:101 src/commands.py:138
 #, python-brace-format
 msgid   "{kanji}-has-been-deleted-from-list-{list_name}"
 msgstr  "{kanji}はリスト{list_name}から削除した。"
 
-#: src/commands.py:107 src/commands.py:134
+#: src/commands.py:106 src/commands.py:133
 #, python-brace-format
 msgid   "{kanji}-added-to-list-{list_name}"
 msgstr  "{kanji}はリスト{list_name}に追加した。"
 
-#: src/commands.py:162
+#: src/commands.py:161
 #, python-brace-format
 msgid   "{new_kanji}-changed-back-to-{kanji}"
 msgstr  "{new_kanji}を{kanji}に戻した。"
 
-#: src/commands.py:167
+#: src/commands.py:166
 #, python-brace-format
 msgid   "{kanji}-changed-to-{new_kanji}"
 msgstr  "f'{kanji}を{new_kanji}に変更した。"
 
-#: src/commands.py:191 src/commands.py:250 src/operations.py:183
+#: src/commands.py:190 src/commands.py:249 src/operations.py:182
 #, python-brace-format
 msgid   "{kana}-deleted-from-{kanji}"
 msgstr  "{kana}は{kanji}から削除した。"
 
-#: src/commands.py:196 src/commands.py:247
+#: src/commands.py:195 src/commands.py:246
 #, python-brace-format
 msgid   "{kana}-added-to-{kanji}"
 msgstr  "{kana}は{kanji}に追加した。"
 
-#: src/commands.py:218
+#: src/commands.py:217
 #, python-brace-format
 msgid   "{new_kana}-changed-back-to-{kana}-for-{kanji}"
 msgstr  "{kanji}は{new_kana}を{kana}に戻した。"
 
-#: src/commands.py:223
+#: src/commands.py:222
 #, python-brace-format
 msgid   "{kana}-changed-to-{new_kana}-for-{kanji}"
 msgstr  "{kanji}は{kana}を{new_kana}に変更した。"
 
-#: src/commands.py:281
+#: src/commands.py:280
 msgid   "already-known"
 msgstr  "既知"
 
-#: src/commands.py:283
+#: src/commands.py:282
 msgid   "unknown"
 msgstr  "未知"
 
-#: src/commands.py:285
+#: src/commands.py:284
 #, python-brace-format
 msgid   "toggled-the-{known_status}-of-{kanji}"
 msgstr  "{kanji}のステータスが{known_status}に変更された。"
 
-#: src/operations.py:98 src/operations.py:114
+#: src/operations.py:97 src/operations.py:113
 #, python-brace-format
 msgid   "{kanji}-already-exists"
 msgstr  "{kanji}は既に有る。"
 
-#: src/operations.py:112 src/operations.py:130 src/operations.py:157
-#: src/operations.py:194
+#: src/operations.py:111 src/operations.py:129 src/operations.py:156
+#: src/operations.py:193
 #, python-brace-format
 msgid   "{kanji}-not-found"
 msgstr  "{kanji}は見つからない。"
 
-#: src/operations.py:133
+#: src/operations.py:132
 #, python-brace-format
 msgid   "{kanji}-deleted"
 msgstr  "{kanji}は削除した。"
 
-#: src/operations.py:144 src/operations.py:164
+#: src/operations.py:143 src/operations.py:163
 #, python-brace-format
 msgid   "{kana}-already-exists-for-{kanji}"
 msgstr  "{kanji}は{kana}が既に有る。"
 
-#: src/operations.py:159 src/operations.py:180
+#: src/operations.py:158 src/operations.py:179
 #, python-brace-format
 msgid   "{kana}-not-found-for-{kanji}"
 msgstr  "{kanji}は{kana}が見つからない。"
 
-#: src/operations.py:232
+#: src/operations.py:231
 msgid   "info"
 msgstr  "データ"
 
-#: src/operations.py:234
+#: src/operations.py:233
 msgid   "known"
 msgstr  "分かった"
 
-#: src/operations.py:236
+#: src/operations.py:235
 msgid   "learning"
 msgstr  "学んでいる"
 
-#: src/operations.py:238
+#: src/operations.py:237
 msgid   "total"
 msgstr  "合計"
 
-#: src/operations.py:281 src/operations.py:285 src/operations.py:286
-#: src/operations.py:288 src/operations.py:290 src/operations.py:291
-#: src/operations.py:294 src/operations.py:299 src/operations.py:357
-#: src/operations.py:361 src/operations.py:364 src/operations.py:371
-#: src/operations.py:379 src/operations.py:387 src/operations.py:397
-#: src/operations.py:405
+#: src/operations.py:280 src/operations.py:284 src/operations.py:285
+#: src/operations.py:287 src/operations.py:289 src/operations.py:290
+#: src/operations.py:293 src/operations.py:298 src/operations.py:356
+#: src/operations.py:360 src/operations.py:363 src/operations.py:370
+#: src/operations.py:378 src/operations.py:386 src/operations.py:396
+#: src/operations.py:404
 msgid   "kanji"
 msgstr  "漢字"
 
-#: src/operations.py:281 src/operations.py:283 src/operations.py:357
+#: src/operations.py:280 src/operations.py:282 src/operations.py:356
 msgid   "bar"
 msgstr  "｜"
 
-#: src/operations.py:281 src/operations.py:290 src/operations.py:291
-#: src/operations.py:294 src/operations.py:357 src/operations.py:379
-#: src/operations.py:387 src/operations.py:399
+#: src/operations.py:280 src/operations.py:289 src/operations.py:290
+#: src/operations.py:293 src/operations.py:356 src/operations.py:378
+#: src/operations.py:386 src/operations.py:398
 msgid   "kana"
 msgstr  "仮名"
 
-#: src/operations.py:281
+#: src/operations.py:280
 msgid   "help-search"
 msgstr  "検索"
 
-#: src/operations.py:283
+#: src/operations.py:282
 msgid   "japanese"
 msgstr  "日本語"
 
-#: src/operations.py:283
+#: src/operations.py:282
 msgid   "english"
 msgstr  "英語"
 
-#: src/operations.py:283
+#: src/operations.py:282
 msgid   "help-dictionary-search"
 msgstr  "和英辞書で検索する。"
 
-#: src/operations.py:285
+#: src/operations.py:284
 msgid   "help-new-kanji"
 msgstr  "新漢字"
 
-#: src/operations.py:286
+#: src/operations.py:285
 msgid   "help-delete-kanji"
 msgstr  "漢字削除"
 
-#: src/operations.py:288 src/operations.py:290 src/operations.py:291
-#: src/operations.py:294 src/operations.py:371 src/operations.py:379
-#: src/operations.py:387 src/operations.py:398 src/operations.py:400
+#: src/operations.py:287 src/operations.py:289 src/operations.py:290
+#: src/operations.py:293 src/operations.py:370 src/operations.py:378
+#: src/operations.py:386 src/operations.py:397 src/operations.py:399
 msgid   "space"
 msgstr  "　"
 
-#: src/operations.py:288 src/operations.py:371
+#: src/operations.py:287 src/operations.py:370
 msgid   "new-kanji"
 msgstr  "新漢字"
 
-#: src/operations.py:288
+#: src/operations.py:287
 msgid   "help-change-kanji"
 msgstr  "漢字変更"
 
-#: src/operations.py:290
+#: src/operations.py:289
 msgid   "help-new-kana"
 msgstr  "新仮名"
 
-#: src/operations.py:291
+#: src/operations.py:290
 msgid   "help-delete-kana"
 msgstr  "仮名削除"
 
-#: src/operations.py:294 src/operations.py:401
+#: src/operations.py:293 src/operations.py:400
 msgid   "new-kana"
 msgstr  "新仮名"
 
-#: src/operations.py:295
+#: src/operations.py:294
 msgid   "help-change-kana"
 msgstr  "仮名変更"
 
-#: src/operations.py:300
+#: src/operations.py:299
 #, python-brace-format
 msgid   "help-known-or-not?{green_tick}"
 msgstr  "分かったか{green_tick}否かを切り換える。"
 
-#: src/operations.py:302
+#: src/operations.py:301
 msgid   "help-undo"
 msgstr  "元に戻す。"
 
-#: src/operations.py:303
+#: src/operations.py:302
 msgid   "help-redo"
 msgstr  "遣り直す。"
 
-#: src/operations.py:304
+#: src/operations.py:303
 msgid   "help-save"
 msgstr  "書き込む。"
 
-#: src/operations.py:305
+#: src/operations.py:304
 msgid   "help-info"
 msgstr  "データ"
 
-#: src/operations.py:310
+#: src/operations.py:309
 msgid   "help-show-this-help"
 msgstr  "この使い方を表示する。"
 
-#: src/operations.py:311
+#: src/operations.py:310
 msgid   "help-quit"
 msgstr  "終了"
 
-#: src/operations.py:324 src/operations.py:357 src/operations.py:361
-#: src/operations.py:364 src/operations.py:371 src/operations.py:379
-#: src/operations.py:387 src/operations.py:395 src/operations.py:405
+#: src/operations.py:323 src/operations.py:356 src/operations.py:360
+#: src/operations.py:363 src/operations.py:370 src/operations.py:378
+#: src/operations.py:386 src/operations.py:394 src/operations.py:404
 msgid   "usage"
 msgstr  "使い方"
 
-#: src/operations.py:412
+#: src/operations.py:411
 msgid   "there-is-nothing-to-undo"
 msgstr  "元に戻すものがない。"
 
-#: src/operations.py:420
+#: src/operations.py:419
 msgid   "there-is-nothing-to-redo"
 msgstr  "遣り直すものがない。"
 
-#: src/vocab.py:103
+#: src/vocab.py:102
 #, python-brace-format
 msgid   "{vocab_file}-failed-to-write-{err}"
 msgstr  "{vocab_file}が書き込みに失敗した。{err}"

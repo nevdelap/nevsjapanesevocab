@@ -1,7 +1,6 @@
+from collections.abc import Callable
 from gettext import NullTranslations
 from gettext import translation
-from typing import Callable
-from typing import Optional
 
 GetText = Callable[[str], str]
 
@@ -23,7 +22,7 @@ __locale = None
 __translations: dict[str, NullTranslations] = {}  # locale.
 
 
-def get_locale() -> Optional[str]:
+def get_locale() -> str | None:
     return __locale
 
 

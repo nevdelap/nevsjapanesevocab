@@ -1,7 +1,6 @@
 import re
 import sys
 from io import StringIO
-from typing import Optional
 
 import pytest
 from test_helpers import strip_ansi_terminal_escapes
@@ -302,7 +301,7 @@ def __io() -> list[tuple[str, str]]:
         ("fr"),
     ],
 )
-def test_usage(locale: Optional[str]) -> None:
+def test_usage(locale: str | None) -> None:
     if locale is None:
         unset_locale()
     else:
@@ -348,7 +347,7 @@ def test_usage(locale: Optional[str]) -> None:
         ("fr"),
     ],
 )
-def test_remaining_translations_with_interpolations(locale: Optional[str]) -> None:
+def test_remaining_translations_with_interpolations(locale: str | None) -> None:
     if locale is None:
         unset_locale()
     else:
