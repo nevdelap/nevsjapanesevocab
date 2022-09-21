@@ -49,7 +49,7 @@ def main_stuff(
     command_stack: CommandStack,
     previous_search: str,
     previous_kanji_found: list[str],
-) -> tuple[str, list[str]]:  # search.  # kanji found.
+) -> tuple[str, list[str]]:  # search, kanji found.
     search = "".join(
         [
             c if c.isalnum() else " "
