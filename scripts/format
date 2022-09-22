@@ -3,9 +3,8 @@ set -e
 shopt -s globstar
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
-for f in **/*.py; do
-    pyupgrade --py310-plus "$f"
-    isort --force-single-line-imports --profile black "$f"
-    black "$f"
-done
+PYVERSION=py310
+pyupgrade --$PYVERSION-plus -- **/*.py
+isort --force-single-line-imports --profile black -- **/*.py
+black --target-version=$PYVERSION -- **/*.py
 git diff
