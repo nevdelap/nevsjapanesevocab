@@ -3,4 +3,6 @@ set -e
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
 export PYTHONPATH="$SCRIPT_DIR/..:$SCRIPT_DIR/../src:$SCRIPT_DIR/../tests"
-python -X dev "$(which pytest)" -rP -q
+PYTHONDEVMODE=1 coverage run --branch "$(which pytest)" -q
+coverage report
+coverage html

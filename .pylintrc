@@ -6,8 +6,9 @@ disable=missing-docstring,redefined-outer-name
 max-line-length=88
 
 [BASIC]
-# do method on undoable commands, i for index, f for file, s for meaningless string.
-good-names=do,i,f,s
+# do method on undoable commands, e for exception, f for
+# file, i for index, io for I/O, s for meaningless string.
+good-names=do,e,f,i,io,s
 
 [DESIGN]
 # Will review to reduce these to defaults.

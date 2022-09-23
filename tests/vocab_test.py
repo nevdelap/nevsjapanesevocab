@@ -1,7 +1,11 @@
 import pathlib
+import sys
+from io import StringIO
 
 import pytest
 
+from localisation import _
+from localisation import unset_locale
 from vocab import Vocab
 
 
@@ -111,6 +115,7 @@ def test_change_kana(vocab: Vocab) -> None:
             "line 3: bad line '0100,送る', 2 fields, expected at least 4.",
         ),
         ("vocab_bad_list_name.csv", "line 3: bad list name 'asdd', expected numeric."),
+        ("vocab_bad_known.csv", "line 3: bad known status '2', expected 0 or 1."),
     ],
 )
 def test_bad_files(filename: str, expected_error: str) -> None:
@@ -127,7 +132,8 @@ def test_save(tmp_path: pathlib.Path, vocab: Vocab) -> None:
     vocab.add_kana("new", "kana2")
     vocab.add("new2")
     vocab.toggle_known("new2")
-    vocab.save(tmp_filename)
+    vocab.filename = tmp_filename
+    vocab.save()
     vocab2 = Vocab(tmp_filename)
     assert "new" in vocab2
     # expressly not kana 'new' that duplicates the kanji 'new'.
@@ -135,3 +141,27 @@ def test_save(tmp_path: pathlib.Path, vocab: Vocab) -> None:
     assert not vocab2.is_known("new")
     assert "new2" in vocab2
     assert vocab2.is_known("new2")
+
+
+def test_fail_save(vocab: Vocab) -> None:
+    unset_locale()
+    stdout = sys.stdout
+    try:
+        sys.stdout = StringIO()
+        tmp_filename = "nonexistent/new.csv"
+        vocab.add("new")
+        try:
+            vocab.filename = tmp_filename
+            vocab.save()
+        except SystemExit as e:
+            assert e.code == 1
+        sys.stdout.seek(0)
+        error = sys.stdout.read()
+        assert (
+            _("{vocab_file}-failed-to-write-{err}").format(
+                vocab_file=tmp_filename, err=""
+            )
+            in error
+        )
+    finally:
+        sys.stdout = stdout

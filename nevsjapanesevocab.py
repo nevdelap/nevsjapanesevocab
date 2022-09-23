@@ -14,7 +14,11 @@ from operations import get_operations
 from vocab import Vocab
 
 
-def main() -> None:
+# Everything in main is tested either by the
+# functionalities' own tests (changing locales, displaying
+# help, load, and save) or in testing user interaction by
+# driving the main_stuff function that main passes off to.
+def main() -> None:  # pragma: no cover
     set_locale("ja")
     print(color(_("nevs-japanese-vocab-list"), style="bold"))
 
@@ -71,7 +75,7 @@ def main_stuff(
         params = parts[1:] if len(parts) > 1 else []
         params = do_shortcuts(command, params, len(previous_search) > 0)
         if command == "q" and len(params) == 0:
-            sys.exit()
+            sys.exit(0)
         operations = get_operations()
         if command in operations:
             operation_descriptor = operations[command]
@@ -93,11 +97,9 @@ def main_stuff(
                     previous_kanji_found = []
                 if result.new_search is None:
                     search = previous_search
-                    if not result.repeat_previous_search:
-                        return search, previous_kanji_found
-                else:
-                    search = result.new_search
-                    exact = True
+                    return search, previous_kanji_found
+                search = result.new_search
+                exact = True
             else:
                 print(operation_descriptor.error_message)
                 search = previous_search
@@ -224,6 +226,6 @@ def is_kanji_or_kana(s: str) -> bool:
     )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
-    sys.exit(0)
+    assert False  # Never reached.

@@ -15,7 +15,7 @@ class Command(ABC):
 
     @abstractmethod
     def do(self) -> None:
-        pass
+        pass  # pragma: no cover
 
     def undo(self) -> str:
         """Undoes the last command and returns a user
@@ -29,11 +29,11 @@ class Command(ABC):
 
     @abstractmethod
     def _undone_message(self) -> str:
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def _redone_message(self) -> str:
-        pass
+        pass  # pragma: no cover
 
 
 class CommandStack:
@@ -91,11 +91,11 @@ class AddCommand(Command):
 
     def undo(self) -> str:
         self.vocab.delete(self.__kanji)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.add(self.__kanji, self.__list_name)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{kanji}-has-been-deleted-from-list-{list_name}").format(
@@ -123,11 +123,11 @@ class DeleteCommand(Command):
         self.vocab.add(self.__kanji, self.__list_name)
         self.vocab.set_known(self.__kanji, self.__known)
         self.vocab.replace_all_kana(self.__kanji, self.__kana)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.delete(self.__kanji)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{kanji}-added-to-list-{list_name}").format(
@@ -151,11 +151,11 @@ class ChangeCommand(Command):
 
     def undo(self) -> str:
         self.vocab.change(self.__new_kanji, self.__kanji)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.change(self.__kanji, self.__new_kanji)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{new_kanji}-changed-back-to-{kanji}").format(
@@ -180,11 +180,11 @@ class AddKanaCommand(Command):
 
     def undo(self) -> str:
         self.vocab.delete_kana(self.__kanji, self.__kana)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.add_kana(self.__kanji, self.__kana, self.__index)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{kana}-deleted-from-{kanji}").format(
@@ -207,11 +207,11 @@ class ChangeKanaCommand(Command):
 
     def undo(self) -> str:
         self.vocab.change_kana(self.__kanji, self.__new_kana, self.__kana)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.change_kana(self.__kanji, self.__kana, self.__new_kana)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{new_kana}-changed-back-to-{kana}-for-{kanji}").format(
@@ -236,11 +236,11 @@ class DeleteKanaCommand(Command):
 
     def undo(self) -> str:
         self.vocab.add_kana(self.__kanji, self.__kana, self.__index)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.delete_kana(self.__kanji, self.__kana)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return _("{kana}-added-to-{kanji}").format(kanji=self.__kanji, kana=self.__kana)
@@ -262,11 +262,11 @@ class ToggleKnownCommand(Command):
 
     def undo(self) -> str:
         self.vocab.set_known(self.__kanji, self.__known)
-        return self._undone_message()
+        return super().undo()
 
     def redo(self) -> str:
         self.vocab.set_known(self.__kanji, not self.__known)
-        return self._redone_message()
+        return super().redo()
 
     def _undone_message(self) -> str:
         return self.__message(True)

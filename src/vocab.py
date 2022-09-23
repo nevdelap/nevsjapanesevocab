@@ -80,11 +80,9 @@ class Vocab:
                 self.__kanji_to_list[kanji] = list_name
                 self.__kanji_to_info[kanji] = KanjiInfo(known == "1", kana_list)
 
-    def save(self, filename: str | None = None) -> None:
-        """Saves the vocab back to its original file."""
-        save_filename = self.__filename if filename is None else filename
+    def save(self) -> None:
         try:
-            with open(save_filename, "w", encoding="utf-8") as f:
+            with open(self.__filename, "w", encoding="utf-8") as f:
                 for list_name in sorted(self.__list_to_kanji):
                     for kanji in sorted(self.__list_to_kanji[list_name]):
                         (known, kana_list) = self.__kanji_to_info[kanji]
@@ -100,7 +98,7 @@ class Vocab:
         except OSError as err:
             print(
                 _("{vocab_file}-failed-to-write-{err}").format(
-                    vocab_file=save_filename, err=err
+                    vocab_file=self.__filename, err=err
                 )
             )
             sys.exit(1)
@@ -108,6 +106,10 @@ class Vocab:
     @property
     def filename(self) -> str:
         return self.__filename
+
+    @filename.setter
+    def filename(self, filename: str) -> None:
+        self.__filename = filename
 
     def get_info(self) -> tuple[int, int]:
         """Returns a tuple of (known, learning) counts."""

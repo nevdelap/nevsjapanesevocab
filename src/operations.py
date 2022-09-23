@@ -28,7 +28,6 @@ class OperationResult(NamedTuple):
     message: str | None
     # a string to search for, otherwise repeat the previous search,
     new_search: str | None
-    repeat_previous_search: bool
     invalidate_previous_results: bool
 
 
@@ -85,7 +84,7 @@ def __look_up(
             print("  " + entry.text(True))
     else:
         print(_("nothing-found"))
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __add(
@@ -97,7 +96,7 @@ def __add(
         print(_("{kanji}-already-exists").format(kanji=kanji))
     else:
         command_stack.do(AddCommand(vocab, kanji))
-    return OperationResult(None, kanji, False, False)
+    return OperationResult(None, kanji, False)
 
 
 def __change(
@@ -116,7 +115,7 @@ def __change(
         command_stack.do(ChangeCommand(vocab, kanji, new_kanji))
         search = new_kanji
         invalidate_previous_search_results = True
-    return OperationResult(None, search, False, invalidate_previous_search_results)
+    return OperationResult(None, search, invalidate_previous_search_results)
 
 
 def __delete(
@@ -131,7 +130,7 @@ def __delete(
         command_stack.do(DeleteCommand(vocab, kanji))
         print(_("{kanji}-deleted").format(kanji=kanji))
         invalidate_previous_search_results = True
-    return OperationResult(None, None, False, invalidate_previous_search_results)
+    return OperationResult(None, None, invalidate_previous_search_results)
 
 
 def __add_kana(
@@ -143,7 +142,7 @@ def __add_kana(
         print(_("{kana}-already-exists-for-{kanji}").format(kanji=kanji, kana=kana))
     else:
         command_stack.do(AddKanaCommand(vocab, kanji, kana))
-    return OperationResult(None, kanji, False, False)
+    return OperationResult(None, kanji, False)
 
 
 def __change_kana(
@@ -153,7 +152,7 @@ def __change_kana(
     kanji, kana, new_kana = params[:3]
     search = None
     if kanji not in vocab:
-        print(_("{kanji}-not-found").format(kanji=kanji))  # Needs test.
+        print(_("{kanji}-not-found").format(kanji=kanji))
     elif not vocab.contains(kanji, kana):
         print(_("{kana}-not-found-for-{kanji}").format(kanji=kanji, kana=kana))
     else:
@@ -166,7 +165,7 @@ def __change_kana(
             )
         else:
             command_stack.do(ChangeKanaCommand(vocab, kanji, kana, new_kana))
-    return OperationResult(None, search, False, False)
+    return OperationResult(None, search, False)
 
 
 def __delete_kana(
@@ -181,7 +180,7 @@ def __delete_kana(
         command_stack.do(DeleteKanaCommand(vocab, kanji, kana))
         print(_("{kana}-deleted-from-{kanji}").format(kanji=kanji, kana=kana))
         invalidate_previous_search_results = True
-    return OperationResult(None, kanji, False, invalidate_previous_search_results)
+    return OperationResult(None, kanji, invalidate_previous_search_results)
 
 
 def __toggle_known_status(
@@ -193,7 +192,7 @@ def __toggle_known_status(
         print(_("{kanji}-not-found").format(kanji=kanji))
     else:
         command_stack.do(ToggleKnownCommand(vocab, kanji))
-    return OperationResult(None, kanji, False, False)
+    return OperationResult(None, kanji, False)
 
 
 def __undo(
@@ -201,7 +200,7 @@ def __undo(
 ) -> OperationResult:
     assert len(params) == 0
     message = command_stack.undo()
-    return OperationResult(message, None, False, True)
+    return OperationResult(message, None, True)
 
 
 def __redo(
@@ -209,7 +208,7 @@ def __redo(
 ) -> OperationResult:
     assert len(params) == 0
     message = command_stack.redo()
-    return OperationResult(message, None, False, True)
+    return OperationResult(message, None, True)
 
 
 def __save(
@@ -218,7 +217,7 @@ def __save(
     assert len(params) == 0
     print(_("saving") + "...")
     vocab.save()
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __info(
@@ -237,7 +236,7 @@ def __info(
         + _("total")
         + f": {known + learning}\n"
     )
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __english(
@@ -245,7 +244,7 @@ def __english(
 ) -> OperationResult:
     assert len(params) == 0
     set_locale("en")
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __french(
@@ -253,7 +252,7 @@ def __french(
 ) -> OperationResult:
     assert len(params) == 0
     set_locale("fr")
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __japanese(
@@ -261,7 +260,7 @@ def __japanese(
 ) -> OperationResult:
     assert len(params) == 0
     set_locale("ja")
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def __spanish(
@@ -269,7 +268,7 @@ def __spanish(
 ) -> OperationResult:
     assert len(params) == 0
     set_locale("es")
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 __green_tick = color("✓", fg="green")
@@ -315,7 +314,7 @@ def __show_help(
     _command_stack: CommandStack, _vocab: Vocab, _params_unused: list[str]
 ) -> OperationResult:
     print(format_help())
-    return OperationResult(None, None, False, False)
+    return OperationResult(None, None, False)
 
 
 def format_help() -> str:
