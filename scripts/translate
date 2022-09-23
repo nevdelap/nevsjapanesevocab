@@ -6,11 +6,21 @@
 set -e
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 cd "$SCRIPT_DIR/.."
-xgettext --indent --msgid-bugs-address="Nev Delap <nevdelap at gmail>" \
+xgettext \
+    --indent \
+    --no-location \
+    --msgid-bugs-address="Nev Delap <nevdelap at gmail>" \
     nevsjapanesevocab.py src/*.py -o locales/messages.pot;
 sed -i '/-Date/d' locales/messages.pot
 for locale in locales/??; do
-    msgmerge --indent --update $locale/LC_MESSAGES/messages.po locales/messages.pot;
-    sed -i '/-Date/d' $locale/LC_MESSAGES/messages.po
-    msgfmt $locale/LC_MESSAGES/messages.po -o $locale/LC_MESSAGES/messages.mo
+    msgmerge \
+        --indent \
+        --update "$locale/LC_MESSAGES/messages.po" \
+        locales/messages.pot;
+    sed \
+        -i '/-Date/d' \
+        "$locale/LC_MESSAGES/messages.po"
+    msgfmt \
+        "$locale/LC_MESSAGES/messages.po" \
+        -o "$locale/LC_MESSAGES/messages.mo"
 done
