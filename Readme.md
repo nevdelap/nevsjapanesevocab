@@ -28,7 +28,7 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 2. Install [Termux Widget](https://f-droid.org/en/packages/com.termux.widget/) from F-Droid.
 3. Install [Code Editor](https://play.google.com/store/apps/details?id=com.rhmsoft.code).
 4. `pkg update`
-5. `pkg install entr git python`
+5. `pkg install entr git python sed`
 6. `termux-setup-storage`
 7. `ssh-keygen`
 8. `cat .ssh/id_rsa.pub # Copy it into GitHub.`
@@ -39,7 +39,7 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 13. `cd nevsjapanesevocab`
 14. `bash install_termux`
 15. `pip install --upgrade wheel`
-16. `pip install --upgrade ansicolors bandit black isort jamdict jamdict-data mypy pykakasi pylint pytest pyupgrade readline`
+16. `pip install --upgrade ansicolors bandit black cover isort jamdict jamdict-data mypy pykakasi pylint pytest pyupgrade readline`
 17. Create a Termux Widget to run `~/.shortcuts/vocab`
 
 ## Setup on Flex OS.
