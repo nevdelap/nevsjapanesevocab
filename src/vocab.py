@@ -88,6 +88,7 @@ class Vocab:
                         (known, kana_list) = self.__kanji_to_info[kanji]
                         if kanji in kana_list:
                             kana_list.remove(kanji)
+                        kana_list = sorted(kana_list)
                         f.write(
                             normalize(
                                 "NFC",

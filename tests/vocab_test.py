@@ -127,9 +127,9 @@ def test_bad_files(filename: str, expected_error: str) -> None:
 def test_save(tmp_path: pathlib.Path, vocab: Vocab) -> None:
     tmp_filename = str(tmp_path / "new.csv")
     vocab.add("new")
-    vocab.add_kana("new", "kana")
-    vocab.add_kana("new", "new")
     vocab.add_kana("new", "kana2")
+    vocab.add_kana("new", "new")
+    vocab.add_kana("new", "kana")
     vocab.add("new2")
     vocab.toggle_known("new2")
     vocab.filename = tmp_filename
