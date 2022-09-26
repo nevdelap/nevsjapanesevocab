@@ -4,7 +4,7 @@
 
 This is a Python terminal application that I use on my phone and tablet to manage Japanese vocabulary that I am learning. I've used various Android apps but I wanted something that does exactly what I require, and I have zero interest in App development. 😉
 
-It is Python 3 with strict typing, full tests, full undo/redo, is localised in Japanese, English, French, and Spanish, it uses [Pykakasi](https://github.com/miurahr/pykakasi) for kanji to kana conversion, and [Jamdict](https://github.com/neocl/jamdict) for English dictionary lookups. Its feature set is just exactly what I personally need, I need even fewer Android apps.
+It is Python 3, has full undo/redo, help, strict typing, 100% test coverage, linting, formatting, is localised in Japanese, English, French, and Spanish, it uses [Pykakasi](https://github.com/miurahr/pykakasi) for kanji to kana conversion, and [Jamdict](https://github.com/neocl/jamdict) for English dictionary lookups. Its feature set is just exactly what I personally need, I need even fewer Android apps.
 
 **NOTE: I don't expect anyone to use this, you have to be a terminal nut for a start. This repo and these instructions are for my own use.**
 

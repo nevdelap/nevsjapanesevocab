@@ -2,6 +2,6 @@
 # Assertions are used for what they are intended for,
 # built-in test of internal state consistency that shouldn't
 # be included in optimised builds, and for pytest tests -
-# not for interations with the external world.
+# not for interactions with the external world.
 skips: B101
 recursive: True
