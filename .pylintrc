@@ -1,5 +1,5 @@
 [MASTER]
-init-hook='import sys; sys.path = ["src", "tests"] + sys.path;'
+init-hook='import sys; sys.path = [".", "src", "tests"] + sys.path;'
 
 [MESSAGES CONTROL]
 # redefined-outer-name is turned off because it complains about pytest fixtures.
