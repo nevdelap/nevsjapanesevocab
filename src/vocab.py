@@ -1,3 +1,5 @@
+# pylint: disable=broad-exception-raised
+
 import sys
 from copy import copy
 from typing import Final
