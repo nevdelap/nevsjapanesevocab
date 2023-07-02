@@ -39,7 +39,7 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 13. `cd nevsjapanesevocab`
 14. `bash install_termux`
 15. `pip install --upgrade wheel`
-16. `pip install --upgrade ansicolors bandit black coverage isort jamdict jamdict-data mypy pykakasi pylint pytest pyupgrade readline`
+16. `pip install --upgrade ansicolors bandit black coverage isort jamdict jamdict-data mypy pykakasi pylint pytest pyupgrade`
 17. Create a Termux Widget to run `~/.shortcuts/vocab`
 
 ## Setup on Flex OS.
@@ -147,4 +147,3 @@ The screenshots at the moment are from before it's been localised.
 <img src="screenshots/screenshot.jpg" width="480">
 <img src="screenshots/screenshot2.jpg" width="480">
 <img src="screenshots/screenshot3.jpg" width="960">
-

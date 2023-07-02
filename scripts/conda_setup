@@ -1,0 +1,29 @@
+#!/bin/bash
+set -eufo pipefail
+
+# shellcheck source=/dev/null
+. ~/miniconda3/etc/profile.d/conda.sh
+conda deactivate
+conda env remove -n nevsjapanesevocab
+conda create -yqn nevsjapanesevocab python=3.10
+conda activate nevsjapanesevocab
+conda install -yq \
+	--channel conda-forge \
+	--channel defaults \
+	--quiet \
+	--yes \
+	ansicolors \
+	pykakasi \
+	`# dev` \
+	bandit \
+	black \
+	coverage \
+	isort \
+	mypy \
+	pylint \
+	pytest \
+	pyupgrade
+pip install \
+	jamdict \
+	jamdict-data
+echo Done.

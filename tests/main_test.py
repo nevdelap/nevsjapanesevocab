@@ -2,8 +2,8 @@ import os
 import re
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
 from io import StringIO
-from typing import NamedTuple
 
 import pytest
 from test_helpers import strip_ansi_terminal_escapes
@@ -75,7 +75,8 @@ def test_replace_indices(
 # {new-kanji}.
 
 
-class IO(NamedTuple):
+@dataclass
+class IO:
     test_input: str
     expected_output_regex: str
 

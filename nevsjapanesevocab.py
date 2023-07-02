@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import re
 import sys
+from dataclasses import dataclass
 from typing import Final
-from typing import NamedTuple
 
 from colors import color  # type: ignore
 
@@ -143,7 +143,8 @@ def main_stuff(
     return search, kanji_found
 
 
-class Shortcut(NamedTuple):
+@dataclass
+class Shortcut:
     command: str
     actual_params: list[str]
     new_params: list[str]

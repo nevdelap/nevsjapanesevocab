@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from collections.abc import Sequence
+from dataclasses import dataclass
 from typing import Final
-from typing import NamedTuple
 
 from colors import color  # type: ignore
 from jamdict import Jamdict  # type: ignore
@@ -24,14 +24,16 @@ from vocab import Vocab
 OperationPrecheck = Callable[[CommandStack], bool]
 
 
-class OperationResult(NamedTuple):
+@dataclass
+class OperationResult:
     message: str | None
     # a string to search for, otherwise repeat the previous search,
     new_search: str | None
     invalidate_previous_results: bool
 
 
-class OperationHelp(NamedTuple):
+@dataclass
+class OperationHelp:
     command: str
     params: str
     help_text: str
@@ -43,7 +45,8 @@ OperationsHelp = list[OperationHelp]
 Operation = Callable[[CommandStack, Vocab, list[str]], OperationResult]
 
 
-class OperationDescriptor(NamedTuple):
+@dataclass
+class OperationDescriptor:
     min_params: int
     max_params: int | None
     accepts_english_params: bool
@@ -63,7 +66,8 @@ class OperationDescriptor(NamedTuple):
 OperationsDescriptors = dict[str, OperationDescriptor]  # command.
 
 
-class HelpColumnWidths(NamedTuple):
+@dataclass
+class HelpColumnWidths:
     command: int
     params: int
     help_text: int
@@ -335,14 +339,12 @@ def format_help() -> str:
 
 
 def __get_help_column_widths() -> HelpColumnWidths:
-    widths = HelpColumnWidths(0, 0, 0)
-    for command, params, help_text in __operations_help():
-        widths = HelpColumnWidths(
-            widths[0] if widths[0] >= len(command) else len(command),
-            widths[1] if widths[1] >= len(params) else len(params),
-            widths[2] if widths[2] >= len(help_text) else len(help_text),
-        )
-    return widths
+    commands_width, params_width, help_text_width = 0, 0, 0
+    for operation_help in __operations_help():
+        commands_width = max(commands_width, len(operation_help.command))
+        params_width = max(params_width, len(operation_help.params))
+        help_text_width = max(help_text_width, len(operation_help.help_text))
+    return HelpColumnWidths(commands_width, params_width, help_text_width)
 
 
 def __operations() -> OperationsDescriptors:
@@ -429,7 +431,11 @@ def __operations() -> OperationsDescriptors:
 
 
 assert sorted(
-    [operation[0] for operation in __operations_help() if operation[0] not in ["", "q"]]
+    [
+        operation.command
+        for operation in __operations_help()
+        if operation.command not in ["", "q"]
+    ]
 ) == sorted(list(__operations()))
 
 
