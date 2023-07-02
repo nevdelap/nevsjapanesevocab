@@ -19,8 +19,8 @@ Reference: https://www.kanshudo.com/collections/vocab_usefulness2021
 ## Setup on Linux
 
 1. Standard dev environment, VS Code, all my extensions, Python 3, `entr`, `gettext`, and `sed`.
-2. The Python packages and tools listed below.
-3. Added VS Code's settings: `"python.linting.banditArgs": ["--ini=${workspaceFolder}/.bandit"],` It has a `.vscode/launch.json` and `.bandit` for VSCode.
+2. I use `miniconda3` for work, so the `scripts/conda_setup` can be used to set up the development environment.
+3. Otherwise `pip install` can be used, for the packages listed in the next section.
 
 ## Setup On Android
 
