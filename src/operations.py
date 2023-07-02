@@ -336,7 +336,7 @@ def format_help() -> str:
 
 def __get_help_column_widths() -> HelpColumnWidths:
     widths = HelpColumnWidths(0, 0, 0)
-    for (command, params, help_text) in __operations_help():
+    for command, params, help_text in __operations_help():
         widths = HelpColumnWidths(
             widths[0] if widths[0] >= len(command) else len(command),
             widths[1] if widths[1] >= len(params) else len(params),
