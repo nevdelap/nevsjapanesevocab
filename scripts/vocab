@@ -15,4 +15,5 @@ else
     cd "$SCRIPT_DIR/.."
     export PYTHONPATH="$SCRIPT_DIR/../src"
 fi
+reset
 python nevsjapanesevocab.py || read -rp "Press enter to quit."
